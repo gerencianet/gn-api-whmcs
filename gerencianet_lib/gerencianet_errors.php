@@ -36,7 +36,7 @@ if (isset($_POST['errors']))
 					<h2>Você tem duas opções:</h2>
 					<div id="opcao-1" class='information-box'>
 						<p>Se você preencheu um campo errado, volte no formulário e altere o campo corretamente.</p>
-						<a href="../../../clientarea.php?action=invoices#" class="css_btn_class"><< Voltar no formulário</a>
+						<a href="../../../clientarea.php?action=details" class="css_btn_class"><< Voltar no formulário</a>
 					</div>
 					<h3>ou</h3>
 					<div id="opcao-2" class='information-box'><p>Se suas informações estão corretas, entre em contato com o vendedor e informe os erros encontrados acima.</p></div>

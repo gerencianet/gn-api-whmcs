@@ -12,7 +12,7 @@ Caso você tenha alguma dúvida ou sugestão, entre em contato conosco pelo site
 1. Faça o download da última versão do módulo;
 2. Descompacte o arquivo baixado;
 3. Copie o arquivo gerencianetcharge.php e a pasta gerencianet_lib, disponíveis na pasta gn-api-whmcs, para o diretório /modules/gateways da instalação do WHMCS;
-4. Copie o arquivo gerencianetcharge.php, disponível no diretório gn-api-whmcs/callback, para o diretorio modules/gateways/callback. Ele deve seguir o modelo modules/gateways/callback/gerencianetcharge.php.
+4. Copie o arquivo gerencianetcharge.php, disponível no diretório gn-api-whmcs/callback, para o diretório modules/gateways/callback. Ele deve seguir o modelo modules/gateways/callback/gerencianetcharge.php.
 
 Os arquivos do módulo Gerencianet devem seguir a seguinte estrutura no WHMCS:
 
@@ -35,7 +35,7 @@ Os arquivos do módulo Gerencianet devem seguir a seguinte estrutura no WHMCS:
 6. Informe o número de dias corridos para o vencimento da cobrança após a mesma ser gerada. Se o campo estiver vazio, o valor será 0;
 7. Caso seja de seu interesse, habilite o ambiente de testes da API Gerencianet através de campo "Sandbox";
 8. Habilite os logs de transação e de erros da Gerencianet no painel WHMCS através do campo "Debug";
-9. Configure as intruções do boleto que sejam de seu interesse;
+9. Configure as instruções do boleto que sejam de seu interesse;
 10. Salve as configurações.
 
 ## Configuração no WHMCS
@@ -57,6 +57,8 @@ O campo "CPF" é obrigatório devido à uma exigência do banco central para emi
 Obs: Os campos citados acima devem ter exatamente o mesmo nome no WHMCS, sem acentos ou caracteres especiais.
 
 ![Campos customizados à serem criados](custom_fields_demonstration.png "Campos customizados à serem criados.")
+
+Para uma melhor interação com o cliente final, sugerimos que os campos customizados sejam exibidos na tela do pedido. Para isto marque a opção "Show on Order Form" em cada  um dos campos customizados.
 
 #Erros de Integração:
 
