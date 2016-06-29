@@ -113,7 +113,7 @@ function update_invoice_status($invoiceId, $status, $adminWHMCS, $isNewTransacti
     return 0;
 }
 
-function buttonGerencianet($link, $discount=0, $discountType=null){
+function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discountType=null){
     $src = '<style>
         .botao {
             background-color: #f26522;
@@ -148,65 +148,62 @@ function buttonGerencianet($link, $discount=0, $discountType=null){
         }
     </style>';
 
-    $src .= '<a title="Visualizar Boleto Gerencianet" target="_blank" class="btn botao" href="'.$link.'">Boleto</a><br/><br/>';
-
-    $discount = number_format($discount, 2, '.', '');
-
-    if((double)$discount > 0)
+    if($errorMessages != null)
     {
-        if($discountType == '1')
-            $src .= '<div id="desconto-gn">No boleto Gerencianet <br> você ainda ganha mais '. $discount .'% de desconto <br> sobre o valor bruto da cobrança.</div>';
+        $src .= '<form action="modules/gateways/gerencianet_lib/gerencianet_errors.php" method="post">';
+        foreach ($errorMessages as $error) {
+            $src = $src . '<input type="hidden" name="errors[]" value="' . $error . '"></input>';
+        }
+        $src .= '<input title="Boleto Gerencianet" type="submit" class="btn botao" value="Boleto"></form><br>';
+    }
+    else
+    {
+        if($link == null)
+        {
+            $src .= "<form action='#' method='post'>
+                        <input type='hidden' name='geraCharge' value='true'>
+                        <input type='submit' title='Boleto Gerencianet' value='Boleto' class='btn botao'>
+                    </form><br>";
+        }
         else 
-            $src .= '<div id="desconto-gn">No boleto Gerencianet <br> você ainda ganha mais R$ '. $discount .' de desconto.</div>';
+            $src .= '<a title="Boleto Gerencianet" target="_blank" class="btn botao" href="'.$link.'">Boleto</a><br><br>';
+
+        $discount = number_format($discount, 2, '.', '');
+
+        if((double)$discount > 0)
+        {
+            if($discountType == '1')
+                $src .= '<div id="desconto-gn">No boleto Gerencianet <br> você ainda ganha mais '. $discount .'% de desconto <br> sobre o valor bruto da cobrança.</div>';
+            else 
+                $src .= '<div id="desconto-gn">No boleto Gerencianet <br> você ainda ganha mais R$ '. $discount .' de desconto.</div>';
+        }
     }
 
     return $src;
 }
+
 function send_errors($errorMessages)
 {
     $url = '/whmcs/modules/gateways/gerencianet_lib/gerencianet_errors.php';
-    $src = '<style>
-        .botao {
-            background-color: #b7b7b7;
-            background-image:url("modules/gateways/gerencianet_lib/images/gn-cinza.svg");
-            background-size: 35px;
-            background-repeat: no-repeat;
-            background-position-x: 7px;
-            background-position-y: 5.5px;
-            font-weight: bold;
-            font-size: 20px;
-            font-style: Arial;
-            color: white;
-            border: none;
-            padding: 10px 36px 10px 58px;
-            border-radius: 30px;
-            cursor: pointer;
-        }
-        .botao:hover {
-            background-color: #D0D0D0;
-            background-image:url("modules/gateways/gerencianet_lib/images/gn-cinza.svg");
-            background-size: 35px;
-            background-repeat: no-repeat;
-            color: white;
-            background-position-x: 7px;
-            background-position-y: 5.5px;
-            cursor: pointer;
-        }
-        #gn-error-notification{
-            font-size: 13px;
-            font-weight: bold;
-            color: red;
-        }
-        </style>';
-
-    $src .= '<form action="modules/gateways/gerencianet_lib/gerencianet_errors.php" method="post">';
+    
+    $code = "<script>
+    var form = document.createElement('form');
+    form.method = 'post';
+    form.action = '" . $url ."';";
     foreach ($errorMessages as $error) {
-        $src = $src . '<input type="hidden" name="errors[]" value="' . $error . '"></input>';
+        $code = $code . 
+        "var input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'errors[]';
+        input.value = '" . $error ."';
+        form.appendChild(input);";
     }
-    $src .= '<input title="Erro ao gerar boleto gerencianet" type="submit" class="btn botao" value="Erros"></form>';
-    $src .= '<div id="gn-error-notification">Clique para visualizar <br> o erro ocorrido</div>';
+    
+    $code = $code .
+    "form.submit();
+    </script>";
 
-    return $src;
+    return $code;
 }
 
 ?>

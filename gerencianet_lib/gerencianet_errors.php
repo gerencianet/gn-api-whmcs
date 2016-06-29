@@ -11,7 +11,7 @@ if (isset($_POST['errors']))
 <html>
 	<link rel="stylesheet" type="text/css" href="gerencianet_errors.css"/>
 	<head>
-		<title>ola</title>
+		<title>Gerencianet Error</title>
 	</head>
 	<body>
 		<div id='whmcs-icone'>

@@ -35,8 +35,9 @@ Os arquivos do módulo Gerencianet devem seguir a seguinte estrutura no WHMCS:
 6. Informe o número de dias corridos para o vencimento da cobrança após a mesma ser gerada. Se o campo estiver vazio, o valor será 0;
 7. Caso seja de seu interesse, habilite o ambiente de testes da API Gerencianet através de campo "Sandbox";
 8. Habilite os logs de transação e de erros da Gerencianet no painel WHMCS através do campo "Debug";
-9. Configure as instruções do boleto que sejam de seu interesse;
-10. Salve as configurações.
+9. Caso seja de seu interesse, habilite o envio de emails de cobrança da Gerencianet para o cliente final;
+10. Configure as instruções do boleto que sejam de seu interesse;
+11. Salve as configurações.
 
 ## Configuração no WHMCS
 
@@ -77,12 +78,14 @@ Antes mesmo do módulo tentar gerar uma cobrança alguns campos requisitados na 
 
 Ainda que nenhum destes erros de validação seja retornados, a API Gerencianet poderá retornar erros referentes à geração da cobrança. Para mais informações sobre os códigos de erros retornados pela API Gerencianet, [acesse](https://docs.gerencianet.com.br/codigos-de-erros).
 
-Descontos:
+##Descontos:
 
 Neste módulo de integração é possível gerar boletos considerando os descontos dos cupons promocionais fornecidos pelo WHMCS.
 Caso o integrador escolha uma das 4 formas de desconto do WHMCS (Porcentagem, valor fixo, Substituição de preço e isenção de tarifas), tal desconto é convertido em Reais e repassado à API Gerencianet no momento da geração do boleto.
 
 Além dos descontos fornecidos pelo WHMCS, é possível disponibilizar descontos exclusivos para os boletos gerados através do módulo Gerencianet. Esta opção de desconto é configurada nos campos "Descoto do Boleto" e "Tipo de deconto" do módulo Gerencianet. Uma vez configurado, este disconto será exibido no boleto Gerencianet e, assim que o mesmo for pago, o valor do pedido e da cobrança no WHMCS serão atualizados para o valor com o desconto Gerencianet.
+
+Outra forma de desconto além das citadas anteriormente são os créditos que o usuário tem no WHMCS. Assim, caso um cliente queira aplicar um determinado crédito no pedido do WHMCS, tal quantia será convertida em desconto no boleto Gerencianet. 
 
 ## Requisitos
 

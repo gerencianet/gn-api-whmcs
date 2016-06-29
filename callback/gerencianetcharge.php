@@ -21,14 +21,14 @@ if (!isset($_POST['notification'])) {
     die("Don't exist any response");
 }
 
-$notificationToken 	= $_POST['notification'];
-$clientIDProd 	   	= $gatewayParams['clientIDProd'];
-$clientSecretProd 	= $gatewayParams['clientSecretProd'];
-$clientIDDev 		= $gatewayParams['clientIDDev'];
-$clientSecretDev 	= $gatewayParams['clientSecretDev'];
-$configSandbox 		= $gatewayParams['configSandbox'];
+$notificationToken  = $_POST['notification'];
+$clientIDProd       = $gatewayParams['clientIDProd'];
+$clientSecretProd   = $gatewayParams['clientSecretProd'];
+$clientIDDev        = $gatewayParams['clientIDDev'];
+$clientSecretDev    = $gatewayParams['clientSecretDev'];
+$configSandbox      = $gatewayParams['configSandbox'];
 $configDebug        = $gatewayParams['configDebug'];
-$idConta 			= $gatewayParams['idConta'];
+$idConta            = $gatewayParams['idConta'];
 $descontoBoleto     = (double)$gatewayParams['descontoBoleto'];
 $discountType       = $gatewayParams['tipoDesconto'];
 $adminWHMCS         = $gatewayParams['whmcsAdmin'];
@@ -40,7 +40,7 @@ $notification = json_decode($notificationJson, true);
 $notificationCode = $notification['code'];
 
 if($notificationCode != 200){
-	die("WHMCS - Falha na autenticacao");
+    die("WHMCS - Falha na autenticacao");
 }
 
 $notificationData     = $notification['data'];
@@ -73,6 +73,7 @@ if ($status == "paid")
     $invoiceValues['invoiceid'] = $invoiceId;
     $invoiceData                = localAPI("getinvoice", $invoiceValues, $adminWHMCS);
     $invoiceStatus              = $invoiceData['status'];
+    $credit                     = number_format((double)$invoiceData['credit'] , 2, '.', '');
 
     $getTransactionValues['invoiceid']  = $invoiceId;
     $transactionData                    = localAPI("gettransactions", $getTransactionValues, $adminWHMCS);
@@ -95,7 +96,7 @@ if ($status == "paid")
         $updateTransactionValues['amountin']       = (string)$amount;
         $updateTransactionresults = localAPI($updateTransactionCommand, $updateTransactionValues, $adminWHMCS);
 
-        $gerencianetPrice = get_price($invoiceId, true);
+        $gerencianetPrice = get_price($invoiceId, true) - $credit;
         $gerencianetPrice = number_format($gerencianetPrice, 2, '.', '');
 
         $logGerencianet = array(
@@ -141,7 +142,7 @@ if ($status == "paid")
 elseif ($status == "canceled") 
 {
     $response = update_invoice_status($invoiceId, "Cancelled", $adminWHMCS, false);
-	die('WHMCS - Cobrança cancelada pelo vendedor ou pelo pagador');
+    die('WHMCS - Cobrança cancelada pelo vendedor ou pelo pagador');
 }
 
 ?>

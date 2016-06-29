@@ -254,7 +254,13 @@ class GerencianetIntegration {
 			$messageAdmin = '';
 			if (isset($result['message']['property'])) {
 				$property = explode("/",$result['message']['property']);
-				$propertyName = end($property);
+				$propertyAux = $property;
+				array_pop($propertyAux);
+
+				if(end($propertyAux) == 'instructions')
+					$propertyName = end($propertyAux) . '/' . end($property);
+				else
+					$propertyName = end($property);
 			} else {
 				$propertyName="";
 			}
@@ -323,6 +329,11 @@ class GerencianetIntegration {
 				{
 					$message = $messageErrorDefault;
 					$messageAdmin = 'O campo ' . $this->getFieldName($property) . ' não está preenchido corretamente: ';
+				}
+				elseif(strpos($property, 'instructions/') !== false)
+				{
+					$message = $messageErrorDefault;
+					$messageAdmin = $this->getFieldName($property);
 				}
 				else{
 					$message = 'O campo ' . $this->getFieldName($property) . ' não está preenchido corretamente: ';
@@ -410,6 +421,13 @@ class GerencianetIntegration {
 	}
 	
 	public function getFieldName($name) {
+		if(strpos($name, 'instructions/') !== true)
+		{
+			$property = explode('/', $name);
+			$name = $property[0];
+			$id   = $property[1] + 1;
+		}
+
 		switch($name) {
 			case "neighborhood":
 				return 'Bairro';
@@ -458,6 +476,9 @@ class GerencianetIntegration {
 				break;
 			case 'items':
 				return 'Itens';
+				break;
+			case 'instructions':
+				return 'A instrução nº ' . $id . ' do boleto ultrapassa o tamanho limite de 90 caracteres.';
 				break;
 			default:
 				return '';
