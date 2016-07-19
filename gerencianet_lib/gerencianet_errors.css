@@ -4,10 +4,14 @@ body {
 }
 
 .content {
-	margin-left: 358px;
-	margin-right: 358px;
 	margin-top: 11px;
 	height: inherit;
+	width: 100%;
+	max-width: 1100px;
+}
+
+.content div{
+	text-align: left;
 }
 
 .row::after {
@@ -17,14 +21,21 @@ body {
 }
 
 #icone-erro {
-	display: inline-block;
-	position: absolute;
 	margin-top: 5px;
+	margin-right: 10px;
 }
 
 #whmcs-icone {
-	margin-left: 357.5px;
+	text-align: left;
 	margin-top: 15px;
+	margin-left: 30px;
+	width: 100%;
+	max-width: 1100px;
+}
+
+.header {
+	width: 100%;
+	text-align: center;
 }
 
 #division {
@@ -77,7 +88,8 @@ h1{
 
 #information{
 	display: inline-block;
-	margin-left: 40px;
+	margin-left: 30px;
+	margin-right: 30px;
 	display: block;
 }
 
@@ -90,8 +102,8 @@ h2 {
 }
 
 .information-box{
-	width: 474px;
-	display: inline-block;
+	width: 40%;
+	float: left;
 	font-size: 20px;
 	color: #737373;
 	border: 1px;
@@ -101,14 +113,26 @@ h2 {
 	padding: 20px;
 }
 
-#opcao-1{
-	margin-right: 20px;
+.clear {
+	clear: both;
+	overflow: hidden;
 }
 
-#opcao-2{
-	margin-left: 20px;
-	position: absolute;
+.center-divisor {
+	float: left;
+	margin: 15px;
 }
+
+@media only screen and (max-width: 992px) {
+
+    .information-box, .center-divisor{
+        width: 85%;
+        margin-right: 60px;
+        float: none;
+    }
+
+}
+
 
 h3 {
 	font-family: sans-serif;
