@@ -184,7 +184,7 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
 
 function send_errors($errorMessages)
 {
-    $url = '/whmcs/modules/gateways/gerencianet_lib/gerencianet_errors.php';
+    $url = 'modules/gateways/gerencianet_lib/gerencianet_errors.php';
     
     $code = "<script>
     var form = document.createElement('form');
