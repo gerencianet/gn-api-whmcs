@@ -1,3 +1,10 @@
+# v0.2.0
+
+* Fix Tela de erros responsiva
+* Deleted Obrigatoriedade de dois campos para receber CPF e CNPJ e do campo referente à Razão Social. 
+* Added Aplicação de taxas no boleto Gerencianet referentes a vencimentos do WHMCS.
+
+
 # v0.1.1
 
 * Fix Notifiação de erro referente ao campo "Instruções do boleto"

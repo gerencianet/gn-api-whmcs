@@ -1,4 +1,4 @@
-# Módulo de Integração Gerencianet para WHMCS Oficial - Versão 0.1.1 #
+# Módulo de Integração Gerencianet para WHMCS Oficial - Versão 0.2.0 #
 
 O módulo Gerencianet para o WHMCS permite gerar boletos com registro através da nossa API.
 Compatível com as versões superiores à 6.0.4 do WHMCS.
@@ -27,39 +27,22 @@ Os arquivos do módulo Gerencianet devem seguir a seguinte estrutura no WHMCS:
 
 ![Parametros de configuração do módulo Gerencianet](parametros_configuracao.png "Parametros de configuração do módulo Gerencianet")
 
-1. Dentro do painel administrativo do WMCS, acesse o menu "Setup" -> "Payments" -> "Payment Gateways";
-2. No campo "Active Module", escolha a opção Gerencianet;
-3. Configure as credenciais de sua Aplicação Gerencianet. Para criar uma nova Aplicação, entre em sua conta Gerencianet, acesse o menu "API" e clique em "Minhas Aplicações" -> "Nova aplicação". Insira as credenciais disponíveis neste link (Client ID e Client Secret de produção e desenvolvimento) nos respectivos campos de configuração do módulo;
-4. Informe o usuário administrador do WHMCS no respectivo campo; 
-5. Informe o desconto (Porcentagem ou valor fixo) que deverá ser aplicado aos boletos gerados exclusivamente pela Gerencianet. Esta informação é opcional;
-6. Informe o número de dias corridos para o vencimento da cobrança após a mesma ser gerada. Se o campo estiver vazio, o valor será 0;
-7. Caso seja de seu interesse, habilite o ambiente de testes da API Gerencianet através de campo "Sandbox";
-8. Habilite os logs de transação e de erros da Gerencianet no painel WHMCS através do campo "Debug";
-9. Caso seja de seu interesse, habilite o envio de emails de cobrança da Gerencianet para o cliente final;
-10. Configure as instruções do boleto que sejam de seu interesse;
-11. Salve as configurações.
+Dentro do painel administrativo do WHMCS, acesse o menu "Setup" -> "Payments" -> "Payment Gateways". No campo "Active Module", escolha a opção Gerencianet. A tela mostrada acima será exibida em sua tela. Dentro do formulário exibido, você deverá preencher os seguintes campos:
 
-## Configuração no WHMCS
-
-Para que o módulo funcione corretamente será necessária a criação de alguns campos no WHMCS. Para isto, acesse "Setup" -> "Custom Client Fields", no painel administrativo do WHMCS, e crie os seguintes campos customizados para seus clientes:
-
-### Campos obrigatórios:
-
-1. "CPF" : Representa o CPF do cliente - O tipo deve ser "Text Box";
-
-O campo "CPF" é obrigatório devido à uma exigência do banco central para emissão de boletos com registro. 
-
-### Campos opcionais (Caso você queira disponibilizar para seus clientes a opção de compra como Pessoa Jurídica).
-
-1. "CNPJ" : Representa o CNPJ do Cliente - O tipo deve ser "Text Box";
-2. "Razao Social" : Representa a Razão Social do empresa que pertence ao cliente - O tipo deve ser "Text Box";
-3. "Juridica" : Através desta opção o cliente irá escolher se deseja fazer a compra como Pessoa Jurídica ou não - O tipo deve ser "Tick Box".
-
-Obs: Os campos citados acima devem ter exatamente o mesmo nome no WHMCS, sem acentos ou caracteres especiais.
-
-![Campos customizados à serem criados](custom_fields_demonstration.png "Campos customizados à serem criados.")
-
-Para uma melhor interação com o cliente final, sugerimos que os campos customizados sejam exibidos na tela do pedido. Para isto marque a opção "Show on Order Form" em cada  um dos campos customizados.
+1. **Client_Id Produção:** Deve ser preenchido com o client_id de produção de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" -> "Minhas Aplicações" -> clique sobre sua aplicação do WHMCS -> Aba "Produção";
+2. **Client_Secret Produção:** Deve ser preenchido com o client_secret de produção de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" ->  "Minhas Aplicações" -> clique sobre sua aplicação do WHMCS -> Aba "Produção";
+3. **Client_Id Desenvolvimento:** Deve ser preenchido com o client_id de desenvolvimento de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" -> "Minhas Aplicações" -> clique sobre sua aplicação do WHMCS ->Aba "Desenvolvimento";
+4. **Client_Secret Desenvolvimento:** Deve ser preenchido com o client_secret de desenvolvimento de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" -> "Minhas Aplicações" -> clique sobre sua aplicação do WHMCS -> Aba "Desenvolvimento";
+5. **Identificador da Conta:** Deve ser preenchido com o identificador de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API", na tela principal e no canto superior esquerdo;
+6. **Usuario administrador do WHMCS:** Deve ser preenchido com o usuário administrador do WHMCS, sendo este usuário o mesmo que o administrador do WHMCS faz login na area administrativa de sua conta. Este campo é de preenchimento obrigatório; 
+7. **Desconto do Boleto:** Informe o valor desconto que deverá ser aplicado aos boletos gerados exclusivamente pela Gerencianet. Esta informação é opcional;
+8. **Tipo de desconto:** Informe o tipo de desconto (porcentagem ou valor fixo) que deverá ser aplicado aos boletos gerados exclusivamente pela Gerencianet. Esta informação é opcional; 
+9. **Numero de dias para o vencimento da cobrança:** Informe o número de dias corridos para o vencimento do boleto Gerencianet após a cobrança ser gerada. Se o campo estiver vazio, o valor será 0;
+10. **Nome do campo referente à CPF e/ou CNPJ:** Deve ser informado o nome do campo que o administrador do WHMCS criou para receber o CPF e/ou CNPJ do cliente final. Este campo é obrigatório, e caso você ainda não o tenha criado, vá ao painel administrativo do WHMCS em "Setup" -> "Custom Client Fields" e configure um campo para receber tais valores. Ex: "CPF/CNPJ". 
+11. **Sandbox:** Caso seja de seu interesse, habilite o ambiente de testes da API Gerencianet;
+12. **Debug:** Através desse campo é possível habilitar os logs de transação e de erros da Gerencianet no painel WHMCS;
+13. **Email de cobrança - Gerencianet:** Caso seja de seu interesse, habilite o envio de emails de cobrança da Gerencianet para o cliente final;
+14. **Intrução do boleto:** Configure as instruções do boleto que sejam de seu interesse;
 
 #Erros de Integração:
 
@@ -68,15 +51,13 @@ Antes mesmo do módulo tentar gerar uma cobrança alguns campos requisitados na 
 1. **Nome Inválido:** O nome informado pelo cliente final é muito curto, assim, o mesmo deve digitar o nome completo;
 2. **Email Inválido:** O email informado pelo cliente final é inválido (não segue o padrão xxxxx@xxxx.com) ou não existe;
 3. **Telefone Inválido:** O telefone informado pelo cliente final não existe ou o DDD está incorreto;
-4. **CPF Inválido:** O número do CPF do cliente final é invalido;
-5. **CPF Nulo:** O campo "CPF" não existe no WHMCS ou não está preenchido;
-6. **CNPJ Inválido:** O número do CNPJ do cliente final é invalido;
-7. **CNPJ Nulo:** O campo "CNPJ" não existe no WHMCS ou não está preenchido;
-8. **Razão Social Inválida:** A Razão Social é inválida. O cliente deve digitar o nome que consta na Receita Federal;
-9. **Razão Social Nula:** O campo "Razao Social" não existe no WHMCS ou não está preenchido;
+4. **Documento Inválido:** O número do CPF/CNPJ do cliente final é invalido;
+5. **Documento Nulo:** O campo referente ao CPF e/ou CNPJ do cliente não existe no WHMCS ou não está preenchido;
+8. **Razão Social Inválida:** A Razão Social é inválida. O cliente deve digitar no campo "Empresa" do WHMCS o nome empresarial que consta na Receita Federal;
+9. **Razão Social Nula:** O campo "Empresa" do WHMCS não está preenchido;
 10. **Erro Inesperado:** Houve algum erro na integração. Provavelmente você não preencheu todos os campos do módulo corretamente, ou a versão do PHP do WHMCS não é compatível com a API Gerencianet. Você deverá ativar o modo Debug do módulo para saber mais detalhes.
 
-Ainda que nenhum destes erros de validação seja retornados, a API Gerencianet poderá retornar erros referentes à geração da cobrança. Para mais informações sobre os códigos de erros retornados pela API Gerencianet, [acesse](https://docs.gerencianet.com.br/codigos-de-erros).
+Ainda que nenhum destes erros de validação sejam retornados, a API Gerencianet poderá retornar erros referentes à geração da cobrança. Para mais informações sobre os códigos de erros retornados pela API Gerencianet, [acesse](https://docs.gerencianet.com.br/codigos-de-erros).
 
 ##Descontos:
 

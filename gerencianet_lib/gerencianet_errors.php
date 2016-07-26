@@ -53,6 +53,6 @@ if (isset($_POST['errors']))
 			</div>
 			</center>
 		</div>
-		<footer>Copyright &#169 <?php echo date(Y); ?> Gerencianet. All Rights Reserved.</footer>
+		<footer>Copyright &#169 <?php echo date('Y'); ?> Gerencianet. All Rights Reserved.</footer>
 	</body>
 </html>

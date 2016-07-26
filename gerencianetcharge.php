@@ -10,39 +10,45 @@ function gerencianetcharge_config()
         ),
 
         "clientIDProd"      => array(
-            "FriendlyName"  => "Client_Id Produção", 
+            "FriendlyName"  => "Client_Id Produção (*)", 
             "Type"          => "text", 
             "Size"          => "50", 
+            "Description"   => " (preenchimento obrigatório)",
         ),
 
         "clientSecretProd"  => array(
-            "FriendlyName"  => "Client_Secret Produção", 
+            "FriendlyName"  => "Client_Secret Produção (*)", 
             "Type"          => "text", 
             "Size"          => "54",
+            "Description"   => " (preenchimento obrigatório)",
         ),
 
         "clientIDDev"       => array(
-            "FriendlyName"  => "Client_Id Desenvolvimento", 
+            "FriendlyName"  => "Client_Id Desenvolvimento (*)", 
             "Type"          => "text", 
             "Size"          => "50",
+            "Description"   => " (preenchimento obrigatório)",
         ),
 
         "clientSecretDev"   => array(
-            "FriendlyName"  => "Client_Secret Desenvolvimento", 
+            "FriendlyName"  => "Client_Secret Desenvolvimento (*)", 
             "Type"          => "text", 
             "Size"          => "54",
+            "Description"   => " (preenchimento obrigatório)",
         ),
 
         "idConta"           => array(
-            "FriendlyName"  => "Identificador da Conta", 
+            "FriendlyName"  => "Identificador da Conta (*)", 
             "Type"          => "text", 
             "Size"          => "32",
+            "Description"   => " (preenchimento obrigatório)",
         ),
 
         "whmcsAdmin"    => array(
-            "FriendlyName"  => "Usuario administrador do WHMCS",
+            "FriendlyName"  => "Usuario administrador do WHMCS (*)",
             "Type"          => "text",
-            "Description"   => "Insira o nome do administrador do WHMCS.",
+            "Description"   => "Insira o nome do usuário administrador do WHMCS.",
+            "Description"   => " (preenchimento obrigatório)",
         ),
 
         "descontoBoleto"    => array(
@@ -58,13 +64,19 @@ function gerencianetcharge_config()
                 '1'         => '% (Porcentagem)',
                 '2'         => 'R$ (Reais)',
             ),
-            'Description'   => 'Escolha a forma do desconto: Porcentagem ou em Reais.',
+            'Description'   => 'Escolha a forma do desconto: Porcentagem ou em Reais',
         ),
 
         "numDiasParaVencimento" => array(
             "FriendlyName"      => "Número de dias para o vencimento da cobrança",
             "Type"              => "text",
-            "Description"       => "Número de dias corridos para o vencimento da cobrança depois que a mesma foi gerada.",
+            "Description"       => "Número de dias corridos para o vencimento da cobrança depois que a mesma foi gerada",
+        ),
+
+         "documentField" => array(
+            "FriendlyName"      => "Nome do campo referente à CPF e/ou CNPJ (*)",
+            "Type"              => "text",
+            "Description"       => "Informe o nome do campo referente à CPF e/ou CNPJ no seu WHMCS. (preenchimento obrigatório)",
         ),
 
         "configSandbox"     => array(
@@ -82,33 +94,33 @@ function gerencianetcharge_config()
         "sendEmailGN"       => array(
             "FriendlyName"  => "Email de cobraça - Gerencianet",
             "Type"          => "yesno",
-            "Description"   => "Marque esta opção se você deseja que a Gerencianet envie emails de transações para o cliente final.",
+            "Description"   => "Marque esta opção se você deseja que a Gerencianet envie emails de transações para o cliente final",
         ),
 
         'instruction1'      => array(
             'FriendlyName'  => 'Instrução do boleto - Primeira linha',
             'Type'          => 'text',
             'Size'          => '90',
-            'Default'       => 'Após o vencimento aceitar somente no banco emissor.',
-            'Description'   => ' (Opcional).',
+            'Default'       => 'Após o vencimento aceitar somente no banco emissor',
+            'Description'   => ' (opcional)',
         ),
         'instruction2'      => array(
             'FriendlyName'  => 'Instrução do boleto - Segunda linha',
             'Type'          => 'text',
             'Size'          => '90',
-            'Description'   => ' (Opcional).',
+            'Description'   => ' (opcional)',
         ),
         'instruction3'      => array(
             'FriendlyName'  => 'Instrução do boleto - Terceira linha',
             'Type'          => 'text',
             'Size'          => '90',
-            'Description'   => ' (Opcional).',
+            'Description'   => ' (opcional)',
         ),
         'instruction4'      => array(
             'FriendlyName'  => 'Instrução do boleto - Quarta linha',
             'Type'          => 'text',
             'Size'          => '90',
-            'Description'   => ' (Opcional).',
+            'Description'   => ' (opcional)',
         ),
 
     );
@@ -129,7 +141,7 @@ function gerencianetcharge_link($params)
         if($params['configDebug'] == "on")
             logTransaction('gerencianetcharge', $errorMsg, 'Erro de Versão');
 
-        return buttonGerencianet(array('Ocorreu um erro inesperado. Entre em contato com o responsável do WHMCS.'));
+        return send_errors(array('Erro Inesperado: Ocorreu um erro inesperado. Entre em contato com o responsável do WHMCS.'));
     }
 
     /* ***************************************************** Includes e captura do invoice **************************************** */
@@ -149,12 +161,11 @@ function gerencianetcharge_link($params)
     define("EMAIL_ERROR_MESSAGE", "Email Inválido: O email informado é inválido ou não existe.");
     define("BIRTHDATE_ERROR_MESSAGE", "Data de nascimento Inválida: A data de nascimento informada deve seguir o padrão Ano-mes-dia.");
     define("PHONENUMBER_ERROR_MESSAGE", "Telefone Inválido: O telefone informado não existe ou o DDD está incorreto.");
-    define("CPF_ERROR_MESSAGE", "CPF Inválido: O número do CPF do cliente é invalido.");
-    define("CPF_NULL_ERROR_MESSAGE", "CPF Nulo: O campo CPF não existe ou não está preenchido");
-    define("CNPJ_ERROR_MESSAGE", "CNPJ Inválido: O número do CNPJ do cliente é invalido.");
-    define("CNPJ_NULL_ERROR_MESSAGE", "CNPJ Nulo: O campo CNPJ não existe ou não está preenchido.");
-    define("CORPORATE_ERROR_MESSAGE", "Razão Social Inválida: O nome da empresa é inválido. Você deve digitar o nome que consta na Receita Federal.");
-    define("CORPORATE_NULL_ERROR_MESSAGE", "Razao Social Nula: O campo Razao Social não existe ou não está preenchido.");
+    define("DOCUMENT_NULL_ERROR_MESSAGE", "Documento Nulo: O campo referente à CPF e/ou CNPJ não existe ou não está preenchido.");
+    define("CPF_ERROR_MESSAGE", "Documento Inválido: O número do CPF do cliente é invalido.");
+    define("CNPJ_ERROR_MESSAGE", "Documento Inválido: O número do CNPJ do cliente é invalido.");
+    define("CORPORATE_ERROR_MESSAGE", "Razão Social Inválida: O nome da empresa é inválido. Você deve digitar no campo \"Empresa\" de seu WHMCS o nome que consta na Receita Federal.");
+    define("CORPORATE_NULL_ERROR_MESSAGE", "Razao Social Nula: O campo \"Empresa\" de seu WHMCS não está preenchido.");
     define("INTEGRATION_ERROR_MESSAGE", "Erro Inesperado: Ocorreu um erro inesperado. Entre em contato com o responsável do WHMCS.");
 
     /* ******************************************** Gateway Configuration Parameters ******************************************* */
@@ -176,13 +187,14 @@ function gerencianetcharge_link($params)
     $instruction3           = $params['instruction3'];
     $instruction4           = $params['instruction4'];
     $adminWHMCS             = $params['whmcsAdmin'];
+    $documentField          = $params['documentField'];
 
     if($adminWHMCS == '' || $adminWHMCS == null)
     {
         array_push($errorMessages, INTEGRATION_ERROR_MESSAGE);
-        return send_errors($errorMessages);
         if ($configDebug == "on")
             logTransaction('gerencianetcharge', 'O campo - Usuario administrador do WHMCS - está preenchido incorretamente', 'Erro de Integração');
+        return send_errors($errorMessages);
     }
 
     /* ***************************** Verifica se já existe um boleto para o pedido em questão *********************************** */
@@ -243,6 +255,8 @@ function gerencianetcharge_link($params)
         $valueDiscountWHMCS      = 0;
         $percentageDiscountWHMCS = 0;
         $invoiceItems = $invoiceData['items']['item'];
+        $invoiceTax   = (double)$invoiceData['tax'];
+        $invoiceTax2  = (double)$invoiceData['tax2'];
 
         $totalItem     = 0;
         $totalDiscount = 0;
@@ -266,6 +280,26 @@ function gerencianetcharge_link($params)
             {   
                 $valueDiscountWHMCS += (double)$invoiceItem['amount'];
             }
+        }
+
+        if($invoiceTax > 0)
+        {
+            $item = array(
+                    'name'   => 'Taxa 1: Taxa adicional do WHMCS',
+                    'amount' => 1,
+                    'value'  => (int)($invoiceTax * 100)
+                );
+            array_push($items, $item);
+        }
+
+        if($invoiceTax2 > 0)
+        {
+             $item = array(
+                    'name'   => 'Taxa 2: Taxa adicional do WHMCS',
+                    'amount' => 1,
+                    'value'  => (int)($invoiceTax2 * 100)
+                );
+            array_push($items, $item);
         }
 
         $valueDiscountWHMCSFormated = number_format($valueDiscountWHMCS , 2, '.', '');
@@ -300,27 +334,36 @@ function gerencianetcharge_link($params)
         /* ********************************************* Coleta os dados do cliente ************************************************* */
         
         $clientId         = $params['clientdetails']['id'];
-        $cpf              = preg_replace("/[^0-9]/","", get_custom_field_value("CPF", $clientId));
-        $corporateName    = get_custom_field_value("Razao Social", $clientId);
-        $cnpj             = preg_replace("/[^0-9]/","", get_custom_field_value("CNPJ", $clientId));
-        $isJuridica       = get_custom_field_value("Juridica", $clientId);
+        $document         = preg_replace("/[^0-9]/","", get_custom_field_value((string)$documentField, $clientId));
+        $corporateName    = $params['clientdetails']['companyname'];
 
         $name  = $params['clientdetails']['firstname'] . ' ' . $params['clientdetails']['lastname'];
         $phone = $params['clientdetails']['phonenumber'];
         $email = $params['clientdetails']['email'];
 
-        $juridical_data = array(
-            'corporate_name' => (string)$corporateName,
-            'cnpj'           => (string)$cnpj
-        );
-
-        if($cpf == null || $cpf == '')
-            array_push($errorMessages, CPF_NULL_ERROR_MESSAGE);
-        elseif(!$validations->_cpf($cpf))
-            array_push($errorMessages, CPF_ERROR_MESSAGE);
-        
-        if(!$validations->_name($name))
-            array_push($errorMessages, NAME_ERROR_MESSAGE);
+        if($document == null || $document == '')
+            array_push($errorMessages, DOCUMENT_NULL_ERROR_MESSAGE);
+        else
+        {
+            if(strlen($document) <= 11)
+            {
+                $isJuridica = false;
+                if(!$validations->_cpf($document))
+                    array_push($errorMessages, CPF_ERROR_MESSAGE);
+                if(!$validations->_name($name))
+                    array_push($errorMessages, NAME_ERROR_MESSAGE);
+            } 
+            else 
+            {
+                $isJuridica = true;
+                if(!$validations->_cnpj($document))
+                    array_push($errorMessages, CNPJ_ERROR_MESSAGE);
+                if($corporateName == null || $corporateName == '')
+                    array_push($errorMessages, CORPORATE_NULL_ERROR_MESSAGE);
+                elseif(!$validations->_corporate($corporateName))
+                    array_push($errorMessages, CORPORATE_ERROR_MESSAGE);
+            }
+        }
 
         if(!$validations->_phone_number($phone))
             array_push($errorMessages, PHONENUMBER_ERROR_MESSAGE);
@@ -328,47 +371,38 @@ function gerencianetcharge_link($params)
         if(!$validations->_email($email))
             array_push($errorMessages, EMAIL_ERROR_MESSAGE);
 
-        if ($isJuridica != "on")
+        if ($isJuridica == false)
         {
             if ($sendEmailGN == "on")
                 $customer = array(
                     'name'          => $name,
-                    'cpf'           => $cpf,
+                    'cpf'           => (string)$document,
                     'email'         => $email,
                     'phone_number'  => $phone
                 );
             else
                 $customer = array(
                     'name'          => $name,
-                    'cpf'           => $cpf,
+                    'cpf'           => (string)$document,
                     'phone_number'  => $phone
                 );
         }
 
         else
         {
-            if($cnpj == null || $cnpj == '')
-                array_push($errorMessages, CNPJ_NULL_ERROR_MESSAGE);
-            elseif(!$validations->_cnpj($cnpj))
-                array_push($errorMessages, CNPJ_ERROR_MESSAGE);
-
-            if($corporateName == null || $corporateName == '')
-                array_push($errorMessages, CORPORATE_NULL_ERROR_MESSAGE);
-            elseif(!$validations->_corporate($corporateName))
-                array_push($errorMessages, CORPORATE_ERROR_MESSAGE);
+            $juridical_data = array(
+                'corporate_name' => (string)$corporateName,
+                'cnpj'           => (string)$document
+            );
 
             if ($sendEmailGN == "on")
                 $customer = array(
-                    'name'              => $name,
-                    'cpf'               => $cpf,
                     'email'             => $email,
                     'phone_number'      => $phone,
                     'juridical_person'  => $juridical_data
                 );
             else
                 $customer = array(
-                    'name'              => $name,
-                    'cpf'               => $cpf,
                     'phone_number'      => $phone,
                     'juridical_person'  => $juridical_data
                 );
