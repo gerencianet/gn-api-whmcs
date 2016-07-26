@@ -29,11 +29,11 @@ Os arquivos do módulo Gerencianet devem seguir a seguinte estrutura no WHMCS:
 
 Dentro do painel administrativo do WHMCS, acesse o menu "Setup" -> "Payments" -> "Payment Gateways". No campo "Active Module", escolha a opção Gerencianet. A tela mostrada acima será exibida em sua tela. Dentro do formulário exibido, você deverá preencher os seguintes campos:
 
-1. **Client_Id Produção:** Deve ser preenchido com o client_id de produção de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" -> "Minhas Aplicações" -> clique sobre sua aplicação do WHMCS -> Aba "Produção";
-2. **Client_Secret Produção:** Deve ser preenchido com o client_secret de produção de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" ->  "Minhas Aplicações" -> clique sobre sua aplicação do WHMCS -> Aba "Produção";
-3. **Client_Id Desenvolvimento:** Deve ser preenchido com o client_id de desenvolvimento de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" -> "Minhas Aplicações" -> clique sobre sua aplicação do WHMCS ->Aba "Desenvolvimento";
-4. **Client_Secret Desenvolvimento:** Deve ser preenchido com o client_secret de desenvolvimento de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" -> "Minhas Aplicações" -> clique sobre sua aplicação do WHMCS -> Aba "Desenvolvimento";
-5. **Identificador da Conta:** Deve ser preenchido com o identificador de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API", na tela principal e no canto superior esquerdo;
+1. **Client_Id Produção:** Deve ser preenchido com o client_id de produção de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "API" -> "Minhas Aplicações" e selecionando sua aplicação criada, conforme é mostrado no [link](http://image.prntscr.com/image/7dc272063bb74dccba91739701a0478b.png);
+2. **Client_Secret Produção:** Deve ser preenchido com o client_secret de produção de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "API" ->  "Minhas Aplicações" e selecionando sua aplicação criada, conforme é mostrado no [link](http://image.prntscr.com/image/7dc272063bb74dccba91739701a0478b.png);
+3. **Client_Id Desenvolvimento:** Deve ser preenchido com o client_id de desenvolvimento de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" -> "Minhas Aplicações" e selecionando sua aplicação criada, conforme é mostrado no [link](http://image.prntscr.com/image/447be4bc64644a35bcf5eaecd1125f5d.png);
+4. **Client_Secret Desenvolvimento:** Deve ser preenchido com o client_secret de desenvolvimento de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "Nova API" -> "Minhas Aplicações" e selecionando sua aplicação criada, conforme é mostrado no [link](http://image.prntscr.com/image/447be4bc64644a35bcf5eaecd1125f5d.png);;
+5. **Identificador da Conta:** Deve ser preenchido com o identificador de sua conta Gerencianet. Este campo é obrigatório e pode ser encontrado no menu "API", na tela principal e no canto superior esquerdo, conforme é mostrado no [link](http://image.prntscr.com/image/cabe13e1e5b64449b942cf31139150ba.png);
 6. **Usuario administrador do WHMCS:** Deve ser preenchido com o usuário administrador do WHMCS, sendo este usuário o mesmo que o administrador do WHMCS faz login na area administrativa de sua conta. Este campo é de preenchimento obrigatório; 
 7. **Desconto do Boleto:** Informe o valor desconto que deverá ser aplicado aos boletos gerados exclusivamente pela Gerencianet. Esta informação é opcional;
 8. **Tipo de desconto:** Informe o tipo de desconto (porcentagem ou valor fixo) que deverá ser aplicado aos boletos gerados exclusivamente pela Gerencianet. Esta informação é opcional; 
@@ -44,9 +44,9 @@ Dentro do painel administrativo do WHMCS, acesse o menu "Setup" -> "Payments" ->
 13. **Email de cobrança - Gerencianet:** Caso seja de seu interesse, habilite o envio de emails de cobrança da Gerencianet para o cliente final;
 14. **Intrução do boleto:** Configure as instruções do boleto que sejam de seu interesse;
 
-#Erros de Integração:
+#Erros Comuns de Integração:
 
-Antes mesmo do módulo tentar gerar uma cobrança alguns campos requisitados na integração passam por uma validação. Os erros que esta validação pode retornar são:
+Antes mesmo do módulo tentar gerar uma cobrança alguns campos requisitados na integração passam por uma validação. Os erros que esta validação podem retornar são:
 
 1. **Nome Inválido:** O nome informado pelo cliente final é muito curto, assim, o mesmo deve digitar o nome completo;
 2. **Email Inválido:** O email informado pelo cliente final é inválido (não segue o padrão xxxxx@xxxx.com) ou não existe;
