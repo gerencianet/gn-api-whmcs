@@ -318,6 +318,9 @@ class GerencianetIntegration {
 			case 3500010:
 				$message = $messageErrorDefault;
 				break;
+			case 3500016:
+				$message = 'A transação deve possuir um cliente antes de ser paga.';
+				break;	
 			case 3500021:
 				$message = 'Não é permitido parcelamento para assinaturas.';
 				break;
@@ -339,8 +342,12 @@ class GerencianetIntegration {
 					$message = 'O campo ' . $this->getFieldName($property) . ' não está preenchido corretamente: ';
 				}
 				break;
+			case 3500036:
+				$message = 'A forma de pagamento da transação não é boleto bancário.';
+				break;
 			case 3500042:
 				$message = $messageErrorDefault;
+				$messageAdmin = 'O parâmetro [data] deve ser um JSON.';
 				break;
 			case 3500044:
 				$message = 'A transação não pode ser paga. Entre em contato com o vendedor.';
@@ -369,6 +376,9 @@ class GerencianetIntegration {
 			case 4600037:
 				$message = 'O valor da emissão é superior ao limite operacional da conta. Por favor, solicite que o recebedor entre em contato com o suporte Gerencianet.';
 				break;
+			case 4600073:
+				$message = 'O telefone informado não é válido.';
+				break;
 			case 4600111:
 				$message = 'valor de cada parcela deve ser igual ou maior que R$5,00';
 				break;
@@ -382,7 +392,7 @@ class GerencianetIntegration {
 				$message = $messageErrorDefault;
 				break;
 			case 4600204:
-				$message = 'cpf deve ter 11 números';
+				$message = 'cpf deve ter 11 dígitos';
 				break;
 			case 4600209:
 				$message = 'Limite de emissões diárias excedido. Por favor, solicite que o recebedor entre em contato com o suporte Gerencianet.';
@@ -392,6 +402,9 @@ class GerencianetIntegration {
 				break;
 			case 4600212:
 				$message = 'Número de telefone já associado a outro CPF. Não é possível cadastrar o mesmo telefone para mais de um CPF.';
+				break;
+			case 4600222:
+				$message = 'Recebedor e cliente não podem ser a mesma pessoa.';
 				break;
 			case 4600219:
 				$message = 'Ocorreu um erro ao validar seus dados: ' . $property;
@@ -415,7 +428,7 @@ class GerencianetIntegration {
 				$message = $messageErrorDefault;
 				break;
 		}
-		if($messageAdmin == null) 
+		if($messageAdmin == null || $messageAdmin == '') 
 			$messageAdmin = $message;
 		return array("message" => $message, "messageAdmin" => $messageAdmin);
 	}

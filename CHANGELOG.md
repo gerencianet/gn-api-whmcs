@@ -1,3 +1,8 @@
+#v0.2.1
+
+* Added Campo para configuração do valor mínimo da fatura.
+* Fix Mensagem de erros armazenada nos logs de gateway do WHMCS: Ao invés de mensagens genéricas, algumas mensagens com explicações mais detalhadas são armazenadas nos logs do gateway. 
+
 # v0.2.0
 
 * Fix Tela de erros responsiva

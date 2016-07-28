@@ -54,7 +54,7 @@ function gerencianetcharge_config()
         "descontoBoleto"    => array(
             "FriendlyName"  => "Desconto do Boleto",
             "Type"          => "text",
-            "Description"   => "Desconto para pagamentos no boleto bancário. O desconto informado deve ser em porcentagem",
+            "Description"   => "Desconto para pagamentos no boleto bancário.",
         ),
 
         "tipoDesconto"      => array(
@@ -73,10 +73,16 @@ function gerencianetcharge_config()
             "Description"       => "Número de dias corridos para o vencimento da cobrança depois que a mesma foi gerada",
         ),
 
-         "documentField" => array(
+        "documentField" => array(
             "FriendlyName"      => "Nome do campo referente à CPF e/ou CNPJ (*)",
             "Type"              => "text",
             "Description"       => "Informe o nome do campo referente à CPF e/ou CNPJ no seu WHMCS. (preenchimento obrigatório)",
+        ),
+
+        "minValue" => array(
+            "FriendlyName"      => "Valor mínimo da fatura.",
+            "Type"              => "text",
+            "Description"       => "Informe o valor mínimo da cobrança, contendo apenas números com exatamente 2 casas decimais, para que o boleto Gerencianet seja gerado. Caso este campo não seja preenchido o valor considerado será R$ 0.00",
         ),
 
         "configSandbox"     => array(
@@ -178,6 +184,8 @@ function gerencianetcharge_link($params)
     $descontoBoleto         = $params['descontoBoleto'];
     $tipoDesconto           = $params['tipoDesconto'];
     $numDiasParaVencimento  = $params['numDiasParaVencimento'];
+    $documentField          = $params['documentField'];
+    $minValue               = $params['minValue'];
     $configSandbox          = $params['configSandbox'];
     $configDebug            = $params['configDebug'];
     $configVencimento       = $params['configVencimento'];
@@ -187,7 +195,6 @@ function gerencianetcharge_link($params)
     $instruction3           = $params['instruction3'];
     $instruction4           = $params['instruction4'];
     $adminWHMCS             = $params['whmcsAdmin'];
-    $documentField          = $params['documentField'];
 
     if($adminWHMCS == '' || $adminWHMCS == null)
     {
@@ -225,12 +232,17 @@ function gerencianetcharge_link($params)
         }
     }
         
+    $invoiceDescription         = $params['description'];
+    $invoiceAmount              = $params['amount'];
+    if($invoiceAmount < $minValue){
+        $limitMsg = "<div id=limit-value-msg style='font-weight:bold; color:#cc0000;'>Transação Não permitida: Você está tentando pagar uma fatura de<br> R$ $invoiceAmount. Para gerar o boleto Gerencianet, o valor mínimo do pedido deve ser de R$ $minValue</div>";
+        return $limitMsg;
+    }
+
     if($geraCharge == true)
     {
         /* ************************************************* Invoice parameters *************************************************** */
 
-        $invoiceDescription         = $params['description'];
-        $invoiceAmount              = $params['amount'];
         $invoiceValues['invoiceid'] = $invoiceId;
         $invoiceData                = localAPI("getinvoice", $invoiceValues, $adminWHMCS);
 
@@ -259,7 +271,7 @@ function gerencianetcharge_link($params)
         $invoiceTax2  = (double)$invoiceData['tax2'];
 
         $totalItem     = 0;
-        $totalDiscount = 0;
+        $totalTaxes    = 0;
         $items = array();
 
         foreach ($invoiceItems as $invoiceItem) 
@@ -284,6 +296,7 @@ function gerencianetcharge_link($params)
 
         if($invoiceTax > 0)
         {
+            $totalTaxes += (double)$invoiceTax;
             $item = array(
                     'name'   => 'Taxa 1: Taxa adicional do WHMCS',
                     'amount' => 1,
@@ -294,6 +307,7 @@ function gerencianetcharge_link($params)
 
         if($invoiceTax2 > 0)
         {
+            $totalTaxes += (double)$invoiceTax2;
              $item = array(
                     'name'   => 'Taxa 2: Taxa adicional do WHMCS',
                     'amount' => 1,
@@ -325,11 +339,15 @@ function gerencianetcharge_link($params)
         $discounGerencianetinCents  = (double)$discounGerencianetFormated * 100;
         $discountValue = $discounGerencianetinCents + $valueDiscountWHMCSinCents + $invoiceCredit;
 
+        $discountInReals = (double)$discounGerencianetFormated + (double)$valueDiscountWHMCSFormated + (double)$invoiceData['credit'];
+
         if($discountValue > 0)
             $discount = array(
                 'type' => 'currency',
                 'value'=> (int)$discountValue
             );
+
+        $invoiceTotalInReals = (double)$totalItem - $discountInReals + $totalTaxes;
 
         /* ********************************************* Coleta os dados do cliente ************************************************* */
         
