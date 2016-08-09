@@ -9,7 +9,7 @@ Caso você tenha alguma dúvida ou sugestão, entre em contato conosco pelo site
 
 ## Instalação
 
-1. Faça o download da última versão do módulo;
+1. Faça o download da última versão do módulo [aqui](https://codeload.github.com/gerencianet/gn-api-whmcs/zip/master);
 2. Descompacte o arquivo baixado;
 3. Copie o arquivo gerencianetcharge.php e a pasta gerencianet_lib, disponíveis na pasta gn-api-whmcs, para o diretório /modules/gateways da instalação do WHMCS;
 4. Copie o arquivo gerencianetcharge.php, disponível no diretório gn-api-whmcs/callback, para o diretório modules/gateways/callback. Ele deve seguir o modelo modules/gateways/callback/gerencianetcharge.php.
