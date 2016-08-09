@@ -82,6 +82,10 @@ if ($status == "paid")
     $whmcsTransactionId                 = (int)$lastTransaction['id'];
     $whmcsTransactionAmountin           = (double)$lastTransaction['amountin'];
 
+    $sendEmailCommand               = "sendemail";
+    $sendEmailValues["messagename"] = "Invoice Payment Confirmation";
+    $sendEmailValues["id"]          = $invoiceId;
+
     if(($invoiceStatus == 'Unpaid' || $invoiceStatus == 'Cancelled') && $whmcsTransactionAmountin == 0.00)
     {
         $amount     = $lastModificationData['value'] / 100;
@@ -112,6 +116,7 @@ if ($status == "paid")
             if ($configDebug == "on")
                 logTransaction($gatewayParams['name'],$logGerencianet,'Divergent Payment');
 
+            localAPI($sendEmailCommand, $sendEmailValues, $adminWHMCS);
             die('WHMCS: Pagamento divergente - O valor pago foi menor do que o descrito no boleto.');
         }
         elseif ((double)$amount > (double)$gerencianetPrice)
@@ -121,6 +126,7 @@ if ($status == "paid")
             if ($configDebug == "on")
                 logTransaction($gatewayParams['name'],$logGerencianet,'Divergent Payment');
 
+            localAPI($sendEmailCommand, $sendEmailValues, $adminWHMCS);
             die('WHMCS: Pagamento divergente - O valor pago foi maior do que o descrito no boleto.');
         }
         else
@@ -130,11 +136,13 @@ if ($status == "paid")
             if ($configDebug == "on")
                 logTransaction($gatewayParams['name'],$logGerencianet,'Payment Successful');
 
+            localAPI($sendEmailCommand, $sendEmailValues, $adminWHMCS);
             die('WHMCS - Pagamento confirmado');
         }
     }
-    elseif($invoiceStatus == 'Paid')
+    elseif($invoiceStatus == 'Paid' || $whmcsTransactionAmountin > 0.00)
     {
+        localAPI($sendEmailCommand, $sendEmailValues, $adminWHMCS);
         die('WHMCS: Pagamento duplicado - O cliente tentou efetuar o pagamento do mesmo boleto duas ou mais vezes');
     }
 } 

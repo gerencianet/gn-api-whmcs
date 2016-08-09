@@ -1,3 +1,7 @@
+#v0.2.2
+
+* Added Envio automático de e-mail do WHMCS quando o pagamento é confirmado. 
+
 #v0.2.1
 
 * Added Campo para configuração do valor mínimo da fatura.
