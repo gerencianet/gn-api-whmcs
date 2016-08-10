@@ -1,3 +1,8 @@
+#v0.2.3
+
+* Fix Atualização do vencimento da fatura mensal quando existe confirmação de pagamento. 
+
+
 #v0.2.2
 
 * Added Envio automático de e-mail do WHMCS quando o pagamento é confirmado. 

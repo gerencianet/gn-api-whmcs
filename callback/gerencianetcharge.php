@@ -93,12 +93,22 @@ if ($status == "paid")
 
         extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountType);
 
-        $updateTransactionCommand                  = "updatetransaction";
-        $updateTransactionValues['transactionid']  = $whmcsTransactionId;
-        $updateTransactionValues['description']    = "Boleto Gerencianet: Pagamento Efetuado.";
-        $updateTransactionValues['date']           = $creationDate;
-        $updateTransactionValues['amountin']       = (string)$amount;
-        $updateTransactionresults = localAPI($updateTransactionCommand, $updateTransactionValues, $adminWHMCS);
+        $conditionsToDeletOldTrans = array('id' => $whmcsTransactionId, 
+                                'gateway' => $gatewayModuleName,
+                                'description' => 'Boleto Gerencianet: Cobrança aguardando pagamento.',
+                                'amountin' => 0.00,
+                                'transid' => (string)$transactionId,
+                                'invoiceid' => (int)$invoiceId);
+
+        $deleteTrans = delete('tblaccounts', $conditionsToDeletOldTrans);
+
+        $addInvoicePaymentCommand               = "addinvoicepayment";
+        $addInvoicePaymentValues["invoiceid"]   = (int)$invoiceId;
+        $addInvoicePaymentValues["transid"]     = (string)$transactionId;
+        $addInvoicePaymentValues["amount"]      = (string)$amount;
+        $addInvoicePaymentValues["gateway"]     = "gerencianetcharge";
+
+        $results = localAPI($addInvoicePaymentCommand, $addInvoicePaymentValues, $adminWHMCS);
 
         $gerencianetPrice = get_price($invoiceId, true) - $credit;
         $gerencianetPrice = number_format($gerencianetPrice, 2, '.', '');
