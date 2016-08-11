@@ -26,7 +26,7 @@ class Request
         'base_url' => $this->config['baseUri'],
         'headers' => [
           'Content-Type' => 'application/json',
-          'api-sdk' => 'whmcs-v023-' . $composerData['version'],
+          'api-sdk' => 'whmcs-v024-' . $composerData['version'],
           'partner-token' => $partner_token
           ],
       ]);

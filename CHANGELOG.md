@@ -1,3 +1,7 @@
+#v0.2.4
+
+* Fix Funcao #delete não estava no BD_access, causando assim, erro 500 na notificação GN"
+
 #v0.2.3
 
 * Fix Atualização do vencimento da fatura mensal quando existe confirmação de pagamento. 

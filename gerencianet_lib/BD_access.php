@@ -40,3 +40,16 @@ function update($table, $conditions, $updateData)
         die($e->getMessage());
     } 
 }
+
+function delete($table, $conditions)
+{
+    try {
+        $gerencianetData = Capsule::table($table);
+        foreach ($conditions as $key => $value) {
+            $gerencianetData = $gerencianetData->where($key, $value);
+        }
+        $gerencianetData->delete();
+    } catch (\Exception $e) {
+        die($e->getMessage());
+    } 
+}
