@@ -1,6 +1,10 @@
+#v0.2.5
+
+* Fix Aceita o numero de telefone que vem do WHMCS, mesmo que tal numero venha com uma mascara.
+
 #v0.2.4
 
-* Fix Funcao #delete não estava no BD_access, causando assim, erro 500 na notificação GN"
+* Fix Funcao #delete não estava no BD_access, causando assim, erro 500 na notificação GN
 
 #v0.2.3
 

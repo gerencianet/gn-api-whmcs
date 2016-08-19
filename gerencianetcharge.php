@@ -356,7 +356,7 @@ function gerencianetcharge_link($params)
         $corporateName    = $params['clientdetails']['companyname'];
 
         $name  = $params['clientdetails']['firstname'] . ' ' . $params['clientdetails']['lastname'];
-        $phone = $params['clientdetails']['phonenumber'];
+        $phone = preg_replace('/[^0-9]/', '',$params['clientdetails']['phonenumber']);
         $email = $params['clientdetails']['email'];
 
         if($document == null || $document == '')
