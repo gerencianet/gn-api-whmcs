@@ -200,7 +200,8 @@ function send_errors($errorMessages)
     }
     
     $code = $code .
-    "form.submit();
+    "document.body.appendChild(form);
+    form.submit();
     </script>";
 
     return $code;
