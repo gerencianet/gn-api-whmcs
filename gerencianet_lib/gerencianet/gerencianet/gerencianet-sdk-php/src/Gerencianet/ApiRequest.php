@@ -28,7 +28,7 @@ class ApiRequest
 
         try {
             return $this->request->send($method, $route, ['json' => $body,
-            'headers' => ['Authorization' => 'Bearer '.$this->auth->accessToken, 'api-sdk' => 'whmcs-v025-' . $composerData['version'], 'partner-token' => $partner_token]]);
+            'headers' => ['Authorization' => 'Bearer '.$this->auth->accessToken, 'api-sdk' => 'whmcs-0.2.5', 'partner-token' => $partner_token]]);
         } catch (AuthorizationException $e) {
             $this->auth->authorize();
 
