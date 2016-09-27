@@ -1,6 +1,8 @@
 <?php
-include_once '../modules/gateways/gerencianet_lib/Gerencianet_WHMCS_Interface.php';
-include_once '../modules/gateways/gerencianet_lib/GerencianetIntegration.php';
+define('BASE_DIR', dirname( dirname( dirname( __FILE__ ) ) ) . '/');
+
+include BASE_DIR . 'modules/gateways/gerencianet_lib/Gerencianet_WHMCS_Interface.php';
+include BASE_DIR . 'modules/gateways/gerencianet_lib/GerencianetIntegration.php';
 
 /**
  * Gerencianet Hook Calls
@@ -27,6 +29,7 @@ function getChargeId($vars, $credentials)
 
     $gnIntegration = new GerencianetIntegration($clientIDProd, $clientSecretProd, $clientIDDev, $clientSecretDev, $configSandbox, $idConta);
     $finalChargeId = 0;
+    $expire_at = '';
 
     if ($totalTransactions > 0)
     {
@@ -43,10 +46,13 @@ function getChargeId($vars, $credentials)
             if((int)$customId == (int)$invoiceid){
                 $finalChargeId = (int)$chargeId;
             }
+
+            if(isset($chargeDetails['data']['payment']['banking_billet']['expire_at']))
+                $expire_at = $chargeDetails['data']['payment']['banking_billet']['expire_at'];
         }
     }
 
-    return array('gn_object' => $gnIntegration, 'charge_id' => $finalChargeId);
+    return array('gn_object' => $gnIntegration, 'charge_id' => $finalChargeId, 'expire_at' => $expire_at);
 }
 
 function gerencianetCancelCharge($vars)
@@ -76,7 +82,8 @@ function gerencianetUpdateBillet($vars)
         $numDiasParaVencimento = $credentials['numDiasParaVencimento'];
 
         $date = DateTime::createFromFormat('Y-m-d', $dueDate);
-        $date->add(new DateInterval('P' . (string)$numDiasParaVencimento . 'D'));
+        if((int)$numDiasParaVencimento > 0)
+            $date->add(new DateInterval('P' . (string)$numDiasParaVencimento . 'D'));
         $newDueDate = (string)$date->format('Y-m-d'); 
 
         if ($newDueDate >= date('Y-m-d'))
@@ -84,8 +91,9 @@ function gerencianetUpdateBillet($vars)
             $response       = getChargeId($vars, $credentials);
             $gnIntegration  = $response['gn_object'];
             $chargeId       = (int)$response['charge_id'];
+            $expireAt       = $response['expire_at'];
 
-            if($chargeId != 0)
+            if($chargeId != 0 && $newDueDate != $expireAt)
             {
                 $gnIntegration->update_billet($chargeId, $newDueDate);
             }
