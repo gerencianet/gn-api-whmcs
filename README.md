@@ -1,9 +1,9 @@
-# Módulo de Integração Gerencianet para WHMCS Oficial - Versão 0.2.5 #
+# Módulo de Integração Gerencianet para WHMCS Oficial - Versão 0.2.6 #
 
 O módulo Gerencianet para o WHMCS permite gerar boletos com registro por meio da nossa API.
 Compatível com as versões superiores a 6.0.4 do WHMCS.
 
-Este é uma versão Beta do Módulo Oficial de integração fornecido pela [Gerencianet](https://gerencianet.com.br/) para WHMCS. Com ele, o responsável pela conta WHMCS pode receber pagamentos por boleto bancário e, assim que a cobrança tem uma confirmação de pagamento ou é cancelada, a Gerencianet envia uma notificação automática para o WHMCS.
+Este é a versão oficial do módulo de integração fornecido pela [Gerencianet](https://gerencianet.com.br/) para WHMCS. Com ele, o responsável pela conta WHMCS pode receber pagamentos por boleto bancário e, assim que a cobrança tem uma confirmação de pagamento ou é cancelada, a Gerencianet envia uma notificação automática para o WHMCS.
 
 Caso você tenha alguma dúvida ou sugestão, entre em contato conosco pelo site [Gerencianet](https://gerencianet.com.br/).
 
@@ -13,16 +13,20 @@ Caso você tenha alguma dúvida ou sugestão, entre em contato conosco pelo site
 2. Descompacte o arquivo baixado;
 3. Copie o arquivo gerencianetcharge.php e a pasta gerencianet_lib, disponíveis na pasta gn-api-whmcs, para o diretório /modules/gateways da instalação do WHMCS;
 4. Copie o arquivo gerencianetcharge.php, disponível no diretório gn-api-whmcs/callback, para o diretório modules/gateways/callback. Ele deve seguir o modelo modules/gateways/callback/gerencianetcharge.php.
+5. Copie o arquivo gerencianet.php, disponível no diretório gn-api-whmcs/hooks, para o diretório includes/hooks. Ele deverá seguir o modelo includes/hooks/gerencianet.php
 
 Os arquivos do módulo Gerencianet devem seguir a seguinte estrutura no WHMCS:
 
 ```
+ includes/hooks/
+  |- gerencianet.php
  modules/gateways/
   |- callback/gerencianetcharge.php
   |  gerencianet_lib/
   |  gerencianetcharge.php
 ```
 
+Obs: O passo 5 é opcional, devendo ser seguido apenas se o administrador do WHMCS desejar que as faturas atualizadas no WHMCS também tenham seu status atualizados automaticamente na Gerencianet.
 ## Configuração do Módulo
 
 ![Parametros de configuração do módulo Gerencianet](parametros_configuracao.png "Parametros de configuração do módulo Gerencianet")
@@ -68,6 +72,12 @@ Caso o integrador escolha uma das 4 formas de desconto do WHMCS (Porcentagem, va
 Além dos descontos fornecidos pelo WHMCS, é possível disponibilizar descontos exclusivos para os boletos gerados por meio do módulo Gerencianet. Esta opção de desconto é configurada nos campos "Desconto do Boleto" e "Tipo de desconto" do módulo Gerencianet. Uma vez configurado, este desconto será exibido no boleto Gerencianet e, assim que for pago, o valor do pedido e da cobrança no WHMCS será atualizado para o valor com o desconto Gerencianet.
 
 Outra forma de desconto além das citadas anteriormente são os créditos que o usuário tem no WHMCS. Assim, caso um cliente queira aplicar um determinado crédito no pedido do WHMCS, tal quantia será convertida em desconto no boleto Gerencianet. 
+
+## Novidades
+
+A partir da versão 0.2.6 do módulo Gerencianet/WHMCS foi disponibilizado o callback automático do WHMCS para a Gerencianet nos casos de cancelamento da fatura e de atualização da data de vencimento do boleto. Portanto, sempre que uma fatura for cancelada no WHMCS ela é automáticamente cancelada na Gerencianet, e sempre que a fatura tem a data de vencimento modificada, o boleto Gerencianet também tem sua data de vencimento atualizada. 
+
+Para ativar o callback automático do WHMCS para a Gerencianet, siga o passo 5 da sessão de Instalação.
 
 ## Requisitos
 

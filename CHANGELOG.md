@@ -1,3 +1,7 @@
+#v0.2.6
+
+* Add. Callback automático do WHMCS para a Gerencianet nos casos de cancelamentos de mudanças na data de vencimento da fatura.
+
 #v0.2.5
 
 * Fix Aceita o numero de telefone que vem do WHMCS, mesmo que tal numero venha com uma mascara.

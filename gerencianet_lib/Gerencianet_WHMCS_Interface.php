@@ -26,6 +26,27 @@ function get_custom_field_value($field, $clientId)
     return $field;
 }
 
+function get_admin_credentials()
+{
+    $table    = "tblpaymentgateways";
+    $fields    = "*";
+     $where     = array(
+        "gateway" => "gerencianetcharge"
+    );
+
+    $credentials = array();
+    $response = select($table, $where, $fields, 8);
+    for($i=0; $i<count($response); $i++){
+        $name = $response[$i]["setting"];
+        $value = $response[$i]["value"];
+        if($name == "clientIDProd" || $name == "clientSecretProd" || $name == "clientIDDev" || $name == "numDiasParaVencimento" ||
+            $name == "clientSecretDev" || $name == "idConta" ||  $name == "configSandbox" || $name == "whmcsAdmin")
+            $credentials[$name] = $value;
+    }
+
+    return $credentials;
+}
+
 function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountType)
 {
     $total        = get_price($invoiceId);

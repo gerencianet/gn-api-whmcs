@@ -150,6 +150,36 @@ class GerencianetIntegration {
 		}
 	}
 
+	public function update_billet($charge_id, $expire_date) {
+
+		$options = GerencianetIntegration::get_gn_api_credentials();
+
+		$params = array("id" => $charge_id);
+		$body = array("expire_at" => $expire_date);
+
+		try {
+		    $api = new Gerencianet($options);
+		    $charge = $api->updateBillet($params, $body);
+
+		    return GerencianetIntegration::result_api($charge, true);
+
+		} catch (GerencianetException $e) {
+		    $errorResponse = array(
+		        "code" => $e->code,
+		        "error" => $e->error,
+		        "message" => $e->errorDescription,
+		    );
+
+		    return GerencianetIntegration::result_api($errorResponse, false);
+		} catch (Exception $e) {
+		    $errorResponse = array(
+		        "message" => $e->getMessage(),
+		    );
+
+		    return GerencianetIntegration::result_api($errorResponse, false);
+		}
+	}
+	
 	public function pay_billet($charge_id, $expirationDate, $customer, $instructions, $discount=false) {
 		$options = GerencianetIntegration::get_gn_api_credentials();
 		$params = array ('id' => $charge_id);
