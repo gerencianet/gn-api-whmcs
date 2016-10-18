@@ -103,32 +103,25 @@ function gerencianetcharge_config()
             "Description"   => "Marque esta opção se você deseja que a Gerencianet envie emails de transações para o cliente final",
         ),
 
-        'instruction1'      => array(
-            'FriendlyName'  => 'Instrução do boleto - Primeira linha',
+        "fineValue"         => array(
+            "FriendlyName"  => "Configuração de Multa",
             'Type'          => 'text',
-            'Size'          => '90',
-            'Default'       => 'Após o vencimento aceitar somente no banco emissor',
-            'Description'   => ' (opcional)',
-        ),
-        'instruction2'      => array(
-            'FriendlyName'  => 'Instrução do boleto - Segunda linha',
-            'Type'          => 'text',
-            'Size'          => '90',
-            'Description'   => ' (opcional)',
-        ),
-        'instruction3'      => array(
-            'FriendlyName'  => 'Instrução do boleto - Terceira linha',
-            'Type'          => 'text',
-            'Size'          => '90',
-            'Description'   => ' (opcional)',
-        ),
-        'instruction4'      => array(
-            'FriendlyName'  => 'Instrução do boleto - Quarta linha',
-            'Type'          => 'text',
-            'Size'          => '90',
-            'Description'   => ' (opcional)',
+            "Description"   => "Informe o valor, em porcentagem, cobrado de multa após o vencimento. Valor máximo não deve ser superior à 10%",
         ),
 
+        "interestValue"         => array(
+            "FriendlyName"  => "Configuração de Juros",
+            'Type'          => 'text',
+            "Description"   => "Informe o valor, em porcentagem, cobrado de juros por dia após a data de vencimento. Valor máximo não deve ser superior à 0,33%",
+        ),
+
+        "message"      => array(
+            'FriendlyName'  => 'Observação',
+            'Type'          => 'text',
+            'Size'          => '80',
+            'Description'   => 'Permite incluir no boleto uma mensagem para o cliente.',
+        ),
+        
     );
     return $configarray;
 }
@@ -190,10 +183,9 @@ function gerencianetcharge_link($params)
     $configDebug            = $params['configDebug'];
     $configVencimento       = $params['configVencimento'];
     $sendEmailGN            = $params['sendEmailGN'];
-    $instruction1           = $params['instruction1'];
-    $instruction2           = $params['instruction2'];
-    $instruction3           = $params['instruction3'];
-    $instruction4           = $params['instruction4'];
+    $fineValue              = $params['fineValue'];
+    $interestValue          = $params['interestValue'];
+    $billetMessage          = $params['message'];
     $adminWHMCS             = $params['whmcsAdmin'];
 
     if($adminWHMCS == '' || $adminWHMCS == null)
@@ -426,14 +418,17 @@ function gerencianetcharge_link($params)
                 );
         }
         
-        /* *********************************************** Gera o array de instrucoes do boleto ******************************************** */
+        /* *********************************************** Multa, juros e observação no boleto ******************************************** */
 
-        $dirtyInstructions = array($instruction1, $instruction2, $instruction3, $instruction4);
-        $instructions = array();
-        foreach ($dirtyInstructions as $instruction) {
-            if ($instruction != '' && $instruction != null)
-                array_push($instructions, $instruction);
-        }
+        $fineValue      = preg_replace("/[,]/",".", $fineValue);
+        $fineValue      = preg_replace("/[%]/","", $fineValue);
+        $fineValue      = number_format($fineValue , 2, '.', '');
+        $fineValue      = (int)preg_replace("/[.,-]/","", $fineValue);
+
+        $interestValue  = preg_replace("/[,]/",".", $interestValue);
+        $interestValue  = preg_replace("/[%]/","", $interestValue);
+        $interestValue  = number_format($interestValue , 3, '.', '');
+        $interestValue  = (int)preg_replace("/[.,-]/","", $interestValue);
 
         /* ******************************************************* Gera a charge e o boleto ************************************************ */
         if (empty($errorMessages))
@@ -466,7 +461,7 @@ function gerencianetcharge_link($params)
 
             if ($permitionToPay == true)
             {
-                $resultPayment = $gnIntegration->pay_billet($chargeId, $newDueDate, $customer, $instructions, $discount);
+                $resultPayment = $gnIntegration->pay_billet($chargeId, $newDueDate, $customer, $billetMessage, $fineValue, $interestValue, $discount);
                 $resultPaymentDecoded = json_decode($resultPayment, true);
 
                 if ($resultPaymentDecoded['code'] != 0)

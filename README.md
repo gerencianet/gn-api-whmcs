@@ -1,4 +1,4 @@
-# Módulo de Integração Gerencianet para WHMCS Oficial - Versão 0.2.7 #
+# Módulo de Integração Gerencianet para WHMCS Oficial - Versão 0.2.8 #
 
 O módulo Gerencianet para o WHMCS permite gerar boletos com registro por meio da nossa API.
 Compatível com as versões superiores a 6.0.4 do WHMCS.
@@ -47,7 +47,9 @@ Dentro do painel administrativo do WHMCS, acesse o menu "Setup" -> "Payments" ->
 12. **Sandbox:** Caso seja de seu interesse, habilite o ambiente de testes da API Gerencianet;
 13. **Debug:** Neste campo é possível habilitar os logs de transação e de erros da Gerencianet no painel WHMCS;
 14. **E-mail de cobrança - Gerencianet:** Caso seja de seu interesse, habilite o envio de emails de cobrança da Gerencianet para o cliente final;
-15. **Instrução do boleto:** Configure as instruções do boleto que sejam de seu interesse;
+15. **Configuração de Multa:** Caso seja de seu interesse, informe o valor, em porcentagem, cobrado de multa após o vencimento. Por exemplo: se você quiser 2%, você deve informar 2. Mínimo de 0.01 e máximo de 10. Integer.
+16. **Configuração de Juros:**  valor cobrado de juros por dia após a data de vencimento. Por exemplo: se você quiser 0,033%, você deve informar 0.033. Mínimo de 0.001 e máximo de 0.33;
+17. **Observação:** Permite incluir no boleto uma mensagem para o cliente;
 
 #Erros Comuns de Integração:
 
@@ -75,7 +77,7 @@ Outra forma de desconto além das citadas anteriormente são os créditos que o 
 
 ## Novidades
 
-A partir da versão 0.2.6 do módulo Gerencianet/WHMCS foi disponibilizado o callback automático do WHMCS para a Gerencianet nos casos de cancelamento da fatura e de atualização da data de vencimento do boleto. Portanto, sempre que uma fatura for cancelada no WHMCS ela é automáticamente cancelada na Gerencianet, e sempre que a fatura tem a data de vencimento modificada, o boleto Gerencianet também tem sua data de vencimento atualizada. 
+A partir da versão 0.2.7 do módulo Gerencianet/WHMCS foi disponibilizado o callback automático do WHMCS para a Gerencianet nos casos de cancelamento da fatura e de atualização da data de vencimento do boleto. Portanto, sempre que uma fatura for cancelada no WHMCS ela é automáticamente cancelada na Gerencianet, e sempre que a fatura tem a data de vencimento modificada, o boleto Gerencianet também tem sua data de vencimento atualizada. 
 
 Para ativar o callback automático do WHMCS para a Gerencianet, siga o passo 5 da sessão de Instalação.
 

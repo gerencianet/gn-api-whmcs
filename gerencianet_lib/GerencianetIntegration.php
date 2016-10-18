@@ -180,45 +180,39 @@ class GerencianetIntegration {
 		}
 	}
 	
-	public function pay_billet($charge_id, $expirationDate, $customer, $instructions, $discount=false) {
+	public function pay_billet($charge_id, $expirationDate, $customer, $message, $fine, $interest, $discount=false) 
+	{
 		$options = GerencianetIntegration::get_gn_api_credentials();
 		$params = array ('id' => $charge_id);
 		
-		if ($discount) {
-			if(sizeof($instructions) == 0)
-			{
-				$banking_billet = array (
-		            'expire_at' => $expirationDate,
-		            'customer' => $customer,
-		            'discount' => $discount
-		      	);
-			} else {
-				$banking_billet = array (
-		            'expire_at' => $expirationDate,
-		            'customer' => $customer,
-		            'instructions' => $instructions,
-		            'discount' => $discount
-		      	);
-			}
-
+		if($discount) 
+		{
+			$banking_billet = array (
+	            'expire_at' => $expirationDate,
+	            'customer' => $customer,
+	            'discount' => $discount
+	      	);
 		} 
 
 		else 
 		{
-			if(sizeof($instructions) == 0)
-			{
-				$banking_billet = array (
-		            'expire_at' => $expirationDate,
-		            'customer' => $customer
-		      	);
-			} else {
-				$banking_billet = array (
-		            'expire_at' => $expirationDate,
-		            'customer' => $customer,
-		            'instructions' => $instructions
-		      	);
-			}
+			$banking_billet = array (
+	            'expire_at' => $expirationDate,
+	            'customer' => $customer
+	      	);
 		}
+
+		$configurations = array();
+		if($fine > 0)
+			$configurations['fine'] = $fine;
+		if($interest > 0)
+			$configurations['interest'] = $interest;
+
+		if(isset($configurations['fine']) || isset($configurations['interest']))
+			$banking_billet['configurations'] = $configurations;
+
+		if(strlen($message) > 0)
+			$banking_billet['message'] = $message;
 
 		$body = array (
 		    'payment' => array (
