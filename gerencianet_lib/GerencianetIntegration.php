@@ -357,7 +357,7 @@ class GerencianetIntegration {
 					$message = $messageErrorDefault;
 					$messageAdmin = 'O campo ' . $this->getFieldName($property) . ' não está preenchido corretamente: ';
 				}
-				elseif(strpos($property, 'instructions/') !== false || strpos($property, '/message') !== false)
+				elseif(strpos($property, 'instructions/') !== false || strpos($property, 'message') !== false)
 				{
 					$message = $messageErrorDefault;
 					$messageAdmin = $this->getFieldName($property);
