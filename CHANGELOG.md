@@ -1,3 +1,7 @@
+#v0.2.9
+
+* Add: Mensagens de erro mais detalhadas.
+
 #v0.2.8
 
 * Add: Configuração de juros e multa.

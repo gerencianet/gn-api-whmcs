@@ -357,7 +357,7 @@ class GerencianetIntegration {
 					$message = $messageErrorDefault;
 					$messageAdmin = 'O campo ' . $this->getFieldName($property) . ' não está preenchido corretamente: ';
 				}
-				elseif(strpos($property, 'instructions/') !== false)
+				elseif(strpos($property, 'instructions/') !== false || strpos($property, '/message') !== false)
 				{
 					$message = $messageErrorDefault;
 					$messageAdmin = $this->getFieldName($property);
@@ -465,7 +465,18 @@ class GerencianetIntegration {
 			$id   = $property[1] + 1;
 		}
 
+		if(strpos($name, '/message') !== true)
+		{
+			$name = 'message';
+		}
+
 		switch($name) {
+			case "message":
+				return "O campo de observação do boleto ultrapassa o tamanho limite de 80 caracteres.";
+				break;
+			case "notification":
+				return "Notificação";
+				break;
 			case "neighborhood":
 				return 'Bairro';
 				break;
