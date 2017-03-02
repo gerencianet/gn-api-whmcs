@@ -1,3 +1,9 @@
+#v0.3.0
+
+* Fix: Mensagens de erros para configurações erradas de juros e multa.
+* Fix: Descrição mais coerente dos campos de configuração.
+* Fix: Tela de erro.
+
 #v0.2.9
 
 * Add: Mensagens de erro mais detalhadas.

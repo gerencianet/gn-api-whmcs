@@ -1,6 +1,7 @@
 
 <?php
 
+date_default_timezone_set('America/Sao_Paulo');
 $errors = null;
 if (isset($_POST['errors']))
 	$errors = $_POST['errors'];

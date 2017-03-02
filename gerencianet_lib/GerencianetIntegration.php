@@ -357,7 +357,7 @@ class GerencianetIntegration {
 					$message = $messageErrorDefault;
 					$messageAdmin = 'O campo ' . $this->getFieldName($property) . ' não está preenchido corretamente: ';
 				}
-				elseif(strpos($property, 'instructions/') !== false || strpos($property, 'message') !== false)
+				elseif(strpos($property, 'instructions/') !== false || strpos($property, 'message') !== false || strpos($property, 'interest') !== false || strpos($property, 'fine') !== false)
 				{
 					$message = $messageErrorDefault;
 					$messageAdmin = $this->getFieldName($property);
@@ -458,19 +458,29 @@ class GerencianetIntegration {
 	}
 	
 	public function getFieldName($name) {
-		if(strpos($name, 'instructions/') !== true)
+		if(strpos($name, 'instructions/') !== false)
 		{
 			$property = explode('/', $name);
 			$name = $property[0];
 			$id   = $property[1] + 1;
 		}
 
-		if(strpos($name, '/message') !== true)
-		{
+		else if(strpos($name, '/message') !== false)
 			$name = 'message';
-		}
+
+		else if(strpos($name, '/interest') !== false)
+			$name = 'interest';
+
+		else if(strpos($name, '/fine') !== false)
+			$name = 'fine';
 
 		switch($name) {
+			case "interest":
+				return "O campo referente ao juros cobrado após o vencimento deve ter valor máximo de 0,33% e mínimo 0,001%.";
+				break;
+			case "fine":
+				return "O campo referente a multa cobrada após o vencimento deve ter valor máximo de 10% e mínimo 0,01%.";
+				break;
 			case "message":
 				return "O campo de observação do boleto ultrapassa o tamanho limite de 80 caracteres.";
 				break;

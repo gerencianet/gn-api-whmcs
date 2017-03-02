@@ -106,20 +106,20 @@ function gerencianetcharge_config()
         "fineValue"         => array(
             "FriendlyName"  => "Configuração de Multa",
             'Type'          => 'text',
-            "Description"   => "Informe o valor, em porcentagem, cobrado de multa após o vencimento. Valor máximo não deve ser superior à 10%",
+            "Description"   => "Valor da multa se pago após o vencimento - informe em porcentagem (mínimo 0,01% e máximo 10%).",
         ),
 
         "interestValue"         => array(
             "FriendlyName"  => "Configuração de Juros",
             'Type'          => 'text',
-            "Description"   => "Informe o valor, em porcentagem, cobrado de juros por dia após a data de vencimento. Valor máximo não deve ser superior à 0,33%",
+            "Description"   => "Valor de juros por dia se pago após o vencimento - informe em porcentagem (mínimo 0,001% e máximo 0,33%).",
         ),
 
         "message"      => array(
             'FriendlyName'  => 'Observação',
             'Type'          => 'text',
             'Size'          => '80',
-            'Description'   => 'Permite incluir no boleto uma mensagem para o cliente.',
+            'Description'   => 'Permite incluir no boleto uma mensagem para o cliente (máximo de 80 caracteres).',
         ),
         
     );
