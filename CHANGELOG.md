@@ -1,3 +1,7 @@
+#v0.3.1
+
+* Fix:  Atualização no link do boleto gerado, agora o link encaminha para um PDF.
+
 #v0.3.0
 
 * Fix: Mensagens de erros para configurações erradas de juros e multa.

@@ -216,8 +216,8 @@ function gerencianetcharge_link($params)
         if($chargeDetails['code'] == 200)
         {
             $existCharge = true;
-            if(isset($chargeDetails['data']['payment']['banking_billet']['link'])){
-                $url  = $chargeDetails['data']['payment']['banking_billet']['link'];
+            if(isset($chargeDetails['data']['payment']['banking_billet']['pdf']['charge'])){
+                $url  = $chargeDetails['data']['payment']['banking_billet']['pdf']['charge'];
                 $code = buttonGerencianet(null,$url);
                 return $code;
             }
@@ -473,13 +473,13 @@ function gerencianetcharge_link($params)
 
                     $data      = $resultPaymentDecoded['data'];
                     $chargeId  = $data["charge_id"];
-                    $url       = (string)$data["link"];
+                    $url       = (string)$data['pdf']['charge'];
 
                     $updateTransactionCommand                  = "updatetransaction";
                     $updateTransactionValues['transactionid']  = $transactionId ;
                     $updateTransactionValues['description']    = "Boleto Gerencianet: Cobrança aguardando pagamento.";
                     $updatetransresults = localAPI($updateTransactionCommand, $updateTransactionValues, $adminWHMCS);
-                    $code = "<meta http-equiv='refresh' content='0;url=" . $resultPaymentDecoded["data"]["link"] . "'>";
+                    $code = "<meta http-equiv='refresh' content='0;url=" . $resultPaymentDecoded["data"]['pdf']['charge'] . "'>";
                     return $code;
                 }
                 else {
