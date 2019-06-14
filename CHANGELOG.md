@@ -1,3 +1,8 @@
+
+#v0.3.2
+
+* Fix: Realiza verificação da versão do TLS do servidor.
+
 #v0.3.1
 
 * Fix:  Atualização no link do boleto gerado, agora o link encaminha para um PDF.

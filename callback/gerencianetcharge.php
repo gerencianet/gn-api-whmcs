@@ -154,5 +154,3 @@ elseif ($status == "canceled")
     $response = update_invoice_status($invoiceId, "Cancelled", $adminWHMCS, false);
     die('WHMCS - Cobrança cancelada pelo vendedor ou pelo pagador');
 }
-
-?>
