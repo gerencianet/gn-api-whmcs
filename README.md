@@ -51,6 +51,13 @@ Dentro do painel administrativo do WHMCS, acesse o menu "Setup" -> "Payments" ->
 16. **Configuração de Juros:**  valor cobrado de juros por dia após a data de vencimento. Por exemplo: se você quiser 0,033%, você deve informar 0.033. Mínimo de 0.001 e máximo de 0.33;
 17. **Observação:** Permite incluir no boleto uma mensagem para o cliente;
 
+## Configuração de Campo Personalizado
+
+- Para que o módulo funcione, é necessário um campo de cliente personalizado, que receberá os valores para CPF ou CNPJ.  
+- No painel administrativo do WHMCS, acesse: "Opções" >> "Campos Personalizados" >>  "Adicionar". Insira um novo campo, exemplo:
+
+![Parametros de configuração do Campo Personalizado](campo_personalizado.png "Parametros de configuração do Campo Personalizado")
+
 #Erros Comuns de Integração:
 
 Antes mesmo do módulo tentar gerar uma cobrança alguns campos requisitados na integração passam por uma validação. Os erros que esta validação podem retornar são:
@@ -87,5 +94,3 @@ Obs: Este módulo foi testado no whmcs 7.1.1 e está funcionando no mesmo.
 
 * Versão mínima do PHP: 5.4.39
 * Versão mínima do WHMCS: 6.0.4
-
-
