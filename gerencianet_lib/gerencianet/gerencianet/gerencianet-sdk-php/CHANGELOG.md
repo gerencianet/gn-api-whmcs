@@ -1,3 +1,39 @@
+# 2.0.0
+
+- Breaking change: Drop PHP 5.4 support 
+- Breaking change: Update Guzzle version
+
+# 1.0.14
+
+- Added: timeout option
+
+# 1.0.13
+
+- Fix: code climate on dev dependencies
+
+# 1.0.12
+
+- Added: new endpoint (update charge link)
+
+# 1.0.11
+
+- Added: new endpoint (charge link)
+- Updated: docs
+
+# 1.0.10
+
+- Added: new endpoints (cancel carnet and cancel parcel)
+- Updated: docs
+
+# 1.0.9
+
+- Fix: Tests.
+
+# 1.0.8
+
+- Updated: Request
+- Added: User can define the certified path.
+
 # 1.0.7
 
 - Updated: ApiRequest
