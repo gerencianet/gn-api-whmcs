@@ -58,7 +58,7 @@ Dentro do painel administrativo do WHMCS, acesse o menu "Setup" -> "Payments" ->
 
 ![Parametros de configuração do Campo Personalizado](campo_personalizado.png "Parametros de configuração do Campo Personalizado")
 
-#Erros Comuns de Integração:
+# Erros Comuns de Integração:
 
 Antes mesmo do módulo tentar gerar uma cobrança alguns campos requisitados na integração passam por uma validação. Os erros que esta validação podem retornar são:
 
@@ -73,7 +73,7 @@ Antes mesmo do módulo tentar gerar uma cobrança alguns campos requisitados na 
 
 Ainda que nenhum destes erros de validação sejam retornados, a API Gerencianet poderá retornar erros referentes à geração da cobrança. Para mais informações sobre os códigos de erros retornados pela API Gerencianet, [clique aqui](https://docs.gerencianet.com.br/codigos-de-erros).
 
-##Descontos:
+## Descontos:
 
 Neste módulo de integração é possível gerar boletos considerando os descontos dos cupons promocionais fornecidos pelo WHMCS.
 Caso o integrador escolha uma das 4 formas de desconto do WHMCS (Porcentagem, valor fixo, Substituição de preço e isenção de tarifas), tal desconto é convertido em Reais e repassado à API Gerencianet no momento da geração do boleto.
