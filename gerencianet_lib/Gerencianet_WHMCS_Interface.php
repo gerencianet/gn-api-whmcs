@@ -166,7 +166,13 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
         #desconto-gn{
             font-size: 13px;
         }
-    </style>';
+    </style>
+    <script>
+        window.onload = function() {
+            document.querySelector("body > div.container-fluid.invoice-container > div:nth-child(4) > div.col-12.col-sm-6.order-sm-last.text-sm-right.invoice-col.right").innerHTML = ""
+        };
+    </script>
+    ';
 
     if($errorMessages != null)
     {
