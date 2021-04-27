@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb46737289d75b56207057dd01dec455c
+class ComposerStaticInitb46737289d75b56207057dd01dec455d
 {
     public static $files = array (
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
@@ -57,9 +57,9 @@ class ComposerStaticInitb46737289d75b56207057dd01dec455c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb46737289d75b56207057dd01dec455c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb46737289d75b56207057dd01dec455c::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb46737289d75b56207057dd01dec455c::$prefixesPsr0;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb46737289d75b56207057dd01dec455d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb46737289d75b56207057dd01dec455d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitb46737289d75b56207057dd01dec455d::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }
