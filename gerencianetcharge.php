@@ -128,7 +128,7 @@ function gerencianetcharge_link($params)
 
     /* **************************************** Verifica se a versão do PHP é compatível com a API ******************************** */
 
-    if (version_compare(PHP_VERSION, '5.4.39') < 0) {
+    if (version_compare(PHP_VERSION, '7.3') < 0) {
         $errorMsg = 'A versão do PHP do servidor onde o WHMCS está hospedado não é compatível com o módulo Gerencianet. Atualize o PHP para uma versão igual ou superior à versão 5.4.39';
         if ($params['configDebug'] == "on")
             logTransaction('gerencianetcharge', $errorMsg, 'Erro de Versão');
