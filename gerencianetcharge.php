@@ -148,7 +148,7 @@ function gerencianetcharge_link($params)
     include_once 'gerencianet_lib/GerencianetValidation.php';
 
     $invoiceId   = $params['invoiceid'];
-    $urlCallback = $params['systemurl'] . '/modules/gateways/callback/gerencianetcharge.php';
+    $urlCallback = $params['systemurl'] . 'modules/gateways/callback/gerencianetcharge.php';
 
     /* ************************************************ Define mensagens de erro ***************************************************/
 
