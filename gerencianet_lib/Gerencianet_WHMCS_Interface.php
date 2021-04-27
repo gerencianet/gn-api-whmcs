@@ -174,7 +174,7 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
         foreach ($errorMessages as $error) {
             $src = $src . '<input type="hidden" name="errors[]" value="' . $error . '"></input>';
         }
-        $src .= '<input title="Boleto Gerencianet" type="submit" class="btn botao" value="Boleto"></form><br>';
+        $src .= '<input title="Boleto Gerencianet" target="_blank" type="submit" class="btn botao" value="Boleto"></form><br>';
     }
     else
     {
@@ -182,7 +182,7 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
         {
             $src .= "<form action='#' method='post'>
                         <input type='hidden' name='geraCharge' value='true'>
-                        <input type='submit' title='Boleto Gerencianet' value='Boleto' class='btn botao'>
+                        <input type='submit' target='_blank' title='Boleto Gerencianet' value='Boleto' class='btn botao'>
                     </form><br>";
         }
         else 
