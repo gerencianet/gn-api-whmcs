@@ -156,7 +156,7 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
             background-size: 35px;
             background-repeat: no-repeat;
             color: white;
-            background-position-x: 7px;
+            background-position-x: 10px;
             background-position-y: 5.5px;
             cursor: pointer;
         }
