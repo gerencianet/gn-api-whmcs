@@ -11,16 +11,16 @@ function get_custom_field_value($field, $clientId)
         "type"      => "client"
     );
 
-    $customFieldData = select($table, $where, $fields);
+    $customFieldData = selectCob($table, $where, $fields);
     $customFieldId   = $customFieldData["id"];
-
+    
     $table     = "tblcustomfieldsvalues";
     $fields    = "value";
     $where     = array(
         "fieldid" => $customFieldId,
         "relid"   => $clientId
     );
-    $customFieldValueData = select($table, $where, $fields, 1, 'fieldid');
+    $customFieldValueData = selectCob($table, $where, $fields, 1, 'fieldid');
     $field = $customFieldValueData['value'];
 
     return $field;
@@ -35,7 +35,7 @@ function get_admin_credentials()
     );
 
     $credentials = array();
-    $response = select($table, $where, $fields, 8);
+    $response = selectCob($table, $where, $fields, 8);
     for($i=0; $i<count($response); $i++){
         $name = $response[$i]["setting"];
         $value = $response[$i]["value"];
@@ -54,9 +54,9 @@ function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountT
     if($descontoBoleto == 0) return null;
 
     $where    = array('invoiceid' => $invoiceId);
-    $order    = select('tblorders', $where, '*');
+    $order    = selectCob('tblorders', $where, '*');
     $where    = array('id' => $invoiceId);              
-    $invoice  = select('tblinvoices', $where, '*');     
+    $invoice  = selectCob('tblinvoices', $where, '*');     
     $userid   = $order['userid'];
 
     if ($discountType == '1') 
@@ -71,7 +71,7 @@ function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountT
     }
     
     $where           =  array('invoiceid' => $invoiceId);
-    $dataInvoiceItem = select('tblinvoiceitems', $where, 'duedate', 1);
+    $dataInvoiceItem = selectCob('tblinvoiceitems', $where, 'duedate', 1);
     $duedate         = $dataInvoiceItem['duedate'];
 
     $dataDiscount = array(
@@ -85,15 +85,15 @@ function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountT
         'paymentmethod' => 'gerencianetcharge'
     );
 
-    insert('tblinvoiceitems', $dataDiscount);
+    insertCob('tblinvoiceitems', $dataDiscount);
 
     $newOrderAmount      = $order['amount'] + $amount; 
     $newInvoiceSubTotal  = $invoice['subtotal'] + $amount;
     $newInvoiceTotal     = $invoice['total'] + $amount;
 
-    $updateAmountOrder   = update('tblorders', array('invoiceid' => $invoiceId), array('amount' => $newOrderAmount)); 
+    $updateAmountOrder   = updateCob('tblorders', array('invoiceid' => $invoiceId), array('amount' => $newOrderAmount)); 
     $updateData          = array('total'    => $newInvoiceTotal, 'subtotal' => $newInvoiceSubTotal);
-    $updateAmountInvoice = update('tblinvoices', array('id' => $invoiceId), $updateData);
+    $updateAmountInvoice = updateCob('tblinvoices', array('id' => $invoiceId), $updateData);
 }
 
 function get_price($invoiceId, $discount=false)
