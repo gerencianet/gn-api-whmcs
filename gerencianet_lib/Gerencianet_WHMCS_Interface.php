@@ -138,7 +138,7 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
     $src = '<style>
         .botao {
             background-color: #f26522;
-            background-image:url("modules/gateways/gerencianet_lib/images/gn-laranja.svg");
+            background-image:url("modules/gateways/gerencianet_lib/images/gn-laranja.png");
             background-size: 35px;
             background-repeat: no-repeat;
             background-position-x: 7px;
@@ -153,7 +153,7 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
         }
         .botao:hover {
             background-color: #ff751a;
-            background-image:url("modules/gateways/gerencianet_lib/images/gn-laranja.svg");
+            background-image:url("modules/gateways/gerencianet_lib/images/gn-laranja.png");
             background-size: 35px;
             background-repeat: no-repeat;
             color: white;
