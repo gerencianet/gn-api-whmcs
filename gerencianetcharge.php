@@ -79,12 +79,6 @@ function gerencianetcharge_config()
             "Description"       => "Informe o nome do campo referente à CPF e/ou CNPJ no seu WHMCS. (preenchimento obrigatório)",
         ),
 
-        "minValue" => array(
-            "FriendlyName"      => "Valor mínimo da fatura.",
-            "Type"              => "text",
-            "Description"       => "Informe o valor mínimo da cobrança, contendo apenas números com exatamente 2 casas decimais, para que o boleto Gerencianet seja gerado. Caso este campo não seja preenchido o valor considerado será R$ 0.00",
-        ),
-
         "configSandbox"     => array(
             "FriendlyName"  => "Sandbox",
             "Type"          => "yesno",
@@ -177,7 +171,7 @@ function gerencianetcharge_link($params)
     $tipoDesconto           = $params['tipoDesconto'];
     $numDiasParaVencimento  = $params['numDiasParaVencimento'];
     $documentField          = $params['documentField'];
-    $minValue               = $params['minValue'];
+    $minValue               = 5; //Valor mínimo de emissão de boleto na Gerencianet
     $configSandbox          = $params['configSandbox'];
     $configDebug            = $params['configDebug'];
     $configVencimento       = $params['configVencimento'];
