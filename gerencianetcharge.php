@@ -6,7 +6,7 @@ function gerencianetcharge_config()
     $configarray = array(
         "FriendlyName"  => array(
             "Type"      => "System",
-            "Value"     => "Gerencianet"
+            "Value"     => "Gerencianet via Boleto"
         ),
 
         "clientIDProd"      => array(
