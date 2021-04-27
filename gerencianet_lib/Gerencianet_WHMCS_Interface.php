@@ -141,14 +141,13 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
             background-image:url("modules/gateways/gerencianet_lib/images/gn-laranja.png");
             background-size: 35px;
             background-repeat: no-repeat;
-            background-position-x: 7px;
+            background-position-x: 10px;
             background-position-y: 5.5px;
             font-weight: bold;
             font-size: 20px;
             color: white;
             border: none;
             padding: 10px 36px 10px 58px;
-            border-radius: 30px;
             cursor: pointer;
         }
         .botao:hover {
