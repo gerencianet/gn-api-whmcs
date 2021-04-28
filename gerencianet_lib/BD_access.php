@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-function select($table, $conditions, $fields, $limits=1)
+function selectCob($table, $conditions, $fields, $limits=1)
 {
     try {
         $gerencianetData = Capsule::table($table);
@@ -19,7 +19,7 @@ function select($table, $conditions, $fields, $limits=1)
     }
 }
 
-function insert($table, $data)
+function insertCob($table, $data)
 {
     try {
         Capsule::table($table)->insert($data);
@@ -28,7 +28,7 @@ function insert($table, $data)
     }
 }
 
-function update($table, $conditions, $updateData)
+function updateCob($table, $conditions, $updateData)
 {
     try {
         $gerencianetData = Capsule::table($table);
@@ -41,7 +41,7 @@ function update($table, $conditions, $updateData)
     } 
 }
 
-function delete($table, $conditions)
+function deleteCob($table, $conditions)
 {
     try {
         $gerencianetData = Capsule::table($table);

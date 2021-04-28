@@ -9,6 +9,7 @@ class Endpoints
     private $requester;
     private $endpoints;
     private $methods;
+    private static $instance;
 
     public function __construct($options, $requester = null)
     {
@@ -19,13 +20,35 @@ class Endpoints
         }
 
         $this->endpoints = Config::get('ENDPOINTS');
+        $this->endpoints = Config::isPix($options) ? $this->endpoints['PIX'] : $this->endpoints['DEFAULT'];
         $this->map();
+    }
+
+    public static function getInstance($options = null, $requester = null)
+    {
+        if (!isset(self::$instance)) {
+            if(!isset($options)) {
+                throw new Exception('config not defined');
+            }
+
+            self::$instance = new self($options, $requester);
+        }
+        return self::$instance;
     }
 
     public function __call($method, $args)
     {
         if (isset($this->methods[$method])) {
-            return $this->methods[$method]($args[0], $args[1]);
+            return $this->methods[$method]((isset($args[0]) ? $args[0] : null), (isset($args[1]) ? $args[1] : null));
+        } else {
+            throw new Exception('nonexistent endpoint');
+        }
+    }
+
+    public static function __callStatic($method, $args)
+    {
+        if (method_exists('\\Gerencianet\Utils', $method)) {
+            return Utils::$method((isset($args[0]) ? $args[0] : null), (isset($args[1]) ? $args[1] : null));
         } else {
             throw new Exception('nonexistent endpoint');
         }
@@ -34,7 +57,7 @@ class Endpoints
     private function map()
     {
         $this->methods = array_map(function ($endpoint) {
-            return function ($params, $body) use ($endpoint) {
+            return function ($params = [], $body = []) use ($endpoint) {
                 $route = $this->getRoute($endpoint, $params);
                 $query = $this->getQueryString($params);
                 $route .= $query;

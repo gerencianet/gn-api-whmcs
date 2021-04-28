@@ -6,7 +6,7 @@ function gerencianetcharge_config()
     $configarray = array(
         "FriendlyName"  => array(
             "Type"      => "System",
-            "Value"     => "Gerencianet"
+            "Value"     => "Gerencianet via Boleto"
         ),
 
         "clientIDProd"      => array(
@@ -79,12 +79,6 @@ function gerencianetcharge_config()
             "Description"       => "Informe o nome do campo referente à CPF e/ou CNPJ no seu WHMCS. (preenchimento obrigatório)",
         ),
 
-        "minValue" => array(
-            "FriendlyName"      => "Valor mínimo da fatura.",
-            "Type"              => "text",
-            "Description"       => "Informe o valor mínimo da cobrança, contendo apenas números com exatamente 2 casas decimais, para que o boleto Gerencianet seja gerado. Caso este campo não seja preenchido o valor considerado será R$ 0.00",
-        ),
-
         "configSandbox"     => array(
             "FriendlyName"  => "Sandbox",
             "Type"          => "yesno",
@@ -134,7 +128,7 @@ function gerencianetcharge_link($params)
 
     /* **************************************** Verifica se a versão do PHP é compatível com a API ******************************** */
 
-    if (version_compare(PHP_VERSION, '5.4.39') < 0) {
+    if (version_compare(PHP_VERSION, '7.3') < 0) {
         $errorMsg = 'A versão do PHP do servidor onde o WHMCS está hospedado não é compatível com o módulo Gerencianet. Atualize o PHP para uma versão igual ou superior à versão 5.4.39';
         if ($params['configDebug'] == "on")
             logTransaction('gerencianetcharge', $errorMsg, 'Erro de Versão');
@@ -148,7 +142,7 @@ function gerencianetcharge_link($params)
     include_once 'gerencianet_lib/GerencianetValidation.php';
 
     $invoiceId   = $params['invoiceid'];
-    $urlCallback = $params['systemurl'] . '/modules/gateways/callback/gerencianetcharge.php';
+    $urlCallback = $params['systemurl'] . 'modules/gateways/callback/gerencianetcharge.php';
 
     /* ************************************************ Define mensagens de erro ***************************************************/
 
@@ -177,7 +171,7 @@ function gerencianetcharge_link($params)
     $tipoDesconto           = $params['tipoDesconto'];
     $numDiasParaVencimento  = $params['numDiasParaVencimento'];
     $documentField          = $params['documentField'];
-    $minValue               = $params['minValue'];
+    $minValue               = 5; //Valor mínimo de emissão de boleto na Gerencianet
     $configSandbox          = $params['configSandbox'];
     $configDebug            = $params['configDebug'];
     $configVencimento       = $params['configVencimento'];

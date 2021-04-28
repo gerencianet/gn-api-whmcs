@@ -11,16 +11,16 @@ function get_custom_field_value($field, $clientId)
         "type"      => "client"
     );
 
-    $customFieldData = select($table, $where, $fields);
+    $customFieldData = selectCob($table, $where, $fields);
     $customFieldId   = $customFieldData["id"];
-
+    
     $table     = "tblcustomfieldsvalues";
     $fields    = "value";
     $where     = array(
         "fieldid" => $customFieldId,
         "relid"   => $clientId
     );
-    $customFieldValueData = select($table, $where, $fields, 1, 'fieldid');
+    $customFieldValueData = selectCob($table, $where, $fields, 1, 'fieldid');
     $field = $customFieldValueData['value'];
 
     return $field;
@@ -35,7 +35,7 @@ function get_admin_credentials()
     );
 
     $credentials = array();
-    $response = select($table, $where, $fields, 8);
+    $response = selectCob($table, $where, $fields, 8);
     for($i=0; $i<count($response); $i++){
         $name = $response[$i]["setting"];
         $value = $response[$i]["value"];
@@ -54,9 +54,9 @@ function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountT
     if($descontoBoleto == 0) return null;
 
     $where    = array('invoiceid' => $invoiceId);
-    $order    = select('tblorders', $where, '*');
+    $order    = selectCob('tblorders', $where, '*');
     $where    = array('id' => $invoiceId);              
-    $invoice  = select('tblinvoices', $where, '*');     
+    $invoice  = selectCob('tblinvoices', $where, '*');     
     $userid   = $order['userid'];
 
     if ($discountType == '1') 
@@ -71,7 +71,7 @@ function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountT
     }
     
     $where           =  array('invoiceid' => $invoiceId);
-    $dataInvoiceItem = select('tblinvoiceitems', $where, 'duedate', 1);
+    $dataInvoiceItem = selectCob('tblinvoiceitems', $where, 'duedate', 1);
     $duedate         = $dataInvoiceItem['duedate'];
 
     $dataDiscount = array(
@@ -85,15 +85,15 @@ function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountT
         'paymentmethod' => 'gerencianetcharge'
     );
 
-    insert('tblinvoiceitems', $dataDiscount);
+    insertCob('tblinvoiceitems', $dataDiscount);
 
     $newOrderAmount      = $order['amount'] + $amount; 
     $newInvoiceSubTotal  = $invoice['subtotal'] + $amount;
     $newInvoiceTotal     = $invoice['total'] + $amount;
 
-    $updateAmountOrder   = update('tblorders', array('invoiceid' => $invoiceId), array('amount' => $newOrderAmount)); 
+    $updateAmountOrder   = updateCob('tblorders', array('invoiceid' => $invoiceId), array('amount' => $newOrderAmount)); 
     $updateData          = array('total'    => $newInvoiceTotal, 'subtotal' => $newInvoiceSubTotal);
-    $updateAmountInvoice = update('tblinvoices', array('id' => $invoiceId), $updateData);
+    $updateAmountInvoice = updateCob('tblinvoices', array('id' => $invoiceId), $updateData);
 }
 
 function get_price($invoiceId, $discount=false)
@@ -138,26 +138,25 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
     $src = '<style>
         .botao {
             background-color: #f26522;
-            background-image:url("modules/gateways/gerencianet_lib/images/gn-laranja.svg");
+            background-image:url("modules/gateways/gerencianet_lib/images/gn-laranja.png");
             background-size: 35px;
             background-repeat: no-repeat;
-            background-position-x: 7px;
+            background-position-x: 10px;
             background-position-y: 5.5px;
             font-weight: bold;
             font-size: 20px;
             color: white;
             border: none;
             padding: 10px 36px 10px 58px;
-            border-radius: 30px;
             cursor: pointer;
         }
         .botao:hover {
             background-color: #ff751a;
-            background-image:url("modules/gateways/gerencianet_lib/images/gn-laranja.svg");
+            background-image:url("modules/gateways/gerencianet_lib/images/gn-laranja.png");
             background-size: 35px;
             background-repeat: no-repeat;
             color: white;
-            background-position-x: 7px;
+            background-position-x: 10px;
             background-position-y: 5.5px;
             cursor: pointer;
         }
@@ -167,7 +166,13 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
         #desconto-gn{
             font-size: 13px;
         }
-    </style>';
+    </style>
+    <script>
+        window.onload = function() {
+            document.querySelector("body > div.container-fluid.invoice-container > div:nth-child(4) > div.col-12.col-sm-6.order-sm-last.text-sm-right.invoice-col.right").innerHTML = ""
+        };
+    </script>
+    ';
 
     if($errorMessages != null)
     {
@@ -175,7 +180,7 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
         foreach ($errorMessages as $error) {
             $src = $src . '<input type="hidden" name="errors[]" value="' . $error . '"></input>';
         }
-        $src .= '<input title="Boleto Gerencianet" type="submit" class="btn botao" value="Boleto"></form><br>';
+        $src .= '<input title="Boleto Gerencianet" target="_blank" type="submit" class="btn botao" value="Boleto"></form><br>';
     }
     else
     {
@@ -183,7 +188,7 @@ function buttonGerencianet($errorMessages=null, $link=null, $discount=0, $discou
         {
             $src .= "<form action='#' method='post'>
                         <input type='hidden' name='geraCharge' value='true'>
-                        <input type='submit' title='Boleto Gerencianet' value='Boleto' class='btn botao'>
+                        <input type='submit' target='_blank' title='Boleto Gerencianet' value='Boleto' class='btn botao'>
                     </form><br>";
         }
         else 
