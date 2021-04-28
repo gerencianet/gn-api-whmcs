@@ -3,11 +3,12 @@
  * Gerencianet Integration Class.
  */
 
-include_once('gerencianet/autoload.php');
+if (!class_exists('Gerencianet\Gerencianet')) {
+	include_once('gerencianet/autoload.php');
+} 
+
 use Gerencianet\Exception\GerencianetException;
 use Gerencianet\Gerencianet;
-
-
 class GerencianetIntegration {
 
 	public $client_id_production;
