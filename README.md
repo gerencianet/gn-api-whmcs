@@ -1,4 +1,4 @@
-# Módulo de Integração Gerencianet para WHMCS Oficial - Versão 0.3.2 #
+# Módulo de Integração Gerencianet para WHMCS Oficial
 
 O módulo Gerencianet para o WHMCS permite gerar boletos com registro por meio da nossa API.
 Compatível com as versões superiores a 6.0.4 do WHMCS.
