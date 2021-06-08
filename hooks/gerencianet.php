@@ -79,7 +79,7 @@ function gerencianetUpdateBillet($vars)
 
         $date = DateTime::createFromFormat('Y-m-d', $dueDate);
         if ((int)$numDiasParaVencimento > 0)
-            $date->add(new DateInterval('P' . (string)$numDiasParaVencimento . 'D'));
+            $date- >add(new DateInterval('PT' . (string)$numDiasParaVencimento . 'D'));
         $newDueDate = (string)$date->format('Y-m-d');
 
         if ($newDueDate >= date('Y-m-d')) {
