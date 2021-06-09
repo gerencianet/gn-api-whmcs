@@ -96,7 +96,7 @@ if ($status == "paid")
                                 'transid' => (string)$transactionId,
                                 'invoiceid' => (int)$invoiceId);
 
-        $deleteTrans = delete('tblaccounts', $conditionsToDeletOldTrans);
+        $deleteTrans = deleteCob('tblaccounts', $conditionsToDeletOldTrans);
 
         $addInvoicePaymentCommand               = "addinvoicepayment";
         $addInvoicePaymentValues["invoiceid"]   = (int)$invoiceId;
