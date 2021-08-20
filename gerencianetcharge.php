@@ -92,7 +92,7 @@ function gerencianetcharge_config()
         ),
 
         "sendEmailGN"       => array(
-            "FriendlyName"  => "Email de cobraça - Gerencianet",
+            "FriendlyName"  => "Email de cobrança - Gerencianet",
             "Type"          => "yesno",
             "Description"   => "Marque esta opção se você deseja que a Gerencianet envie emails de transações para o cliente final",
         ),
