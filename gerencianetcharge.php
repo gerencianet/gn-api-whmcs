@@ -327,7 +327,7 @@ function gerencianetcharge_link($params)
         /* ********************************************* Coleta os dados do cliente ************************************************* */
 
         $clientId         = $params['clientdetails']['id'];
-        $document         = preg_replace("/[^0-9]/", "", get_custom_field_value((string)"CPF/CNPJ", $clientId));
+        $document         = preg_replace("/[^0-9]/", "", get_custom_field_value((string)$documentField, $clientId));
         $corporateName    = $params['clientdetails']['companyname'];
 
         $name  = $params['clientdetails']['firstname'] . ' ' . $params['clientdetails']['lastname'];
