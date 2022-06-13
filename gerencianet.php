@@ -333,6 +333,8 @@ function gerencianet_config_validate($params) {
  */
 function gerencianet_link($gatewayParams)
 {
+    // Creating table 'tblgerencianetpix'
+       createGerencianetPixTable();
     
     $baseUrl = $gatewayParams['systemurl'];
    
@@ -393,8 +395,7 @@ function gerencianet_link($gatewayParams)
             // Getting API Instance
             $api_instance = getGerencianetApiInstance($gatewayParams);
 
-            // Creating table 'tblgerencianetpix'
-            createGerencianetPixTable();
+            
 
             // Verifying if exists a Pix Charge for current invoiceId
             $existingPixCharge = getPixCharge($gatewayParams['invoiceid']);
