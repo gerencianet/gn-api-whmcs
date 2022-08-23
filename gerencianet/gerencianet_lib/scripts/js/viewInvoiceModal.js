@@ -5,383 +5,25 @@ window.onload = function () {
      * Função Gerencianet para gerar o payment token
      */
     $gn.ready(function (checkout) {
-        setTimeout(() => {
-            let numCartaoLarge = $('#numCartao');
-            let numCartaoMobile = $('#numCartaoMobile');
-            $('#numCartao').blur(() => {
-                var numCartao = $('#numCartao').val().replaceAll(' ', '');
-                var numInputCartao = $('#numCartao');
-                var invoiceValue = $('.invoice_value').val() * 100;
-                if (brandOption(numInputCartao) != '' && brandOption(numInputCartao) != undefined && brandOption(numInputCartao) != null && numCartao.length >= 13) {
-                    checkout.getInstallments(invoiceValue, brandOption(numInputCartao), function (error, response) {
-                        if (error) {
-                            console.log(error)
-                        } else {
-                            let installmentsOptions;
-                            for (let i = 0; i < response.data.installments.length; i++) {
-                                let juros = (((response.data.installments[i].value / 100) - 0.01) * (i + 1)) > $('.invoice_value').val() ? 'com juros' : 'sem juros';
-                                installmentsOptions += `<option valor=${response.data.installments[i].value} value="${i + 1}">${i + 1}x de R$${response.data.installments[i].currency} ${juros} </option> `;
-                            }
-                            if ($("#numParcelas option:selected").val() == 1 || $("#numParcelas option:selected").val() == '' ) {
-                                $('#numParcelas').html(installmentsOptions);
-                                $("#dynamicValue").html(`${formatValue($(".invoice_value").val())}`)
-                            }
-                            verifyPaymentToken(checkout, numInputCartao, 1);
-                        }
-                    })
-
-                } else {
-
-                    $('#numParcelas').html('<option>Insira os dados do seu cartão...</option>');
-                }
-            });
-            $('#numParcelas').change(function () {
-                $("#dynamicValue").html(`${formatValue(($('#numParcelas option:selected').attr('valor') * $('#numParcelas option:selected').val()) / 100)}`);
-
-
-            });
-            $('#codSeguranca').keyup(() => {
-                if ($('#codSeguranca').val().length == 3) {
-
-                    verifyPaymentToken(checkout, numCartaoLarge, 1);
-                }
-
-            });
-            $('#mesVencimento').change(() => {
-                verifyPaymentToken(checkout, numCartaoLarge, 1);
-            });
-            $('#anoVencimento').change(() => {
-                verifyPaymentToken(checkout, numCartaoLarge, 1);
-            });
-            $('#numCartaoMobile').blur(() => {
-                var numCartao = $('#numCartaoMobile').val().replaceAll(' ', '');
-                var numInputCartao = $('#numCartaoMobile');
-                var invoiceValue = $('.invoice_value').val() * 100;
-                if (brandOption(numInputCartao) != '' && brandOption(numInputCartao) != undefined && brandOption(numInputCartao) != null && numCartao.length >= 13) {
-                    checkout.getInstallments(invoiceValue, brandOption(numInputCartao), function (error, response) {
-                        if (error) {
-                            console.log(error)
-                        } else {
-                            let installmentsOptions;
-                            for (let i = 0; i < response.data.installments.length; i++) {
-                                installmentsOptions += `<option value="${i + 1}">${i + 1}x de R$${response.data.installments[i].currency}</option> `;
-                            }
-                            if ($("#numParcelasMobile option:selected").val() == 1 || $("#numParcelasMobile option:selected").val() == '' ) {
-                                $('#numParcelasMobile').html(installmentsOptions);
-                                $("#dynamicValue").html(`${formatValue($(".invoice_value").val())}`)
-                            }
-                            verifyPaymentToken(checkout, numInputCartao);
-                        }
-                    })
-
-                } else {
-                    $('#numParcelasMobile').html('<option>Insira os dados do seu cartão...</option>');
-                }
-            });
-            $('#codSegurancaMobile').keyup(() => {
-                if ($('#codSegurancaMobile').val().length == 3) {
-                    verifyPaymentToken(checkout, numCartaoMobile);
-                }
-
-            });
-            $('#mesVencimentoMobile').change(() => {
-                verifyPaymentToken(checkout, numCartaoMobile);
-            });
-            $('#anoVencimentoMobile').change(() => {
-                verifyPaymentToken(checkout, numCartaoMobile);
-            });
-
-        }, 2500);
+       startProcesso(checkout);
 
     })
 
 
-    let modal = setInterval(() => {
-        if (document.getElementsByClassName('invoice-container').length > 0) {
-            clearButton()
-            $.ajax({
-                url: "modules/gateways/gerencianet/gerencianet_lib/html/viewInvoiceModal.html",
-                dataType: "html",
-                cache: false,
-                success: function (dados) {
-                    document.body.insertAdjacentHTML('beforeend', dados);
-                    let buttonFinalizar = $('.botao');
-                    $(buttonFinalizar).css('display', 'none');
-
-                    $('.payment-btn-container').append(buttonFinalizar);
-                    $(buttonFinalizar).css('display', 'inline-block');
-
-
-                    $(buttonFinalizar).click(function () {
-                        $('.optionPaymentGerencianet').show(700);
-                        $('.optionPaymentGerencianet').css('display', 'flex');
-                    });
-                    $('.optionPaymentGerencianet').click(function (e) {
-
-                        if (e.target.className.includes('optionPaymentGerencianet')) {
-                            $('.optionPaymentGerencianet').hide(700);
-                        }
-
-                    });
-
-                    $('.fechar').click(function (e) {
-                        $('.optionPaymentGerencianet').hide(700);
-
-                    });
-
-                    document.getElementsByClassName('billet')[0].onclick = () => {
-                        $(".formularios :submit").removeAttr('disabled');
-                        $('.formularios :submit').css('opacity', '1');
-                        veriFyMinValue();
-
-                        document.getElementById('boleto').checked = true;
-                        document.getElementsByClassName('billet')[0].classList.add('selectedOption');
-                        (document.getElementsByClassName('pix')[0] != undefined) ? document.getElementsByClassName('pix')[0].classList.remove('selectedOption') : "";
-                        (document.getElementsByClassName('credit_card')[0] != undefined) ? document.getElementsByClassName('credit_card')[0].classList.remove('selectedOption') : "";
-
-                        $('.button').html('Gerar Boleto');
-                        $('.creditSelected').hide(0);
-                        $('.pixSelected').hide(0);
-                        $('.billetSelected').show();
-
-                        $('#nameBillet').attr('required', true);
-                        $('#documentClientBillet').attr('required', true);
-                        $('#clientEmailBillet').attr('required', true);
-
-                        $('#nameCredit').removeAttr('required');
-                        $('#clientEmailCredit').removeAttr('required');
-                        $('#documentClientCredit').removeAttr('required');
-                        $('#telephoneCredit').removeAttr('required');
-                        $('#dataNasce').removeAttr('required');
-                        $('#rua').removeAttr('required');
-                        $('#numero').removeAttr('required');
-                        $('#bairro').removeAttr('required');
-                        $('#cidade').removeAttr('required');
-                        $('#estado').removeAttr('required');
-                        $('#cep').removeAttr('required');
-
-                        if ($(document).width() > 767) {
-                            $('#numCartao').removeAttr('required');
-                            $('#codSeguranca').removeAttr('required');
-                            $('#mesVencimento').removeAttr('required');
-                            $('#anoVencimento').removeAttr('required');
-                            $('#numParcelas').removeAttr('required');
-                        } else {
-                            $('#numCartaoMobile').removeAttr('required');
-                            $('#codSegurancaMobile').removeAttr('required');
-                            $('#mesVencimentoMobile').removeAttr('required');
-                            $('#anoVencimentoMobile').removeAttr('required');
-                            $('#numParcelasMobile').removeAttr('required');
-                        }
-
-
-                        $('#documentClientPix').removeAttr('required');
-                        $('#clientNamePix').removeAttr('required');
-
-
-
-                    }
-                    document.getElementsByClassName('credit_card')[0].onclick = () => {
-                        if ($(".invalid-feedback").length > 0) {
-                            $(".formularios :submit").prop('disabled', true);
-                            $('.formularios :submit').css('opacity', '0.3');
-                        }
-                        veriFyMinValue();
-                        document.getElementById('credit').checked = true;
-                        document.getElementsByClassName('credit_card')[0].classList.add('selectedOption');
-                        (document.getElementsByClassName('pix')[0] != undefined) ? document.getElementsByClassName('pix')[0].classList.remove('selectedOption') : "";
-                        (document.getElementsByClassName('billet')[0] != undefined) ? document.getElementsByClassName('billet')[0].classList.remove('selectedOption') : "";
-                        $('.button').html('Pagar');
-                        $('.pixSelected').hide(0);
-                        $('.billetSelected').hide(0);
-                        $('.creditSelected').show();
-
-                        $('#nameBillet').removeAttr('required');
-                        $('#documentClientBillet').removeAttr('required');
-                        $('#clientEmailBillet').removeAttr('required');
-
-                        $('#nameCredit').attr('required', true);
-                        $('#clientEmailCredit').attr('required', true);
-                        $('#documentClientCredit').attr('required', true);
-                        $('#telephoneCredit').attr('required', true);
-                        $('#dataNasce').attr('required', true);
-                        $('#rua').attr('required', true);
-                        $('#numero').attr('required', true);
-                        $('#bairro').attr('required', true);
-                        $('#cidade').attr('required', true);
-                        $('#estado').attr('required', true);
-                        $('#cep').attr('required', true);
-
-                        if ($(document).width() > 767) {
-                            $('#numCartao').attr('required', true);
-                            $('#codSeguranca').attr('required', true);
-                            $('#mesVencimento').attr('required', true);
-                            $('#anoVencimento').attr('required', true);
-                            $('#numParcelas').attr('required', true);
-                        } else {
-                            $('#numCartaoMobile').attr('required', true);
-                            $('#codSegurancaMobile').attr('required', true);
-                            $('#mesVencimentoMobile').attr('required', true);
-                            $('#anoVencimentoMobile').attr('required', true);
-                            $('#numParcelasMobile').attr('required', true);
-                        }
-
-
-                        $('#documentClientPix').removeAttr('required');
-                        $('#clientNamePix').removeAttr('required');
-
-                    }
-                    document.getElementsByClassName('pix')[0].onclick = () => {
-                        $(".formularios :submit").removeAttr('disabled');
-                        $('.formularios :submit').css('opacity', '1');
-                        document.getElementById('pix').checked = true;
-                        document.getElementsByClassName('pix')[0].classList.add('selectedOption');
-                        (document.getElementsByClassName('credit_card')[0] != undefined) ? document.getElementsByClassName('credit_card')[0].classList.remove('selectedOption') : "";
-                        (document.getElementsByClassName('billet')[0] != undefined) ? document.getElementsByClassName('billet')[0].classList.remove('selectedOption') : "";
-                        $('.button').html('Gerar QRCode');
-                        $('.billetSelected').hide(0);
-                        $('.creditSelected').hide(0);
-                        $('.pixSelected').show();
-
-
-                        $('#nameBillet').removeAttr('required');
-                        $('#documentClientBillet').removeAttr('required');
-                        $('#clientEmailBillet').removeAttr('required');
-
-
-                        $('#nameCredit').removeAttr('required');
-                        $('#clientEmailCredit').removeAttr('required');
-                        $('#documentClientCredit').removeAttr('required');
-                        $('#telephoneCredit').removeAttr('required');
-                        $('#dataNasce').removeAttr('required');
-                        $('#rua').removeAttr('required');
-                        $('#numero').removeAttr('required');
-                        $('#bairro').removeAttr('required');
-                        $('#cidade').removeAttr('required');
-                        $('#estado').removeAttr('required');
-                        $('#cep').removeAttr('required');
-
-                        if ($(document).width() > 767) {
-                            $('#numCartao').removeAttr('required');
-                            $('#codSeguranca').removeAttr('required');
-                            $('#mesVencimento').removeAttr('required');
-                            $('#anoVencimento').removeAttr('required');
-                            $('#numParcelas').removeAttr('required');
-                        } else {
-                            $('#numCartaoMobile').removeAttr('required');
-                            $('#codSegurancaMobile').removeAttr('required');
-                            $('#mesVencimentoMobile').removeAttr('required');
-                            $('#anoVencimentoMobile').removeAttr('required');
-                            $('#numParcelasMobile').removeAttr('required');
-                        }
-
-                        $('#documentClientPix').attr('required', true);
-                        $('#clientNamePix').attr('required', true);
-
-
-                    }
-                    document.querySelectorAll('.button')[0].onclick = (e) => {
-
-
-
-                        if ((verifyActivation('boleto')) ? document.getElementById('boleto').checked : false) {
-                            validationForm('billet', e)
-                        } else if ((verifyActivation('pix')) ? document.getElementById('pix').checked : false) {
-                            validationForm('pix', e)
-                        } else {
-                            validationForm('credit', e)
-                        }
-
-                    }
-                    $("#documentClientBillet").on('paste', (e) => {
-                        try {
-                            $("#documentClientBillet").unmask();
-                        } catch (e) { }
-
-                        var tamanho = e.originalEvent.clipboardData.getData('text').replaceAll('.', '').replaceAll('-', '').length;
-                        if (tamanho <= 11) {
-                            $("#documentClientBillet").mask("999.999.999-99");
-                        } else {
-                            $("#documentClientBillet").mask("99.999.999/9999-99");
-                        }
-
-                        // ajustando foco
-                        var elem = this;
-                        setTimeout(function () {
-                            // mudo a posição do seletor
-                            elem.selectionStart = elem.selectionEnd = 10000;
-                        }, 0);
-                        // reaplico o valor para mudar o foco
-                        var currentValue = $(this).val();
-                        $(this).val('');
-                        $(this).val(currentValue);
-                    });
-                    $("#documentClientCredit").on('paste', (e) => {
-                        try {
-                            $("#documentClientCredit").unmask();
-
-                        } catch (e) { }
-
-                        var tamanho = e.originalEvent.clipboardData.getData('text').replaceAll('.', '').replaceAll('-', '').length;
-
-                        if (tamanho <= 11) {
-                            $("#documentClientCredit").mask("999.999.999-99");
-                        } else {
-                            $("#documentClientCredit").mask("99.999.999/9999-99");
-                        }
-
-                        // ajustando foco
-                        var elem = this;
-                        setTimeout(function () {
-                            // mudo a posição do seletor
-                            elem.selectionStart = elem.selectionEnd = 10000;
-                        }, 0);
-                        // reaplico o valor para mudar o foco
-                        var currentValue = $(this).val();
-                        $(this).val('');
-                        $(this).val(currentValue);
-                    });
-                    $("#documentClientPix").on('paste', (e) => {
-                        try {
-                            $("#documentClientPix").unmask();
-                        } catch (e) { }
-
-                        var tamanho = e.originalEvent.clipboardData.getData('text').replaceAll('.', '').replaceAll('-', '').length;
-
-                        if (tamanho <= 11) {
-                            $("#documentClientPix").mask("999.999.999-99");
-                        } else {
-                            $("#documentClientPix").mask("99.999.999/9999-99");
-                        }
-
-                        // ajustando foco
-                        var elem = this;
-                        setTimeout(function () {
-                            // mudo a posição do seletor
-                            elem.selectionStart = elem.selectionEnd = 10000;
-                        }, 0);
-                        // reaplico o valor para mudar o foco
-                        var currentValue = $(this).val();
-                        $(this).val('');
-                        $(this).val(currentValue);
-                    });
-
-                    $('.creditSelected').hide(0);
-                    $('.pixSelected').hide(0);
-                    intervalTotal();
-                    format();
-                    shadowButton();
-                    formatYear();
-                    autoComplete();
-                    veriFyMinValue();
-                }
-            });
+function startProcesso(checkout) {
+    $.ajax({
+        url: "modules/gateways/gerencianet/gerencianet_lib/html/btnViewModal.html",
+        dataType: "html",
+        cache: false,
+        success: function (dados) {
+            btnModalActions(dados, checkout);
         }
-    }, 100);
+    });
+}
+    
 
-    function clearButton() {
-        clearInterval(modal);
-    }
+
+   
 
     /**
      * Mascara aplicada nos inputs 
@@ -670,19 +312,19 @@ window.onload = function () {
             addTotalBoleto();
             addTotalPix();
             addTotalCartao();
-           
-            if ($('.ativarCredito').val() != 1  ) {
-               
+
+            if ($('.ativarCredito').val() != 1) {
+
                 $('.credit_card').remove();
                 $('.creditSelected').remove();
-                if ($('.boletoOption').val() != 1  ) {
+                if ($('.boletoOption').val() != 1) {
                     $('.pix').addClass('selectedOption');
                     $('#pix').attr('checked', true);
                     $('.pixSelected').show();
                     $(".button").html('Gerar QRCode');
                 }
             }
-            if ($('.boletoOption').val() != 1   ) {
+            if ($('.boletoOption').val() != 1) {
                 $('.billet').remove();
                 $('.billetSelected').remove();
                 $('.credit_card').addClass('selectedOption');
@@ -696,8 +338,8 @@ window.onload = function () {
                 $('.pixSelected').remove();
 
             }
-            
-            
+
+
         }
     };
 
@@ -890,20 +532,9 @@ window.onload = function () {
         $('#spanValorTotalCredit').html(`${formatValue($('.invoice_value').val())}`)
         $('#totalCredito').append(span);
 
-        div = $("<div />", {
-            class: 'container-fluid d-flex justify-content-between border p-1'
-        });
-        span = $("<span />", {
-            class: 'font-weight-bold'
-        });
-        $(span).html('Total com juros:');
-        $(div).append(span);
-        span = $("<span />", {
-            class: 'font-weight-bold',
-            id: 'dynamicValue'
-        });
-        $(span).html(`${formatValue($('.invoice_value').val())}`);
-        $(div).append(span);
+       
+        
+        
 
         $(".creditSelected").append(div);
     }
@@ -913,15 +544,414 @@ window.onload = function () {
             $('.creditSelected').html('<span class="validationMessage text-danger">Compra miníma para cartão: R$5,00</span>');
             $(".formularios :submit").prop('disabled', true);
             $('.formularios :submit').css('opacity', '0.3');
-            
+
         }
         if ($('.invoice_value').val() < 5) {
             $('.billetSelected').children().remove();
             $('.billetSelected').html('<span class="validationMessage text-danger">Compra miníma para boleto: R$5,00</span>');
             $(".formularios :submit").prop('disabled', true);
             $('.formularios :submit').css('opacity', '0.3');
-            
+
         }
     }
 
+    function btnModalActions(btn, checkout) {
+        document.getElementById("modal_content").insertAdjacentHTML('beforeend', btn);
+        let buttonFinalizar = $('.botao');
+
+        $(buttonFinalizar).css('display', 'inline-block');
+        $(buttonFinalizar).prop('disabled', true);
+        $(buttonFinalizar).addClass('disabled');
+        setTimeout(() => {
+            $(buttonFinalizar).removeAttr('disabled');
+            $(buttonFinalizar).removeClass('disabled');
+        }, 3000);
+
+        $(buttonFinalizar).click(function () {
+            
+            $.ajax({
+                url: 'modules/gateways/gerencianet/gerencianet_lib/css/bootstrap.min.css',
+                dataType: "text",
+                cache: false,
+                success: function (bootstrap) {
+                    style = $("<style />",{id:"theme_gateway"});
+                    $(style).html(bootstrap);
+                    $("#modal_content").append(style);
+                },
+                error: function (xhr,status,error) {
+                    console.log(error)
+                }
+                
+            })
+            if (!$("div").hasClass("optionPaymentGerencianet")) {
+                
+                $.ajax({
+                    url: "modules/gateways/gerencianet/gerencianet_lib/html/viewInvoiceModal.html",
+                    dataType: "html",
+                    cache: false,
+                    success: function (modal) {
+                        loadModal(modal, checkout);
+                    }
+                })
+                
+            }else{
+                $('.optionPaymentGerencianet').show(700);
+            }
+           
+
+        });
+    }
+
+    function loadModal(modal, checkout) {
+        document.getElementById("modal_content").insertAdjacentHTML('beforebegin', modal);
+                    $("#boleto").attr('checked', true);
+                    $('.optionPaymentGerencianet').show(700);
+                    $('.optionPaymentGerencianet').css('display', 'flex');
+                    $('.optionPaymentGerencianet').click(function (e) {
+
+                        if (e.target.className.includes('optionPaymentGerencianet')) {
+                            $("#theme_gateway").remove();
+                            $('.optionPaymentGerencianet').hide(700);
+                        }
+
+                    });
+
+                    $('.fechar').click(function (e) {
+                        $("#theme_gateway").remove();
+                        $('.optionPaymentGerencianet').hide(700);
+
+                    });
+
+                    document.getElementsByClassName('billet')[0].onclick = () => {
+                        $(".formularios :submit").removeAttr('disabled');
+                        $('.formularios :submit').css('opacity', '1');
+                        veriFyMinValue();
+
+                        document.getElementById('boleto').checked = true;
+                        document.getElementsByClassName('billet')[0].classList.add('selectedOption');
+                        (document.getElementsByClassName('pix')[0] != undefined) ? document.getElementsByClassName('pix')[0].classList.remove('selectedOption') : "";
+                        (document.getElementsByClassName('credit_card')[0] != undefined) ? document.getElementsByClassName('credit_card')[0].classList.remove('selectedOption') : "";
+
+                        $('.button').html('Gerar Boleto');
+                        $('.creditSelected').hide(0);
+                        $('.pixSelected').hide(0);
+                        $('.billetSelected').show();
+
+                        $('#nameBillet').attr('required', true);
+                        $('#documentClientBillet').attr('required', true);
+                        $('#clientEmailBillet').attr('required', true);
+
+                        $('#nameCredit').removeAttr('required');
+                        $('#clientEmailCredit').removeAttr('required');
+                        $('#documentClientCredit').removeAttr('required');
+                        $('#telephoneCredit').removeAttr('required');
+                        $('#dataNasce').removeAttr('required');
+                        $('#rua').removeAttr('required');
+                        $('#numero').removeAttr('required');
+                        $('#bairro').removeAttr('required');
+                        $('#cidade').removeAttr('required');
+                        $('#estado').removeAttr('required');
+                        $('#cep').removeAttr('required');
+
+                        if ($(document).width() > 767) {
+                            $('#numCartao').removeAttr('required');
+                            $('#codSeguranca').removeAttr('required');
+                            $('#mesVencimento').removeAttr('required');
+                            $('#anoVencimento').removeAttr('required');
+                            $('#numParcelas').removeAttr('required');
+                        } else {
+                            $('#numCartaoMobile').removeAttr('required');
+                            $('#codSegurancaMobile').removeAttr('required');
+                            $('#mesVencimentoMobile').removeAttr('required');
+                            $('#anoVencimentoMobile').removeAttr('required');
+                            $('#numParcelasMobile').removeAttr('required');
+                        }
+
+
+                        $('#documentClientPix').removeAttr('required');
+                        $('#clientNamePix').removeAttr('required');
+
+
+
+                    }
+                    document.getElementsByClassName('credit_card')[0].onclick = () => {
+                        if ($(".invalid-feedback").length > 0) {
+                            $(".formularios :submit").prop('disabled', true);
+                            $('.formularios :submit').css('opacity', '0.3');
+                        }
+                        veriFyMinValue();
+                        document.getElementById('credit').checked = true;
+                        document.getElementsByClassName('credit_card')[0].classList.add('selectedOption');
+                        (document.getElementsByClassName('pix')[0] != undefined) ? document.getElementsByClassName('pix')[0].classList.remove('selectedOption') : "";
+                        (document.getElementsByClassName('billet')[0] != undefined) ? document.getElementsByClassName('billet')[0].classList.remove('selectedOption') : "";
+                        $('.button').html('Pagar');
+                        $('.pixSelected').hide(0);
+                        $('.billetSelected').hide(0);
+                        $('.creditSelected').show();
+
+                        $('#nameBillet').removeAttr('required');
+                        $('#documentClientBillet').removeAttr('required');
+                        $('#clientEmailBillet').removeAttr('required');
+
+                        $('#nameCredit').attr('required', true);
+                        $('#clientEmailCredit').attr('required', true);
+                        $('#documentClientCredit').attr('required', true);
+                        $('#telephoneCredit').attr('required', true);
+                        $('#dataNasce').attr('required', true);
+                        $('#rua').attr('required', true);
+                        $('#numero').attr('required', true);
+                        $('#bairro').attr('required', true);
+                        $('#cidade').attr('required', true);
+                        $('#estado').attr('required', true);
+                        $('#cep').attr('required', true);
+
+                        if ($(document).width() > 767) {
+                            $('#numCartao').attr('required', true);
+                            $('#codSeguranca').attr('required', true);
+                            $('#mesVencimento').attr('required', true);
+                            $('#anoVencimento').attr('required', true);
+                            $('#numParcelas').attr('required', true);
+                        } else {
+                            $('#numCartaoMobile').attr('required', true);
+                            $('#codSegurancaMobile').attr('required', true);
+                            $('#mesVencimentoMobile').attr('required', true);
+                            $('#anoVencimentoMobile').attr('required', true);
+                            $('#numParcelasMobile').attr('required', true);
+                        }
+
+
+                        $('#documentClientPix').removeAttr('required');
+                        $('#clientNamePix').removeAttr('required');
+
+                    }
+                    document.getElementsByClassName('pix')[0].onclick = () => {
+                        $(".formularios :submit").removeAttr('disabled');
+                        $('.formularios :submit').css('opacity', '1');
+                        document.getElementById('pix').checked = true;
+                        document.getElementsByClassName('pix')[0].classList.add('selectedOption');
+                        (document.getElementsByClassName('credit_card')[0] != undefined) ? document.getElementsByClassName('credit_card')[0].classList.remove('selectedOption') : "";
+                        (document.getElementsByClassName('billet')[0] != undefined) ? document.getElementsByClassName('billet')[0].classList.remove('selectedOption') : "";
+                        $('.button').html('Gerar QRCode');
+                        $('.billetSelected').hide(0);
+                        $('.creditSelected').hide(0);
+                        $('.pixSelected').show();
+
+
+                        $('#nameBillet').removeAttr('required');
+                        $('#documentClientBillet').removeAttr('required');
+                        $('#clientEmailBillet').removeAttr('required');
+
+
+                        $('#nameCredit').removeAttr('required');
+                        $('#clientEmailCredit').removeAttr('required');
+                        $('#documentClientCredit').removeAttr('required');
+                        $('#telephoneCredit').removeAttr('required');
+                        $('#dataNasce').removeAttr('required');
+                        $('#rua').removeAttr('required');
+                        $('#numero').removeAttr('required');
+                        $('#bairro').removeAttr('required');
+                        $('#cidade').removeAttr('required');
+                        $('#estado').removeAttr('required');
+                        $('#cep').removeAttr('required');
+
+                        if ($(document).width() > 767) {
+                            $('#numCartao').removeAttr('required');
+                            $('#codSeguranca').removeAttr('required');
+                            $('#mesVencimento').removeAttr('required');
+                            $('#anoVencimento').removeAttr('required');
+                            $('#numParcelas').removeAttr('required');
+                        } else {
+                            $('#numCartaoMobile').removeAttr('required');
+                            $('#codSegurancaMobile').removeAttr('required');
+                            $('#mesVencimentoMobile').removeAttr('required');
+                            $('#anoVencimentoMobile').removeAttr('required');
+                            $('#numParcelasMobile').removeAttr('required');
+                        }
+
+                        $('#documentClientPix').attr('required', true);
+                        $('#clientNamePix').attr('required', true);
+
+
+                    }
+                    document.querySelectorAll('.button')[0].onclick = (e) => {
+
+
+
+                        if ((verifyActivation('boleto')) ? document.getElementById('boleto').checked : false) {
+                            validationForm('billet', e)
+                        } else if ((verifyActivation('pix')) ? document.getElementById('pix').checked : false) {
+                            validationForm('pix', e)
+                        } else {
+                            validationForm('credit', e)
+                        }
+
+                    }
+                    $("#documentClientBillet").on('paste', (e) => {
+                        try {
+                            $("#documentClientBillet").unmask();
+                        } catch (e) { }
+
+                        var tamanho = e.originalEvent.clipboardData.getData('text').replaceAll('.', '').replaceAll('-', '').length;
+                        if (tamanho <= 11) {
+                            $("#documentClientBillet").mask("999.999.999-99");
+                        } else {
+                            $("#documentClientBillet").mask("99.999.999/9999-99");
+                        }
+
+                        // ajustando foco
+                        var elem = this;
+                        setTimeout(function () {
+                            // mudo a posição do seletor
+                            elem.selectionStart = elem.selectionEnd = 10000;
+                        }, 0);
+                        // reaplico o valor para mudar o foco
+                        var currentValue = $(this).val();
+                        $(this).val('');
+                        $(this).val(currentValue);
+                    });
+                    $("#documentClientCredit").on('paste', (e) => {
+                        try {
+                            $("#documentClientCredit").unmask();
+
+                        } catch (e) { }
+
+                        var tamanho = e.originalEvent.clipboardData.getData('text').replaceAll('.', '').replaceAll('-', '').length;
+
+                        if (tamanho <= 11) {
+                            $("#documentClientCredit").mask("999.999.999-99");
+                        } else {
+                            $("#documentClientCredit").mask("99.999.999/9999-99");
+                        }
+
+                        // ajustando foco
+                        var elem = this;
+                        setTimeout(function () {
+                            // mudo a posição do seletor
+                            elem.selectionStart = elem.selectionEnd = 10000;
+                        }, 0);
+                        // reaplico o valor para mudar o foco
+                        var currentValue = $(this).val();
+                        $(this).val('');
+                        $(this).val(currentValue);
+                    });
+                    $("#documentClientPix").on('paste', (e) => {
+                        try {
+                            $("#documentClientPix").unmask();
+                        } catch (e) { }
+
+                        var tamanho = e.originalEvent.clipboardData.getData('text').replaceAll('.', '').replaceAll('-', '').length;
+
+                        if (tamanho <= 11) {
+                            $("#documentClientPix").mask("999.999.999-99");
+                        } else {
+                            $("#documentClientPix").mask("99.999.999/9999-99");
+                        }
+
+                        // ajustando foco
+                        var elem = this;
+                        setTimeout(function () {
+                            // mudo a posição do seletor
+                            elem.selectionStart = elem.selectionEnd = 10000;
+                        }, 0);
+                        // reaplico o valor para mudar o foco
+                        var currentValue = $(this).val();
+                        $(this).val('');
+                        $(this).val(currentValue);
+                    });
+
+                    $('.creditSelected').hide(0);
+                    $('.pixSelected').hide(0);
+                    intervalTotal();
+                    format();
+                    shadowButton();
+                    formatYear();
+                    autoComplete();
+                    veriFyMinValue();
+                    setPaymentToken(checkout)
+    }
+    function setPaymentToken(checkout) {
+        let numCartaoLarge = $('#numCartao');
+            let numCartaoMobile = $('#numCartaoMobile');
+            $('#numCartao').blur(() => {
+                var numCartao = $('#numCartao').val().replaceAll(' ', '');
+                var numInputCartao = $('#numCartao');
+                var invoiceValue = $('.invoice_value').val() * 100;
+                if (brandOption(numInputCartao) != '' && brandOption(numInputCartao) != undefined && brandOption(numInputCartao) != null && numCartao.length >= 13) {
+                    checkout.getInstallments(invoiceValue, brandOption(numInputCartao), function (error, response) {
+                        if (error) {
+                            console.log(error)
+                        } else {
+                            let installmentsOptions;
+
+                            for (let i = 0; i < response.data.installments.length; i++) {
+                                let juros = (((response.data.installments[i].value / 100) - 0.01) * (i + 1)) > $('.invoice_value').val() ? 'com juros' : 'sem juros';
+                                installmentsOptions += `<option valor=${response.data.installments[i].value} value="${i + 1}">${i + 1}x de R$${response.data.installments[i].currency} ${juros} </option> `;
+                            }
+
+                            if ($("#numParcelas option:selected").val() == 1 || $("#numParcelas option:selected").val() == '' || $("#numParcelas option:selected").val() == 'Insira os dados do seu cartão...') {
+
+                                $('#numParcelas').html(installmentsOptions);
+                                
+                            }
+                            verifyPaymentToken(checkout, numInputCartao, 1);
+                        }
+                    })
+
+                } else {
+
+                    $('#numParcelas').html('<option>Insira os dados do seu cartão...</option>');
+                }
+            });
+            
+            $('#codSeguranca').keyup(() => {
+                if ($('#codSeguranca').val().length == 3) {
+
+                    verifyPaymentToken(checkout, numCartaoLarge, 1);
+                }
+
+            });
+            $('#mesVencimento').change(() => {
+                verifyPaymentToken(checkout, numCartaoLarge, 1);
+            });
+            $('#anoVencimento').change(() => {
+                verifyPaymentToken(checkout, numCartaoLarge, 1);
+            });
+            $('#numCartaoMobile').blur(() => {
+                var numCartao = $('#numCartaoMobile').val().replaceAll(' ', '');
+                var numInputCartao = $('#numCartaoMobile');
+                var invoiceValue = $('.invoice_value').val() * 100;
+                if (brandOption(numInputCartao) != '' && brandOption(numInputCartao) != undefined && brandOption(numInputCartao) != null && numCartao.length >= 13) {
+                    checkout.getInstallments(invoiceValue, brandOption(numInputCartao), function (error, response) {
+                        if (error) {
+                            console.log(error)
+                        } else {
+                            let installmentsOptions;
+                            for (let i = 0; i < response.data.installments.length; i++) {
+                                installmentsOptions += `<option value="${i + 1}">${i + 1}x de R$${response.data.installments[i].currency}</option> `;
+                            }
+                            if ($("#numParcelasMobile option:selected").val() == 1 || $("#numParcelasMobile option:selected").val() == '' || $("#numParcelas option:selected").val() == 'Insira os dados do seu cartão...') {
+                                $('#numParcelasMobile').html(installmentsOptions);
+                                
+                            }
+                            verifyPaymentToken(checkout, numInputCartao);
+                        }
+                    })
+
+                } else {
+                    $('#numParcelasMobile').html('<option>Insira os dados do seu cartão...</option>');
+                }
+            });
+            $('#codSegurancaMobile').keyup(() => {
+                if ($('#codSegurancaMobile').val().length == 3) {
+                    verifyPaymentToken(checkout, numCartaoMobile);
+                }
+
+            });
+            $('#mesVencimentoMobile').change(() => {
+                verifyPaymentToken(checkout, numCartaoMobile);
+            });
+            $('#anoVencimentoMobile').change(() => {
+                verifyPaymentToken(checkout, numCartaoMobile);
+            });
+    }
 }

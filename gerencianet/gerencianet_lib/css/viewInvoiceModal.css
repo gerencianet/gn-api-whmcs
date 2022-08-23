@@ -207,6 +207,7 @@
     align-items: flex-start!important;
     padding-bottom: 2%;
     padding-top: 1%;
+    text-align: initial !important;
 }
 
 .meuPopUp {
@@ -354,11 +355,6 @@
 .selectedOption  {
     background-color: #f37021 !important;
 }
-
-
-
-
-
 #codSeguranca {
     height: 38px !important;
 }

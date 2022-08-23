@@ -45,7 +45,7 @@ function gerencianet_config()
             'Value' => 'Gerencianet'
         ),
         'gn_style' => array(
-            'Description'=>'
+            'Description' => '
             <style type="text/css">
                 .icon-required{
                     font-size:0.6em;
@@ -61,7 +61,7 @@ function gerencianet_config()
 
             '
         ),
-        
+
         'clientIdProd' => array(
             'FriendlyName' => '<i  data-toggle="tooltip" data-placement="top" title="Obrigatório" class="fas icon-required icon-weight fa-xs fa-asterisk"></i>Client_Id de Produção ',
             'Type' => 'text',
@@ -96,7 +96,7 @@ function gerencianet_config()
             'Size'          => '32',
             'Description'   => '',
         ),
-        
+
         'whmcsAdmin'    => array(
             'FriendlyName'  => '<i  data-toggle="tooltip" data-placement="top" title="Obrigatório" class="fas icon-required icon-weight fa-xs fa-asterisk"></i> Usuário administrador do WHMCS ',
             'Type'          => 'text',
@@ -205,8 +205,9 @@ function gerencianet_config()
     );
 }
 
-function gerencianet_config_validate($params) {
-    
+function gerencianet_config_validate($params)
+{
+
     if ($params['clientIdProd'] == '') {
         throw new \Exception('O campo Client_id produção não foi preenchido');
     }
@@ -225,41 +226,38 @@ function gerencianet_config_validate($params) {
     if ($params['whmcsAdmin'] == '') {
         throw new \Exception('O campo administrador do whmcs  não foi preenchido');
     }
-    if ($params['activeBoleto'] != 'on' && $params['activeCredit'] != 'on' && $params['activePix'] != 'on' ) {
+    if ($params['activeBoleto'] != 'on' && $params['activeCredit'] != 'on' && $params['activePix'] != 'on') {
         throw new \Exception('Nenhuma forma de pagamento ativa!');
     }
     if ($params['activeBoleto'] == 'on') {
-        if ($params['descontoBoleto'] != '')  {
-            $desconto = str_replace(',','.',$params['descontoBoleto'] );
-            if ( !is_numeric($desconto)) {
+        if ($params['descontoBoleto'] != '') {
+            $desconto = str_replace(',', '.', $params['descontoBoleto']);
+            if (!is_numeric($desconto)) {
                 throw new \Exception('O campo desconto do boleto  não foi preenchido corretamente');
             }
-            
         }
-    
-        if($params['numDiasParaVencimento'] == '' || !(is_numeric($params['numDiasParaVencimento'])) ){
+
+        if ($params['numDiasParaVencimento'] == '' || !(is_numeric($params['numDiasParaVencimento']))) {
             throw new \Exception('O campo dias para vencimento boleto  não foi preenchido corretamente');
         }
-        
+
         if ($params['fineValue'] != '') {
-            $multa = str_replace(',','.',$params['fineValue']);
-            if (!is_numeric( $multa)) {
+            $multa = str_replace(',', '.', $params['fineValue']);
+            if (!is_numeric($multa)) {
                 throw new \Exception('O campo multa  não foi preenchido corretamente');
             }
-            
         }
         if ($params['interestValue'] != '') {
-            $juros = str_replace(',','.',$params['interestValue']);
-            if (!is_numeric( $juros)) {
+            $juros = str_replace(',', '.', $params['interestValue']);
+            if (!is_numeric($juros)) {
                 throw new \Exception('O campo juros  não foi preenchido corretamente');
             }
-            
         }
     }
-    
+
     if ($params['activePix'] == 'on') {
         $chave_pix = $params['pixKey'];
-        
+
         $patternCPF = '/^[0-9]{11}$/';
         $patternCNPJ = '/^[0-9]{14}$/';
         $patternPHONE = '/^\+[1-9][0-9]\d{1,14}$/';
@@ -269,7 +267,7 @@ function gerencianet_config_validate($params) {
         if (!preg_match($patternCPF, $chave_pix) && !preg_match($patternCNPJ, $chave_pix) && !preg_match($patternPHONE, $chave_pix) && !preg_match($patternEMAIL, $chave_pix) && !preg_match($patterEVP, $chave_pix)) {
             throw new \Exception('Chave PIX inválida');
         }
-      
+
         if ($params['pixKey'] == '') {
             throw new \Exception('O campo chave Pix  não foi preenchido corretamente');
         }
@@ -284,12 +282,12 @@ function gerencianet_config_validate($params) {
             ";
             throw new \Exception($message);
         }
-        
+
         if ($params['pixDiscount'] != '') {
-            $descontoPix =  str_replace(',','.',str_replace('%','',$params['pixDiscount']));
+            $descontoPix =  str_replace(',', '.', str_replace('%', '', $params['pixDiscount']));
             if (!is_numeric($descontoPix)) {
                 throw new \Exception('O campo desconto Pix  não foi preenchido corretamente');
-        }
+            }
         }
 
         if ($params['pixDays'] == '') {
@@ -303,18 +301,15 @@ function gerencianet_config_validate($params) {
                 throw new \Exception($th->getMessage());
             }
         }
-        
     }
-    
-  try {
-    $gnIntegration = new GerencianetIntegration($params['clientIdProd'], $params['clientSecretProd'], $params['clientIdSandbox'], $params['clientSecretSandbox'], $params['sandbox'], $params['idConta']);
-   
-    $gnIntegration->testIntegration();
-} catch (\Throwable $th) {
-    throw new \Exception("<strong>Credenciais inválidas</strong>. Por favor, verifique se as suas credencias estão corretas e tente novamente.");
-  }
 
+    try {
+        $gnIntegration = new GerencianetIntegration($params['clientIdProd'], $params['clientSecretProd'], $params['clientIdSandbox'], $params['clientSecretSandbox'], $params['sandbox'], $params['idConta']);
 
+        $gnIntegration->testIntegration();
+    } catch (\Throwable $th) {
+        throw new \Exception("<strong>Credenciais inválidas</strong>. Por favor, verifique se as suas credencias estão corretas e tente novamente.");
+    }
 }
 
 /**
@@ -334,29 +329,31 @@ function gerencianet_config_validate($params) {
 function gerencianet_link($gatewayParams)
 {
     // Creating table 'tblgerencianetpix'
-       createGerencianetPixTable();
-    
+    createGerencianetPixTable();
+
     $baseUrl = $gatewayParams['systemurl'];
-   
- 
+
+
+
     $identificadorDaConta = $gatewayParams['idConta'];
     $autoCompleteFields = generateAutoCompleteFields($gatewayParams);
-   $autoCompletetotal = generateAutoCompleteTotal($gatewayParams);
-    
-   
-    
-    
-    $scriptPaymentTokenProducao = "<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://api.gerencianet.com.br/v1/cdn/$identificadorDaConta/'+v;s.async=false;s.id='$identificadorDaConta';if(!document.getElementById('$identificadorDaConta')){document.getElementsByTagName('head')[0].appendChild(s);};\$gn={validForm:true,processed:false,done:{},ready:function(fn){\$gn.done=fn;}};</script>";
-    $scriptPaymentTokenSandbox = "<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/$identificadorDaConta/'+v;s.async=false;s.id='$identificadorDaConta';if(!document.getElementById('$identificadorDaConta')){document.getElementsByTagName('head')[0].appendChild(s);};\$gn={validForm:true,processed:false,done:{},ready:function(fn){\$gn.done=fn;}};</script>";
-    $scriptGetPaymentToken = ($gatewayParams['sandbox'] == 'on')?$scriptPaymentTokenSandbox:$scriptPaymentTokenProducao;
+    $autoCompletetotal = generateAutoCompleteTotal($gatewayParams);
 
 
-    $paymentOptionsScript = "$scriptGetPaymentToken
-    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js\"></script>
+
+
+    $scriptPaymentTokenProducao = "<script type='text/javascript'>  var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://api.gerencianet.com.br/v1/cdn/$identificadorDaConta/'+v;s.async=false;s.id='$identificadorDaConta';if(!document.getElementById('$identificadorDaConta')){document.getElementsByTagName('head')[0].appendChild(s);};\$gn={validForm:true,processed:false,done:{},ready:function(fn){\$gn.done=fn;}};</script>";
+    $scriptPaymentTokenSandbox = "<script type='text/javascript'>  var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/$identificadorDaConta/'+v;s.async=false;s.id='$identificadorDaConta';if(!document.getElementById('$identificadorDaConta')){document.getElementsByTagName('head')[0].appendChild(s);};\$gn={validForm:true,processed:false,done:{},ready:function(fn){\$gn.done=fn;}};</script>";
+    $scriptGetPaymentToken = ($gatewayParams['sandbox'] == 'on') ? $scriptPaymentTokenSandbox : $scriptPaymentTokenProducao;
+
+
+    $paymentOptionsScript = "<div id='modal_content'></div>
+    $scriptGetPaymentToken
+    <script type=\"text/javascript\" src=\"$baseUrl/modules/gateways/gerencianet/gerencianet_lib/scripts/js/viewInvoiceModal.js\"></script>
+    <script type=\"text/javascript\" src=\"$baseUrl/modules/gateways/gerencianet/gerencianet_lib/scripts/js/jquery-mask/jquery.mask.min.js\"></script>
     <script type=\"text/javascript\" src=\"$baseUrl/modules/gateways/gerencianet/gerencianet_lib/scripts/js/validation/validation.js\"></script>
     $autoCompleteFields
     <script type=\"text/javascript\" src=\"$baseUrl/modules/gateways/gerencianet/gerencianet_lib/scripts/js/autoComplete/autoComplete.js\"></script>
-    <script type=\"text/javascript\" src=\"$baseUrl/modules/gateways/gerencianet/gerencianet_lib/scripts/js/viewInvoiceModal.js\"></script>
     $autoCompletetotal
     ";
 
@@ -365,37 +362,39 @@ function gerencianet_link($gatewayParams)
     if (!empty($existingPixCharge)) {
         $api_instance = getGerencianetApiInstance($gatewayParams);
         $locId =  $existingPixCharge['locid'];
-            return createQRCode($api_instance, $locId);
-    }else{
+        return createQRCode($api_instance, $locId);
+    } else {
         $gnIntegration = new GerencianetIntegration($gatewayParams['clientIdProd'], $gatewayParams['clientSecretProd'], $gatewayParams['clientIdSandbox'], $gatewayParams['clientSecretSandbox'], $gatewayParams['sandbox'], $gatewayParams['idConta']);
-            $existingChargeConfirm = existingCharge($gatewayParams, $gnIntegration);
+        $existingChargeConfirm = existingCharge($gatewayParams, $gnIntegration);
+        $existingCharge = $existingChargeConfirm['existCharge'];
+        $code = $existingChargeConfirm['code'];
+        if ($existingCharge) {
+            return $code;
+        } else {
+            $existingChargeConfirm = existingChargeCredit($gatewayParams, $gnIntegration);
             $existingCharge = $existingChargeConfirm['existCharge'];
             $code = $existingChargeConfirm['code'];
             if ($existingCharge) {
                 return $code;
-            }else{
-                $existingChargeConfirm = existingChargeCredit($gatewayParams, $gnIntegration);
-                $existingCharge = $existingChargeConfirm['existCharge'];
-                $code = $existingChargeConfirm['code'];
-                if ($existingCharge) {
-                 return $code;
-                }
             }
-
+        }
     }
 
-    if (!isset($_POST['optionPayment'])) {
+
+    if (!isset($_POST['optionPayment']) || $_POST['optionPayment'] == '') {
+       
         return $paymentOptionsScript;
     } else {
+       
         if ($_POST['optionPayment'] == 'pix') {
             $gatewayParams['paramsPix'] = $_POST;
-           
+
             validateRequiredParams($gatewayParams);
-           
+
             // Getting API Instance
             $api_instance = getGerencianetApiInstance($gatewayParams);
 
-            
+
 
             // Verifying if exists a Pix Charge for current invoiceId
             $existingPixCharge = getPixCharge($gatewayParams['invoiceid']);
@@ -413,25 +412,25 @@ function gerencianet_link($gatewayParams)
             // Generating QR Code
             $locId = $existingPixCharge ? $existingPixCharge['locid'] : $newPixCharge['loc']['id'];
             return createQRCode($api_instance, $locId);
-        }elseif ($_POST['optionPayment'] == 'boleto') {
+        } elseif ($_POST['optionPayment'] == 'boleto') {
             $gatewayParams['paramsBoleto'] = $_POST;
             $errorMessages = array();
             $errorMessages = validationParams($gatewayParams);
             /* **************************************** Verifica se a versão do PHP é compatível com a API ******************************** */
-        
+
             if (version_compare(PHP_VERSION, '7.3') < 0) {
                 $errorMsg = 'A versão do PHP do servidor onde o WHMCS está hospedado não é compatível com o módulo Gerencianet. Atualize o PHP para uma versão igual ou superior à versão 5.4.39';
                 if ($gatewayParams['debug'] == "on")
                     logTransaction('gerencianet', $errorMsg, 'Erro de Versão');
-        
+
                 return send_errors(array('Erro Inesperado: Ocorreu um erro inesperado. Entre em contato com o responsável do site.'));
             }
             /* ************************************************ Define mensagens de erro ***************************************************/
-        
-        
-           
-        
-        
+
+
+
+
+
             /* ******************************************** Gateway Configuration Parameters ******************************************* */
             $descontoBoleto         = $gatewayParams['descontoBoleto'];
             $tipoDesconto           = $gatewayParams['tipoDesconto'];
@@ -444,9 +443,9 @@ function gerencianet_link($gatewayParams)
                     logTransaction('gerencianet', 'O campo - Usuario administrador do WHMCS - está preenchido incorretamente', 'Erro de Integração');
                 return send_errors($errorMessages);
             }
-        
+
             /* ***************************** Verifica se já existe um boleto para o pedido em questão *********************************** */
-        
+
             $gnIntegration = new GerencianetIntegration($gatewayParams['clientIdProd'], $gatewayParams['clientSecretProd'], $gatewayParams['clientIdSandbox'], $gatewayParams['clientSecretSandbox'], $gatewayParams['sandbox'], $gatewayParams['idConta']);
             $existingChargeConfirm = existingCharge($gatewayParams, $gnIntegration);
             $existingCharge = $existingChargeConfirm['existCharge'];
@@ -459,16 +458,15 @@ function gerencianet_link($gatewayParams)
                 $limitMsg = "<div id=limit-value-msg style='font-weight:bold; color:#cc0000;'>Transação Não permitida: Você está tentando pagar uma fatura de<br> R$ $invoiceAmount. Para gerar o boleto Gerencianet, o valor mínimo do pedido deve ser de R$ $minValue</div>";
                 return $limitMsg;
             }
-                /* ************************************************* Invoice parameters *************************************************** */
-                $linkPagamento = createBillet($gatewayParams, $gnIntegration, $errorMessages,$existingCharge);
-                if (strpos($linkPagamento, 'modules/gateways/gerencianet/gerencianet_lib/gerencianet_errors.php')) {
-                    return ($linkPagamento);
-                }
-                return buttonGerencianet($errorMessages,$linkPagamento,$descontoBoleto, $tipoDesconto);
-            
-        }else{
+            /* ************************************************* Invoice parameters *************************************************** */
+            $linkPagamento = createBillet($gatewayParams, $gnIntegration, $errorMessages, $existingCharge);
+            if (strpos($linkPagamento, 'modules/gateways/gerencianet/gerencianet_lib/gerencianet_errors.php')) {
+                return ($linkPagamento);
+            }
+            return buttonGerencianet($errorMessages, $linkPagamento, $descontoBoleto, $tipoDesconto);
+        } else {
             $gatewayParams['paramsCartao'] = $_POST;
-            
+
             $errorMessages = array();
             $errorMessages = validationParamsCard($gatewayParams);
             $gnIntegration = new GerencianetIntegration($gatewayParams['clientIdProd'], $gatewayParams['clientSecretProd'], $gatewayParams['clientIdSandbox'], $gatewayParams['clientSecretSandbox'], $gatewayParams['sandbox'], $gatewayParams['idConta']);
@@ -478,12 +476,12 @@ function gerencianet_link($gatewayParams)
             if ($existingCharge) {
                 return $code;
             }
-            
+
             if (version_compare(PHP_VERSION, '7.3') < 0) {
                 $errorMsg = 'A versão do PHP do servidor onde o WHMCS está hospedado não é compatível com o módulo Gerencianet. Atualize o PHP para uma versão igual ou superior à versão 5.4.39';
                 if ($gatewayParams['debug'] == "on")
                     logTransaction('gerencianet', $errorMsg, 'Erro de Versão');
-        
+
                 return send_errors(array('Erro Inesperado: Ocorreu um erro inesperado. Entre em contato com o responsável do site.'));
             }
             $invoiceAmount              = $gatewayParams['amount'];
@@ -491,10 +489,7 @@ function gerencianet_link($gatewayParams)
                 $limitMsg = "<div id=limit-value-msg style='font-weight:bold; color:#cc0000;'>Transação Não permitida: Você está tentando pagar uma fatura de<br> R$ $invoiceAmount. Para gerar o boleto Gerencianet, o valor mínimo do pedido deve ser de R$ $minValue</div>";
                 return $limitMsg;
             }
-           return createCard($gatewayParams,$gnIntegration,$errorMessages,$existingCharge);
-
-        
-
+            return createCard($gatewayParams, $gnIntegration, $errorMessages, $existingCharge);
         }
     }
 }
