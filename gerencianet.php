@@ -328,6 +328,15 @@ function gerencianet_config_validate($params)
  */
 function gerencianet_link($gatewayParams)
 {
+    /* **************************************** Verifica se a versão do PHP é compatível com o módulo ******************************** */
+
+    if (version_compare(PHP_VERSION, '7.3') < 0) {
+        $errorMsg = 'A versão do PHP do servidor onde o WHMCS está hospedado não é compatível com o módulo Gerencianet.';
+        if ($gatewayParams['debug'] == "on")
+            logTransaction('gerencianet', $errorMsg, 'Erro de Versão');
+
+        return send_errors(array('Erro Inesperado: Ocorreu um erro inesperado. Entre em contato com o responsável do site.'));
+    }
     // Creating table 'tblgerencianetpix'
     createGerencianetPixTable();
 
@@ -416,15 +425,7 @@ function gerencianet_link($gatewayParams)
             $gatewayParams['paramsBoleto'] = $_POST;
             $errorMessages = array();
             $errorMessages = validationParams($gatewayParams);
-            /* **************************************** Verifica se a versão do PHP é compatível com a API ******************************** */
-
-            if (version_compare(PHP_VERSION, '7.3') < 0) {
-                $errorMsg = 'A versão do PHP do servidor onde o WHMCS está hospedado não é compatível com o módulo Gerencianet. Atualize o PHP para uma versão igual ou superior à versão 5.4.39';
-                if ($gatewayParams['debug'] == "on")
-                    logTransaction('gerencianet', $errorMsg, 'Erro de Versão');
-
-                return send_errors(array('Erro Inesperado: Ocorreu um erro inesperado. Entre em contato com o responsável do site.'));
-            }
+            
             /* ************************************************ Define mensagens de erro ***************************************************/
 
 
@@ -475,14 +476,6 @@ function gerencianet_link($gatewayParams)
             $code = $existingChargeConfirm['code'];
             if ($existingCharge) {
                 return $code;
-            }
-
-            if (version_compare(PHP_VERSION, '7.3') < 0) {
-                $errorMsg = 'A versão do PHP do servidor onde o WHMCS está hospedado não é compatível com o módulo Gerencianet. Atualize o PHP para uma versão igual ou superior à versão 5.4.39';
-                if ($gatewayParams['debug'] == "on")
-                    logTransaction('gerencianet', $errorMsg, 'Erro de Versão');
-
-                return send_errors(array('Erro Inesperado: Ocorreu um erro inesperado. Entre em contato com o responsável do site.'));
             }
             $invoiceAmount              = $gatewayParams['amount'];
             if ($invoiceAmount < $minValue) {
