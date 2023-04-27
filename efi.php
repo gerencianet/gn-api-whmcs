@@ -108,11 +108,6 @@ function efi_config()
             'Type'          => 'yesno',
             'Description'   => '<span id="billet">Ativar boleto como forma de pagamento</span>',
         ),
-        'descontoBoleto'    => array(
-            'FriendlyName'  => 'Desconto do Boleto <i class="toggle_billet fas fa-question-circle " data-toggle="tooltip" data-placement="top" title="Desconto para pagamentos no boleto bancário."></i>',
-            'Type'          => 'text',
-            'Description'   => '',
-        ),
         'tipoDesconto'      => array(
             'FriendlyName'  => 'Tipo de desconto <i class="toggle_billet fas fa-question-circle " data-toggle="tooltip" data-placement="top" title="Escolha a forma do desconto: Porcentagem ou em Reais"></i>',
             'Type'          => 'dropdown',
@@ -120,6 +115,11 @@ function efi_config()
                 '1'         => '% (Porcentagem)',
                 '2'         => 'R$ (Reais)',
             ),
+            'Description'   => '',
+        ),
+        'descontoBoleto'    => array(
+            'FriendlyName'  => 'Desconto do Boleto <i class="toggle_billet fas fa-question-circle" id="discount_billet" data-toggle="tooltip" data-placement="top" title="Desconto para pagamentos no boleto bancário."></i>',
+            'Type'          => 'text',
             'Description'   => '',
         ),
         'numDiasParaVencimento' => array(
@@ -161,7 +161,7 @@ function efi_config()
             'Description' => '',
         ),
         'pixDiscount' => array(
-            'FriendlyName' => 'Desconto do Pix (%) <i class="toggle_pix fas fa-question-circle " data-toggle="tooltip" data-placement="top" title="Preencha um valor caso queira dar um desconto para pagamentos via Pix"></i>',
+            'FriendlyName' => 'Desconto do Pix (%) <i class="toggle_pix fas fa-question-circle" id="discount_pix" data-toggle="tooltip" data-placement="top" title="Preencha um valor caso queira dar um desconto para pagamentos via Pix"></i>',
             'Type' => 'text',
             'Size' => '3',
             'Default' => '0%',
@@ -172,6 +172,13 @@ function efi_config()
             'Type' => 'text',
             'Size' => '3',
             'Default' => '1',
+            'Description' => '',
+        ),
+        'pixCert' => array(
+            'FriendlyName' => 'Certificado de Autenticação <i class="toggle_pix fas fa-question-circle " data-toggle="tooltip" data-placement="top" title="Insira o caminho do seu certificado .pem ou .p12 "></i>',
+            'Type' => 'text',
+            'Size' => '350',
+            'Default' => '/var/certs/cert.pem',
             'Description' => '',
         ),
         'activeCredit'       => array(
@@ -195,16 +202,34 @@ function efi_config()
             'Default' => false,
             'Description' => 'Entenda os riscos de não configurar o mTLS acessando o link https://gnetbr.com/rke4baDVyd',
         ),
-        'pixCert' => array(
-            'FriendlyName' => 'Certificado de Autenticação <i class="toggle_pix fas fa-question-circle " data-toggle="tooltip" data-placement="top" title="Insira o caminho do seu certificado .pem ou .p12 (Necessário somente no caso de utilização do Pix)"></i>',
-            'Type' => 'text',
-            'Size' => '350',
-            'Default' => '/var/certs/cert.pem',
-            'Description' => '',
-        ),
+        
         'gn_script' => array(
             'Description' => '
             <script>
+            function limitarDuasCasasDecimais(ids) {
+                
+                ids.forEach(function(id) {
+                    let row = $("#discount_" + id).parents()[1];
+                    let tdDiscount = $(row).children()[1];
+                    let inputDiscount = $(tdDiscount).children()[0];
+                    
+                    $(inputDiscount).on("input", function() {
+                        let value = $(this).val().replace(/[^0-9.]/g, "");
+                        let hasDecimal = value.indexOf(".") >= 0;
+
+                        if (hasDecimal) {
+                            let decimalIndex = value.indexOf(".");
+                            let decimalSubstring = value.substr(decimalIndex + 1);
+                            if (decimalSubstring.length > 2) {
+                            value = value.substr(0, decimalIndex + 3);
+                            }
+                        }
+
+                        $(this).val(value);
+                    });
+                
+                })
+            }
                 function isCheckedOptPayment(method){
                     let labelOptPaymentMethod = $("#" + method).parent();
                     let inputOptPaymentMethod = $(labelOptPaymentMethod).children()[1];
@@ -214,7 +239,7 @@ function efi_config()
                         toggleFieldsPaymentMethod(".toggle_" + method,0)
                     }
                     $(inputOptPaymentMethod).click(()=>{
-                        toggleFieldsPaymentMethod(".toggle_" + method,250)
+                        toggleFieldsPaymentMethod(".toggle_" + method,400)
                     })
 
                 }
@@ -224,11 +249,15 @@ function efi_config()
                     let fields = $(method);
                     fields.each((i, field)=>{
                         let rowField = $(field).parents()[1];
-                        $(rowField).fadeToggle(timeToggle);
+                        $(rowField).animate({
+                            height: "toggle",
+                            opacity: "toggle"
+                        }, timeToggle).css("overflow", "hidden");
                     })
                 }
                 isCheckedOptPayment("billet")
                 isCheckedOptPayment("pix")
+                limitarDuasCasasDecimais(["billet","pix"])
                 
                
             </script>
@@ -280,11 +309,18 @@ function efi_link($gatewayParams)
     $identificadorDaConta = $gatewayParams['idConta'];
     $autoCompleteFields = generateAutoCompleteFields($gatewayParams);
     $autoCompletetotal = generateAutoCompleteTotal($gatewayParams);
+    $viewInvoiceModal = file_get_contents("$baseUrl/modules/gateways/efi/gerencianet_lib/scripts/js/viewInvoiceModal.js");
 
 
 
     $apiEnvironment = ($gatewayParams['sandbox'] == 'on') ? "sandbox" : "api"; 
-    $scriptGetPaymentToken = "<script defer type='text/javascript'>  var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://$apiEnvironment.gerencianet.com.br/v1/cdn/$identificadorDaConta/'+v;s.async=false;s.id='$identificadorDaConta';if(!document.getElementById('$identificadorDaConta')){document.getElementsByTagName('head')[0].appendChild(s);};\$gn={validForm:true,processed:false,done:{},ready:function(fn){\$gn.done=fn;}};</script>";
+    $scriptGetPaymentToken = "<script  type='text/javascript'> 
+        var inputEnviroment = $(\"<input />\",{value: '$apiEnvironment',type: 'hidden',id: 'apiEnvironment'}); 
+        $(document.body).append(inputEnviroment); 
+
+        var inputIdentificador = $(\"<input />\",{value: '$identificadorDaConta',type: 'hidden',id: 'identificadorDaConta'}); 
+        $(document.body).append(inputIdentificador); 
+    </script>";
 
 
     $paymentOptionsScript = "<div id='modal_content'></div>
@@ -338,6 +374,9 @@ function efi_link($gatewayParams)
                 break;
             case 'credit':
                 return definedCreditCardPayment($gatewayParams);
+                break;
+            case 'openFinance':
+                return definedOpenFinancePayment($gatewayParams);
                 break;
             default:
                 break;
@@ -472,3 +511,4 @@ function definedCreditCardPayment($gatewayParams)
             }
             return createCard($gatewayParams, $gnIntegration, $errorMessages, $existingCharge);
 }
+
