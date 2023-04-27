@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="89.76973mm"
+   height="97.895836mm"
+   viewBox="0 0 89.76973 97.895836"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="openfinance.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.42646138"
+     inkscape:cx="113.72659"
+     inkscape:cy="351.73173"
+     inkscape:window-width="1846"
+     inkscape:window-height="911"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+	
+	
+</defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(212.33409,-101.98274)">
+    <g
+       id="g8780">
+      <path
+         class="st1"
+         d="m -128.21441,136.05314 c -3.77031,-6.54579 -9.01436,-11.72898 -15.73477,-15.54692 -5.91609,-3.36021 -12.18671,-5.24139 -18.80923,-5.64356 v 19.13731 c 5.38692,0.4789 9.89277,2.61409 13.51756,6.40557 4.14602,4.33916 6.223,9.98008 6.223,16.92274 0,6.94532 -2.11137,12.62063 -6.33412,17.03388 -4.22275,4.4159 -9.51442,6.61987 -15.87236,6.61987 -5.81554,0 -10.70504,-1.83091 -14.67114,-5.48216 l -13.57577,13.57577 c 7.874,7.20196 17.22702,10.80294 28.0617,10.80294 7.88723,0 15.10242,-1.87061 21.64821,-5.61446 6.60929,-3.7809 11.81894,-9.04081 15.621,-15.7824 3.59304,-6.36587 5.5245,-13.59694 5.57477,-20.90737 0.0556,-7.70731 -1.82827,-14.88281 -5.64885,-21.52121 z"
+         id="path3555"
+         style="stroke-width:0.264583" />
+      <g
+         id="g3563"
+         transform="matrix(0.26458333,0,0,0.26458333,-273.28016,45.097328)"
+         style="fill:#3f3f3f;fill-opacity:1">
+		<path
+   class="st2"
+   d="m 351.76,357.87 c 13.24,-12.74 29.12,-20.01 47.63,-21.8 V 215 c -47.21,3.46 -92.04,26.16 -123.48,67.03 z"
+   id="path3557"
+   style="fill:#3f3f3f;fill-opacity:1" />
+
+		<path
+   class="st2"
+   d="m 325.57,416.8 c 1.06,-17.12 5.84,-32.07 14.36,-44.83 l -77.08,-77.08 c -26.69,37.27 -36.3,84.78 -31.18,121.9 h 93.9 z"
+   id="path3559"
+   style="fill:#3f3f3f;fill-opacity:1" />
+
+		<path
+   class="st2"
+   d="m 325.81,435.13 h -94.13 c 7.19,42.85 31.23,74.79 57.09,95.99 l 52.08,-52.08 C 332.3,466.69 327.3,452.05 325.81,435.13 Z"
+   id="path3561"
+   style="fill:#3f3f3f;fill-opacity:1" />
+
+	</g>
+    </g>
+  </g>
+  <style
+     type="text/css"
+     id="style3553">
+	.st0{fill:#08090A;}
+	.st1{fill:#3F3F3F;}
+	.st2{fill:#4A7E94;}
+	.st3{fill:#FFFFFF;}
+</style>
+</svg>
