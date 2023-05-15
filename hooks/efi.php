@@ -6,7 +6,6 @@ if (!defined('WHMCS')) {
 require_once __DIR__ . '/../../init.php';
 require_once ROOTDIR . '/modules/gateways/efi/gerencianet_lib/handler/exception_handler.php';
 require_once ROOTDIR . '/modules/gateways/efi/gerencianet_lib/api_interaction.php';
-require_once ROOTDIR . '/modules/gateways/efi/gerencianet_lib/functions/pix/gateway_functions.php';
 include BASE_DIR . 'modules/gateways/efi/gerencianet_lib/Gerencianet_WHMCS_Interface.php';
 include BASE_DIR . 'modules/gateways/efi/gerencianet_lib/GerencianetIntegration.php';
 
