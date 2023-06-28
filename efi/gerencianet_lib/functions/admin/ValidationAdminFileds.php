@@ -190,7 +190,7 @@ function requiredOpenFinanceFields($params)
           $open_finance_instance = new OpenFinanceEfi($params);
           $open_finance_instance->updateConfigOpenFinance();
     }catch(\Throwable $th) {
-            generateException("Falha ao configurar Open Finance");
+            generateException($th->getMessage());       
     }
     
 }

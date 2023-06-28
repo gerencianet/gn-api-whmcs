@@ -13,11 +13,56 @@ function validationForm(optionSelected, event) {
         case 'pix':
             validationPix(event);
             break;
-
+        case 'openfinance':
+            validationOpenFinance(event);
+            break;
         default:
             break;
     }
 
+}
+
+function validationOpenFinance(event) {
+    let message = '';
+    let documentClientOF = $('#documentClientOF').val().replaceAll('.', '').replace('-', '').replace('/', '');
+    let documentClientPJOF = $('#documentPJClientOF').val().replaceAll('.', '').replace('-', '').replace('/', '');
+    let bankClient = $("#bankOF option:selected").val();
+  
+    if (bankClient == "") {
+        message += `
+        <div class="alert alert-danger" role="alert">
+            O campo <span class="font-weight-bold"> Banco para Pagamento </span> não foi preenchido corretamente.
+        </div>
+        `;
+    }
+
+
+    if (!verifyCPF(documentClientOF)) {
+        message += `
+            <div class="alert alert-danger" role="alert">
+                O campo <span class="font-weight-bold"> CPF</span> não foi preenchido corretamente.
+            </div>
+            `;
+    }
+
+    if (documentClientPJOF != "" && !verifyCNPJ(documentClientPJOF)) {
+        message += `
+        <div class="alert alert-danger" role="alert">
+            O campo <span class="font-weight-bold">CNPJ</span> não foi preenchido corretamente.
+        </div>
+        `;
+    }
+
+    scrollTop()
+    if (message == '') {
+        spinnerLoad()
+        $('.meuPopUp').css('opacity', '0.3');
+        $('.meuPopUp').addClass('desabilitar');
+    } else {
+        event.preventDefault();
+        $('.messageValidationOpenFinance').html(message);
+    }
+    
 }
 
 function validationBillet(event) {

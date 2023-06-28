@@ -3,6 +3,23 @@
 use Gerencianet\Gerencianet;
 use Gerencianet\Exception\GerencianetException;
 
+
+/**
+ * Generates an random prefix to compose a unique ID for
+ * open finance idempotency key.
+ */
+function uniqidReal($lenght = 30) {
+    if (function_exists("random_bytes")) {
+        $bytes = random_bytes(ceil($lenght / 2));
+    } elseif (function_exists("openssl_random_pseudo_bytes")) {
+        $bytes = openssl_random_pseudo_bytes(ceil($lenght / 2));
+    } else {
+        throw new Exception("no cryptographically secure random function available");
+    }
+    return substr(bin2hex($bytes), 0, $lenght);
+}
+
+
 /**
  * Retrieve Genrencianet API Instance
  * 
@@ -35,7 +52,8 @@ function getGerencianetApiInstance($gatewayParams)
             'sandbox' => $sandbox,
             'debug' => $debug,
             'headers' => [
-                'x-skip-mtls-checking' => $mtls ? 'false' : 'true' // Needs to be string
+                'x-skip-mtls-checking' => $mtls ? 'false' : 'true', // Needs to be string
+                'x-idempotency-key' => uniqid(uniqidReal(), true) // For open finance usage
             ]
         )
     );

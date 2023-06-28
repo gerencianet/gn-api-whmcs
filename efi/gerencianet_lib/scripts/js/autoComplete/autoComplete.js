@@ -1,132 +1,262 @@
-//---------------------------------Envia as funções Auto Complete para o arquivo viewInvoiceModal.js ----
+//---------------------------------Envia as funções Autocomplete para o arquivo viewInvoiceModal.js ----
+function getClientDocument(attributes) {
+    let documentoEncontrado = null;
+    $(attributes.customFields).each(function(indexInArray, field) {
+        let documento = field.value.replace(/\D/g, '');
+
+        if (verifyCPF(documento) || verifyCNPJ(documento)) {
+            documentoEncontrado = documento;
+            return false; // interrompe o loop
+        }
+    });
+    return documentoEncontrado;
+}
 
 function autoComplete() {
-    autoCompleteBillet();
-    autoCompleteCredit();
-    autoCompletePix();
+    $.get('modules/gateways/efi/gerencianet_lib/functions/frontend/ajax/ClientDataAjaxHandler.php', function(data) {
+        let cliente = {};
+        const attributes = JSON.parse(data);
+        cliente.telefone = attributes.phoneNumber.split('.')[1];
+        cliente.fullName = `${attributes.firstName} ${attributes.lastName}`;
+        cliente.email = attributes.email;
+        cliente.rua = attributes.address1.split(',')[0];
+        cliente.numero = attributes.address1.split(',')[1];
+        cliente.cidade = attributes.city;
+        cliente.cep = attributes.postcode.replace('-', '');
+        cliente.estado = attributes.state;
+        cliente.documento = getClientDocument(attributes);
+
+
+        autocompleteBillet(cliente);
+        autocompleteCredit(cliente);
+        autocompletePix(cliente);
+        autocompleteOpenFinance(cliente);
+
+    });
 }
 
-//---------------------------------- Retorna numero no formato (xx) xxxxx-xxxx ----------------------------
+function autocompleteOpenFinance(cliente) {
+    const inputsAnimation = [
+        cliente.documento.length == 11 ? {
+            inputName: "#documentClientOF",
+            inputValue: cliente.documento
+        } : {
+            inputName: "#documentPJClientOF",
+            inputValue: cliente.documento
+        }
+    ];
 
-function returnNumeroTelefoneFormatado(numero) {
-    let numformatado = '';
-    numformatado += `(${numero[0]}${numero[1]}) `;
-    for (let index = 2; index < 6; index++) {
-        numformatado += `${numero[index]}`
-
-    }
-    numformatado += '-'
-    for (let index = 6; index < numero.length; index++) {
-        numformatado += `${numero[index]}`
-
-    }
-
-    return numformatado;
-}
-
-//---------------------------------- Retorna cep no formato xx.xxx-xxx ----------------------------
-
-function returnCepFormatado(cep) {
-    let cepFormatado = '';
-    cepFormatado += `${cep[0]}${cep[1]}.`;
-
-    for (let index = 2; index < 5; index++) {
-        cepFormatado += `${cep[index]}`
-    }
-
-    cepFormatado += '-';
-
-    for (let index = 5; index < 8; index++) {
-        cepFormatado += `${cep[index]}`
-    }
-
-
-    return cepFormatado;
-}
-// ------------------------------------- Auto Complete Boleto ---------------------------------------------
-
-function autoCompleteBillet() {
-    let numero = $('.telefoneCliente').val();
-    $('#nameBillet').val($('.nomeCompletoCliente').val());
-    $('#clientEmailBillet').val($('.emailCliente').val());
-    $('#telephoneBillet').val(`${returnNumeroTelefoneFormatado(numero)}`);
-    $('#autocompleteBillet').prop('checked', true);
-
-    $('#autocompleteBillet').click(() => {
-        if ($('#autocompleteBillet').is(':checked')) {
-            $('#nameBillet').val($('.nomeCompletoCliente').val());
-            $('#clientEmailBillet').val($('.emailCliente').val());
-            $('#telephoneBillet').val(`${returnNumeroTelefoneFormatado(numero)}`);
+    applyAnimations(inputsAnimation)
+    $('#autocompleteOpenFinance').click(() => {
+        if ($('#autocompleteOpenFinance').is(':checked')) {
+            applyAnimations(inputsAnimation)
         } else {
-            $('#nameBillet').val('');
-            $('#clientEmailBillet').val('');
-            $('#telephoneBillet').val('');
+            const inputsDefaultValue = [{
+                    inputName: "#documentClientOF",
+                    inputValue: ''
+                },
+                {
+                    inputName: "#documentPJClientOF",
+                    inputValue: ''
+                },
+            ];
+            applyAnimations(inputsDefaultValue)
         }
 
     })
-}
-// ------------------------------------- Auto Complete Pix ---------------------------------------------
 
-function autoCompletePix() {
-    $('#clientNamePix').val($('.nomeCompletoCliente').val());
+    $('#autocompleteOpenFinance').prop('checked', true);
+
+}
+
+// ------------------------------------- Auto Complete Boleto ---------------------------------------------
+
+function autocompleteBillet(cliente) {
+    const inputsAnimation = [{
+        inputName: "#nameBillet",
+        inputValue: cliente.fullName
+    }, {
+        inputName: "#clientEmailBillet",
+        inputValue: cliente.email
+    }, {
+        inputName: "#documentClientBillet",
+        inputValue: cliente.documento
+    }, {
+        inputName: "#telephoneBillet",
+        inputValue: cliente.telefone
+    }];
+    applyAnimations(inputsAnimation)
+
+    $('#autocompleteBillet').click(() => {
+        if ($('#autocompleteBillet').is(':checked')) {
+            applyAnimations(inputsAnimation)
+        } else {
+            const inputsDefaultValue = [{
+                inputName: "#nameBillet",
+                inputValue: ''
+            }, {
+                inputName: "#clientEmailBillet",
+                inputValue: ''
+            }, {
+                inputName: "#documentClientBillet",
+                inputValue: ''
+            }, {
+                inputName: "#telephoneBillet",
+                inputValue: ''
+            }];
+            applyAnimations(inputsDefaultValue)
+        }
+
+    })
+
+
+
+    $('#autocompleteBillet').prop('checked', true);
+
+}
+// ------------------------------------- Autocomplete Pix ---------------------------------------------
+
+function autocompletePix(cliente) {
+    const inputsAnimation = [{
+        inputName: "#clientNamePix",
+        inputValue: cliente.fullName
+    }, {
+        inputName: "#documentClientPix",
+        inputValue: cliente.documento
+    }];
+    applyAnimations(inputsAnimation)
     $('#autocompletePix').prop('checked', true);
 
 
     $('#autocompletePix').click(() => {
         if ($('#autocompletePix').is(':checked')) {
-            $('#clientNamePix').val($('.nomeCompletoCliente').val());
+            applyAnimations(inputsAnimation)
 
         } else {
-            $('#clientNamePix').val('');
+            const inputsDefaultValue = [{
+                inputName: "#clientNamePix",
+                inputValue: ''
+            }, {
+                inputName: "#documentClientPix",
+                inputValue: ''
+            }];
+            applyAnimations(inputsDefaultValue)
         }
 
     })
 }
 
-// ------------------------------------- Auto Complete Cartão ---------------------------------------------
+// ------------------------------------- Autocomplete Cartão ---------------------------------------------
 
-function autoCompleteCredit() {
-    let numero = $('.telefoneCliente').val();
-    let cep = $('.cepCliente').val();
-    let estado = $("#estado").find(`option[value='${$('.estadoCliente').val()}']`);
-    $('#nameCredit').val($('.nomeCompletoCliente').val());
-    $('#clientEmailCredit').val($('.emailCliente').val());
-    $('#telephoneCredit').val(`${returnNumeroTelefoneFormatado(numero)}`);
-    $('#rua').val($('.ruaCliente').val());
-    $('#numero').val($('.numeroCasaCliente').val());
-    $('#cidade').val($('.cidadeCliente').val());
-    $('#bairro').val($('.bairroCliente').val());
-    $('#cep').val(`${returnCepFormatado(cep)}`);
-    estado.prop("selected", true);
+function autocompleteCredit(cliente) {
+    const inputsAnimation = [{
+        inputName: "#nameCredit",
+        inputValue: cliente.fullName
+    }, {
+        inputName: "#clientEmailCredit",
+        inputValue: cliente.email
+    }, {
+        inputName: "#documentClientCredit",
+        inputValue: cliente.documento
+    }, {
+        inputName: "#telephoneCredit",
+        inputValue: cliente.telefone
+    }, {
+        inputName: "#rua",
+        inputValue: cliente.rua
+    }, {
+        inputName: "#numero",
+        inputValue: cliente.numero
+    }, {
+        inputName: "#cidade",
+        inputValue: cliente.cidade
+    }, {
+        inputName: "#bairro",
+        inputValue: cliente.bairro
+    }, {
+        inputName: "#cep",
+        inputValue: cliente.cep
+    }, {
+        inputName: "#estado",
+        inputValue: cliente.estado
+    }, {
+        inputName: "#dataNasce",
+        inputValue: ''
+    }];
+
+    applyAnimations(inputsAnimation)
+
+
+
     $('#autocompleteCredit').prop('checked', true);
 
     $('#autocompleteCredit').click(() => {
-        
+
         if ($('#autocompleteCredit').is(':checked')) {
-            $('#nameCredit').val($('.nomeCompletoCliente').val());
-            $('#clientEmailCredit').val($('.emailCliente').val());
-            $('#telephoneCredit').val(`${returnNumeroTelefoneFormatado(numero)}`);
-            $('#rua').val($('.ruaCliente').val());
-            $('#numero').val($('.numeroCasaCliente').val());
-            $('#cidade').val($('.cidadeCliente').val());
-            $('#bairro').val($('.bairroCliente').val());
-            $('#cep').val(`${returnCepFormatado(cep)}`);
-            estado.prop("selected", true);
+            applyAnimations(inputsAnimation)
+
+
 
         } else {
-            $('#nameCredit').val('');
-            $('#clientEmailCredit').val('');
-            $('#telephoneCredit').val('');
-            $('#rua').val('');
-            $('#cidade').val('');
-            $('#cep').val('');
-            $('#numero').val('');
-            $('#bairro').val('');
-            estado.prop("selected", false);
+            const inputsDefaultValue = [{
+                inputName: "#nameCredit",
+                inputValue: ''
+            }, {
+                inputName: "#clientEmailCredit",
+                inputValue: ''
+            }, {
+                inputName: "#documentClientCredit",
+                inputValue: ''
+            }, {
+                inputName: "#telephoneCredit",
+                inputValue: ''
+            }, {
+                inputName: "#rua",
+                inputValue: ''
+            }, {
+                inputName: "#numero",
+                inputValue: ''
+            }, {
+                inputName: "#cidade",
+                inputValue: ''
+            }, {
+                inputName: "#bairro",
+                inputValue: ''
+            }, {
+                inputName: "#cep",
+                inputValue: ''
+            }, {
+                inputName: "#estado",
+                inputValue: ''
+            }, {
+                inputName: "#dataNasce",
+                inputValue: ''
+            }];
+            applyAnimations(inputsDefaultValue)
 
 
 
         }
 
     })
+}
+
+function applyAnimations(inputs) {
+    inputs.forEach((inputObj) => {
+        // Seleciona o elemento input
+        let input = $(`${inputObj.inputName}`);
+
+        // Anima a opacidade do elemento para zero
+        input.animate({ opacity: 0 }, 500, function() {
+            // Quando a animação terminar, atualiza o valor do input
+            input.val(inputObj.inputValue);
+            input.trigger('keydown');
+            input.trigger('input');
+
+            // Anima a opacidade do elemento de volta para 1
+            input.animate({ opacity: 1 }, 500);
+
+        });
+    });
+
 }

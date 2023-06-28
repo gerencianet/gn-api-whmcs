@@ -54,8 +54,11 @@ function gerencianetCancelCharge($vars)
 
     $credentials    = getGatewayVariables(PAYMENT_METHOD);
     $response       = getChargeId($vars, $credentials);
+   
+    
     $gnIntegration  = $response['gn_object'];
     $chargeId       = (int)$response['charge_id'];
+ 
     if ($chargeId != 0)
         $gnIntegration->cancel_charge($chargeId);
 }
@@ -68,6 +71,7 @@ function gerencianetUpdateBillet($vars)
     $invoiceValues['invoiceid'] = $invoiceid;
     $adminWHMCS         = $paramsGateway['whmcsAdmin'];
     $invoiceData                = localAPI("getinvoice", $invoiceValues, $adminWHMCS);
+  
 
     $dueDate                    = $invoiceData['duedate'];
     $status                     = $invoiceData['status'];
@@ -81,6 +85,7 @@ function gerencianetUpdateBillet($vars)
             $date->add(new DateInterval($diasFormatado));
         }
         $newDueDate = (string)$date->format('Y-m-d');
+      
         if ($newDueDate >= date('Y-m-d')) {
             $response       = getChargeId($vars, $paramsGateway);
             $gnIntegration  = $response['gn_object'];
@@ -93,5 +98,5 @@ function gerencianetUpdateBillet($vars)
         }
     }
 }
-add_hook('InvoiceCancelled', 1, "gerencianetCancelCharge");
-add_hook('UpdateInvoiceTotal', 1, "gerencianetUpdateBillet");
+add_hook('InvoiceCancelled', 1, 'gerencianetCancelCharge');
+add_hook('UpdateInvoiceTotal', 1, 'gerencianetUpdateBillet');

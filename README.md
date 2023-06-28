@@ -7,8 +7,9 @@
 3. Copie o arquivo **efi.php** e a pasta **efi**, para o diretório **/modules/gateways** da instalação do WHMCS;
 4. Altere as permissões do arquivo copiado utilizando o comando: `chmod 777 modules/gateways/efi.php`
 5. Altere as permissões da pasta copiada utilizando o comando: `chmod 777 modules/gateways/efi/ -R`
-6. Copie o arquivo **efi.php**, disponível no diretório **callback**, para o diretório **modules/gateways/callback**. Ele deve estar no caminho: *modules/gateways/callback/efi.php*
+6. Copie o arquivo **efi.php** e a pasta **efi**, disponível no diretório **callback**, para o diretório **modules/gateways/callback**. 
 7. Altere as permissões do arquivo copiado utilizando o comando: `chmod 777 modules/gateways/callback/efi.php`
+7. Altere as permissões da pasta copiada utilizando o comando:: `chmod 777 modules/gateways/callback/efi -R`
 8. Copie o arquivo **efi.php**, disponível no diretório **hooks**, para o diretório **includes/hooks**. Ele deve estar no caminho *includes/hooks/efi.php*
 9. Altere as permissões do arquivo copiado utilizando o comando: `chmod 777 includes/hooks/efi.php`
 10. Crie uma pasta na raiz do seu servidor e insira seu certificado na pasta. 
@@ -19,6 +20,7 @@ Ao final da instalação, os arquivos do módulo Efí devem estar na seguinte es
 includes/hooks/
   |- efi.php
  modules/gateways/
+  |- callback/efi/
   |- callback/efi.php
   |- efi/
   |- efi.php
@@ -33,7 +35,7 @@ Caso ainda não tenha seu certificado, basta seguir o passo a passo do link a se
 
 ## Configuração do Módulo
 
-![Tela de Configuração](https://sejaefi.link/BJetA4JvQ3)
+![Tela de Configuração](https://sejaefi.link/H1lGo65O_3)
 1. **Client_Id Produção:** Deve ser preenchido com o client_id de produção de sua conta Efí. Este campo é obrigatório e pode ser encontrado no menu "API" -> "Aplicações". Em seguida, selecione sua aplicação criada, conforme é mostrado no [link](https://gnetbr.com/Ske9THqjrO);
 2. **Client_Secret Produção:** Deve ser preenchido com o client_secret de produção de sua conta Efí. Este campo é obrigatório e pode ser encontrado no menu "API" ->  "Aplicações". Em seguida, selecione sua aplicação criada, conforme é mostrado no [link](https://gnetbr.com/Ske9THqjrO);
 3. **Client_Id Desenvolvimento:** Deve ser preenchido com o client_id de desenvolvimento de sua conta Efí. Este campo é obrigatório e pode ser encontrado no menu "API" -> "Aplicações". Em seguida, selecione sua aplicação criada, conforme é mostrado no [link](https://gnetbr.com/BJe-vIciHd);
@@ -53,7 +55,13 @@ Caso ainda não tenha seu certificado, basta seguir o passo a passo do link a se
 17. **Certificado Pix:** Deve ser preenchido com o caminho do certificado salvo em seu servidor no passo 10 da instalação;
 18. **Desconto:** Informe o valor de desconto que deverá ser aplicado ao pix gerado exclusivamente pela Efí;
 19. **Validade da Cobrança PIX:** Deve ser informado o período de validade em dias da cobrança PIX;
+19. **Nome:** Deve ser informado o nome do titular da conta;
+19. **Documento:** Deve ser informado o documento (CPF ou CNPJ) do titular da conta;
+19. **Agência:** Deve ser informado a agência do titular;
+19. **Conta :** Deve ser informado o número referente a conta;
+19. **Tipo de conta:** Deve ser informado o tipo de conta referente ao titular ;
 20. **Validar mTLS:** Entenda os riscos de não configurar o mTLS acessando o link https://gnetbr.com/rke4baDVyd;
 21. **PIX:** Selecione essa opção caso deseje deixar a opção PIX como forma de pagamento;
 22. **Boleto:** Selecione essa opção caso deseje deixar a opção boleto como forma de pagamento;
-23. **Cartão de Crédito:** Selecione essa opção caso deseje deixar a opção de cartão de crédito como forma de pagamento.
+23. **Cartão de Crédito:** Selecione essa opção caso deseje deixar a opção de cartão de crédito como forma de pagamento;
+24. **Open Finance:** Selecione essa opção caso deseje deixar a opção de open finance como forma de pagamento.

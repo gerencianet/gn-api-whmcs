@@ -16,8 +16,7 @@ window.onload = function() {
      */
     $gn.ready(function(checkout) {
         startProcesso(checkout);
-
-    })
+    });
 
 
     function startProcesso(checkout) {
@@ -114,6 +113,41 @@ window.onload = function() {
             $(this).val(currentValue);
         });
 
+
+
+        $("#documentClientOF").keydown(function() {
+            try { $("#documentClientOF").unmask(); } catch (e) {}
+            $("#documentClientOF").mask("999.999.999-99");
+
+            // ajustando foco
+            var elem = this;
+            setTimeout(function() {
+                // mudo a posição do seletor
+                elem.selectionStart = elem.selectionEnd = 10000;
+            }, 0);
+            // reaplico o valor para mudar o foco
+            var currentValue = $(this).val();
+            $(this).val('');
+            $(this).val(currentValue);
+        });
+
+        $("#documentPJClientOF").keydown(function() {
+            try { $("#documentPJClientOF").unmask(); } catch (e) {}
+            
+            $("#documentPJClientOF").mask("99.999.999/9999-99");
+
+            // ajustando foco
+            var elem = this;
+            setTimeout(function() {
+                // mudo a posição do seletor
+                elem.selectionStart = elem.selectionEnd = 10000;
+            }, 0);
+            // reaplico o valor para mudar o foco
+            var currentValue = $(this).val();
+            $(this).val('');
+            $(this).val(currentValue);
+        });
+
         $("#telephoneBillet").mask("(00) 0000-00009");
         $("#telephoneCredit").mask("(00) 0000-00009");
         $("#cep").mask("99.999-999");
@@ -128,6 +162,27 @@ window.onload = function() {
             $('.button').removeClass('shadow-lg')
         })
 
+    }
+
+    function loadParticipantsOpenFinance() {
+
+        $.ajax({
+            type: "GET",
+            url: "modules/gateways/efi/gerencianet_lib/functions/frontend/ajax/OpenFinanceAjaxHandler.php?participants=1",
+            success: function(response) {
+                var jsonData = JSON.parse(response);
+                console.log("OF response:");
+                console.log(jsonData);
+                $('#bankOF').empty();
+                $('#bankOF').append('<option value="">Escolha o banco...</option>');
+                jsonData.participantes.forEach(function(value, i) {
+                    $('#bankOF').append(`<option value="${value.identificador}">${value.nome}</option>`)
+                });
+            },
+            error: function(error) {
+                console.log(`OF error: ${error.status} - ${error.statusText}`);
+            }
+        })
     }
 
 
@@ -178,6 +233,7 @@ window.onload = function() {
                 brand = "<img src='modules/gateways/efi/gerencianet_lib/images/amex.png' style='width:50px;' >";
                 bandeiraCartao = 'amex'
             }
+
             //Diners 
             var regexDiners = /(36[0-8][0-9]{3}|369[0-8][0-9]{2}|3699[0-8][0-9]|36999[0-9])/;
             var resDiners = regexDiners.exec(numCartao);
@@ -193,6 +249,7 @@ window.onload = function() {
                 brand = "<img src='modules/gateways/efi/gerencianet_lib/images/hipercard.png' style='width:50px;' >";
                 bandeiraCartao = 'hipercard'
             }
+
             // Visa 
             var regexVisa = /^4[0-9]{15}$/;
             var resVisa = regexVisa.exec(numCartao);
@@ -202,7 +259,6 @@ window.onload = function() {
             }
 
             // MOSTRA RESULTADO
-
             if (brand != 'null') {
                 $('#card').empty();
                 $('#card').append(brand);
@@ -314,6 +370,7 @@ window.onload = function() {
             addTotalBoleto();
             addTotalPix();
             addTotalCartao();
+            addTotalOpenFinance();
 
             if ($('.ativarCredito').val() != 1) {
                 $('#container_credit').remove();
@@ -327,6 +384,7 @@ window.onload = function() {
                     $(".button").html('Gerar QRCode');
                 }
             }
+
             if ($('.boletoOption').val() != 1) {
                 //$('.billet').remove();
                 $('#container_billet').remove();
@@ -338,12 +396,18 @@ window.onload = function() {
                 $(".button").html('Pagar');
 
             }
+
             if ($('.pixOption').val() != 1) {
                 //$('.pix').remove();
                 $('#container_pix').remove();
                 $('.pixSelected').remove();
             }
 
+            if ($('.openFinanceOption').val() != 1) {
+                //$('.pix').remove();
+                $('#container_openfinance').remove();
+                $('.openfinanceSelected').remove();
+            } 
 
         }
     };
@@ -552,15 +616,15 @@ window.onload = function() {
             id: 'spanTotalOpenFinance',
             class: 'font-weight-bold'
         });
-        $('#totalCredito').append(span);
-        $('#spanTotaCredit').html(`Total à vista:`)
+        $('#totalOpenFinance').append(span);
+        $('#spanTotalOpenFinance').html(`Total:`)
         span = $("<span />", {
-            id: 'spanValorTotalCredit',
+            id: 'spanValorTotalOpenFinance',
             class: 'font-weight-bold'
         });
-        $('#totalCredito').append(span);
-        $('#spanValorTotalCredit').html(`${formatValue($('.invoice_value').val())}`)
-        $('#totalCredito').append(span);
+        $('#totalOpenFinance').append(span);
+        $('#spanValorTotalOpenFinance').html(`${formatValue($('.invoice_value').val())}`)
+        $('#totalOpenFinance').append(span);
 
         $(".openfinanceSelected").append(div);
     }
@@ -869,6 +933,209 @@ window.onload = function() {
             $('#clientNamePix').attr('required', true);
         }
 
+        document.getElementById('container_openfinance').onclick = () => {
+            $(".formularios :submit").removeAttr('disabled');
+            $('.formularios :submit').css('opacity', '1');
+
+
+            changePaymentOption('Pagar', 'openfinance');
+
+            loadParticipantsOpenFinance();
+
+            $('#nameBillet').removeAttr('required');
+            $('#documentClientBillet').removeAttr('required');
+            $('#clientEmailBillet').removeAttr('required');
+
+
+            $('#nameCredit').removeAttr('required');
+            $('#clientEmailCredit').removeAttr('required');
+            $('#documentClientCredit').removeAttr('required');
+            $('#telephoneCredit').removeAttr('required');
+            $('#dataNasce').removeAttr('required');
+            $('#rua').removeAttr('required');
+            $('#numero').removeAttr('required');
+            $('#bairro').removeAttr('required');
+            $('#cidade').removeAttr('required');
+            $('#estado').removeAttr('required');
+            $('#cep').removeAttr('required');
+
+            if ($(document).width() > 767) {
+                $('#numCartao').removeAttr('required');
+                $('#codSeguranca').removeAttr('required');
+                $('#mesVencimento').removeAttr('required');
+                $('#anoVencimento').removeAttr('required');
+                $('#numParcelas').removeAttr('required');
+            } else {
+                $('#numCartaoMobile').removeAttr('required');
+                $('#codSegurancaMobile').removeAttr('required');
+                $('#mesVencimentoMobile').removeAttr('required');
+                $('#anoVencimentoMobile').removeAttr('required');
+                $('#numParcelasMobile').removeAttr('required');
+            }
+
+
+            $('#documentClientPix').removeAttr('required');
+            $('#clientNamePix').removeAttr('required');
+        }
+
+        /*
+        //document.getElementsByClassName('billet')[0].onclick = () => {
+        document.getElementById('container_billet').onclick = () => {
+            $(".formularios :submit").removeAttr('disabled');
+            $('.formularios :submit').css('opacity', '1');
+            veriFyMinValue();
+
+            document.getElementById('billet').checked = true;
+
+            //document.getElementsByClassName('billet')[0].classList.add('selectedOption');
+            document.getElementById('container_billet').classList.add('selectedOption');
+            (document.getElementById('container_pix') != undefined) ? document.getElementById('container_pix').classList.remove('selectedOption') : "";
+            (document.getElementById('container_credit') != undefined) ? document.getElementById('container_credit').classList.remove('selectedOption') : "";
+
+            $('.button').html('Gerar Boleto');
+            $('.creditSelected').hide(0);
+            $('.pixSelected').hide(0);
+            $('.billetSelected').show();
+
+            $('#nameBillet').attr('required', true);
+            $('#documentClientBillet').attr('required', true);
+            $('#clientEmailBillet').attr('required', true);
+
+            $('#nameCredit').removeAttr('required');
+            $('#clientEmailCredit').removeAttr('required');
+            $('#documentClientCredit').removeAttr('required');
+            $('#telephoneCredit').removeAttr('required');
+            $('#dataNasce').removeAttr('required');
+            $('#rua').removeAttr('required');
+            $('#numero').removeAttr('required');
+            $('#bairro').removeAttr('required');
+            $('#cidade').removeAttr('required');
+            $('#estado').removeAttr('required');
+            $('#cep').removeAttr('required');
+
+            if ($(document).width() > 767) {
+                $('#numCartao').removeAttr('required');
+                $('#codSeguranca').removeAttr('required');
+                $('#mesVencimento').removeAttr('required');
+                $('#anoVencimento').removeAttr('required');
+                $('#numParcelas').removeAttr('required');
+            } else {
+                $('#numCartaoMobile').removeAttr('required');
+                $('#codSegurancaMobile').removeAttr('required');
+                $('#mesVencimentoMobile').removeAttr('required');
+                $('#anoVencimentoMobile').removeAttr('required');
+                $('#numParcelasMobile').removeAttr('required');
+            }
+
+
+            $('#documentClientPix').removeAttr('required');
+            $('#clientNamePix').removeAttr('required');
+
+        }
+        
+        document.getElementById('container_credit').onclick = () => {
+            if ($(".invalid-feedback").length > 0) {
+                $(".formularios :submit").prop('disabled', true);
+                $('.formularios :submit').css('opacity', '0.3');
+            }
+            veriFyMinValue();
+            document.getElementById('credit').checked = true;
+            document.getElementById('container_credit').classList.add('selectedOption');
+            (document.getElementById('container_pix') != undefined) ? document.getElementById('container_pix').classList.remove('selectedOption') : "";
+            (document.getElementById('container_billet') != undefined) ? document.getElementById('container_billet').classList.remove('selectedOption') : "";
+            $('.button').html('Pagar');
+            $('.pixSelected').hide(0);
+            $('.billetSelected').hide(0);
+            $('.creditSelected').show();
+
+            $('#nameBillet').removeAttr('required');
+            $('#documentClientBillet').removeAttr('required');
+            $('#clientEmailBillet').removeAttr('required');
+
+            $('#nameCredit').attr('required', true);
+            $('#clientEmailCredit').attr('required', true);
+            $('#documentClientCredit').attr('required', true);
+            $('#telephoneCredit').attr('required', true);
+            $('#dataNasce').attr('required', true);
+            $('#rua').attr('required', true);
+            $('#numero').attr('required', true);
+            $('#bairro').attr('required', true);
+            $('#cidade').attr('required', true);
+            $('#estado').attr('required', true);
+            $('#cep').attr('required', true);
+
+            if ($(document).width() > 767) {
+                $('#numCartao').attr('required', true);
+                $('#codSeguranca').attr('required', true);
+                $('#mesVencimento').attr('required', true);
+                $('#anoVencimento').attr('required', true);
+                $('#numParcelas').attr('required', true);
+            } else {
+                $('#numCartaoMobile').attr('required', true);
+                $('#codSegurancaMobile').attr('required', true);
+                $('#mesVencimentoMobile').attr('required', true);
+                $('#anoVencimentoMobile').attr('required', true);
+                $('#numParcelasMobile').attr('required', true);
+            }
+
+
+            $('#documentClientPix').removeAttr('required');
+            $('#clientNamePix').removeAttr('required');
+
+        }
+        
+
+        document.getElementById('container_pix').onclick = () => {
+            $(".formularios :submit").removeAttr('disabled');
+            $('.formularios :submit').css('opacity', '1');
+            document.getElementById('pix').checked = true;
+            document.getElementById('container_pix').classList.add('selectedOption');
+            (document.getElementById('container_credit') != undefined) ? document.getElementById('container_credit').classList.remove('selectedOption') : "";
+            (document.getElementById('container_billet') != undefined) ? document.getElementById('container_billet').classList.remove('selectedOption') : "";
+            $('.button').html('Gerar QRCode');
+            $('.billetSelected').hide(0);
+            $('.creditSelected').hide(0);
+            $('.pixSelected').show();
+
+
+            $('#nameBillet').removeAttr('required');
+            $('#documentClientBillet').removeAttr('required');
+            $('#clientEmailBillet').removeAttr('required');
+
+
+            $('#nameCredit').removeAttr('required');
+            $('#clientEmailCredit').removeAttr('required');
+            $('#documentClientCredit').removeAttr('required');
+            $('#telephoneCredit').removeAttr('required');
+            $('#dataNasce').removeAttr('required');
+            $('#rua').removeAttr('required');
+            $('#numero').removeAttr('required');
+            $('#bairro').removeAttr('required');
+            $('#cidade').removeAttr('required');
+            $('#estado').removeAttr('required');
+            $('#cep').removeAttr('required');
+
+            if ($(document).width() > 767) {
+                $('#numCartao').removeAttr('required');
+                $('#codSeguranca').removeAttr('required');
+                $('#mesVencimento').removeAttr('required');
+                $('#anoVencimento').removeAttr('required');
+                $('#numParcelas').removeAttr('required');
+            } else {
+                $('#numCartaoMobile').removeAttr('required');
+                $('#codSegurancaMobile').removeAttr('required');
+                $('#mesVencimentoMobile').removeAttr('required');
+                $('#anoVencimentoMobile').removeAttr('required');
+                $('#numParcelasMobile').removeAttr('required');
+            }
+
+            $('#documentClientPix').attr('required', true);
+            $('#clientNamePix').attr('required', true);
+
+
+        }
+        */
+
         document.querySelectorAll('.button')[0].onclick = (e) => {
 
 
@@ -877,6 +1144,8 @@ window.onload = function() {
                 validationForm('billet', e)
             } else if ((verifyActivation('pix')) ? document.getElementById('pix').checked : false) {
                 validationForm('pix', e)
+            } else if ((verifyActivation('openfinance')) ? document.getElementById('openfinance').checked : false) {
+                validationForm('openfinance', e)
             } else {
                 validationForm('credit', e)
             }
@@ -943,6 +1212,45 @@ window.onload = function() {
                 $("#documentClientPix").mask("99.999.999/9999-99");
             }
 
+            // ajustando foco
+            var elem = this;
+            setTimeout(function() {
+                // mudo a posição do seletor
+                elem.selectionStart = elem.selectionEnd = 10000;
+            }, 0);
+            // reaplico o valor para mudar o foco
+            var currentValue = $(this).val();
+            $(this).val('');
+            $(this).val(currentValue);
+        });
+
+
+        $("#documentClientOF").on('paste', (e) => {
+            try {
+                $("#documentClientOF").unmask();
+            } catch (e) {}
+
+            $("#documentClientOF").mask("999.999.999-99");
+
+            // ajustando foco
+            var elem = this;
+            setTimeout(function() {
+                // mudo a posição do seletor
+                elem.selectionStart = elem.selectionEnd = 10000;
+            }, 0);
+            // reaplico o valor para mudar o foco
+            var currentValue = $(this).val();
+            $(this).val('');
+            $(this).val(currentValue);
+        });
+
+        $("#documentPJClientOF").on('paste', (e) => {
+            try {
+                $("#documentPJClientOF").unmask();
+            } catch (e) {}
+
+            $("#documentPJClientOF").mask("99.999.999/9999-99");
+           
             // ajustando foco
             var elem = this;
             setTimeout(function() {

@@ -71,7 +71,7 @@
 }
 
 .pay_option_container img {
-    width: 32px !important;
+    width: 1.5em !important;
 }
 
 .pay_option_container input {
@@ -103,13 +103,13 @@
     margin-bottom: 0.2rem;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 4px;
 }
 
 .labelPayment label,
 .formularios span {
-    font-weight: 600 !important;
-    font-size: 0.9vw !important;
+    font-weight: 600;
+    font-size: 0.9vw;
 }
 
 .optionSelected {
@@ -223,6 +223,12 @@
     .meuPopUp {
         width: 80% !important;
     }
+
+    .labelPayment label,
+    .formularios span {
+        font-weight: 600 !important;
+        font-size: 1.5vw !important;
+    }
 }
 
 @media screen and (max-width: 900px) {
@@ -232,6 +238,12 @@
     .meuPopUp {
         width: 95% !important;
         border: 4px solid #f3722c !important;
+    }
+
+    .labelPayment label,
+    .formularios span {
+        font-weight: 600 !important;
+        font-size: 2.0vw !important;
     }
 }
 
@@ -254,7 +266,7 @@
         margin-bottom: 1px;
     }
     .pay_option_container img {
-        width: 30px !important;
+        width: 1.5em !important;
     }
     .pay_option_container i {
         font-size: 1.6em;
@@ -279,6 +291,9 @@
     }
     .labelPayment {
         padding-left: 10px !important;
+    }
+    .labelPayment label {
+        gap: 12px;
     }
 }
 
