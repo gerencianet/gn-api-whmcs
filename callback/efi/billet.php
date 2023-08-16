@@ -60,7 +60,7 @@ if (isset($_POST['notification'])) {
 
     $adminWHMCS         = $gatewayParams['whmcsAdmin'];
 
-    $paymentFee = '1.25';
+    $paymentFee = $gatewayParams['tarifaBoleto'];
 
 
 
