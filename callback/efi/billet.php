@@ -133,7 +133,7 @@ if (isset($_POST['notification'])) {
 
 
 
-    if ($status == "settled") 
+    if ($status == "paid") 
 
     {
 
