@@ -169,11 +169,11 @@ if (isset($_POST['notification'])) {
 
                 extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountType);
 
-                // $amount     = $lastModificationData['value'] / 100;
+                 $amount     = $lastModificationData['value'] / 100;
 
-                // $amount     = number_format((double)$amount, 2, '.', '');
+                 $amount     = number_format((double)$amount, 2, '.', '');
 
-                $amount = '5.00';
+                
 
 
           
