@@ -10,11 +10,11 @@ App::load_function('invoice');
 function validateWebhook($gatewayParams)
 {
     
-   
+    
   
     if ($gatewayParams['mtls'] != 'on' && isset($_GET['hmac'])) {
         $hmac = $_GET['hmac'];
-        $hash = hash('sha256', $gatewayParams['clientIdProd']);
+        $hash = hash('sha256',$gatewayParams['clientIdProd']);
         if ($hmac != $hash) {
             header('HTTP/1.1 403 Forbidden');
             die("Não foi possível receber a notificação de pagamento do Open Finance.");
@@ -25,12 +25,12 @@ function validateWebhook($gatewayParams)
 function handleWebhook($gatewayParams)
 {
     
-    $postData = json_decode(file_get_contents('php://input'));
+    $ofPaymentData = json_decode(file_get_contents('php://input')); 
     $logFile = __DIR__ . '/log.txt'; // caminho completo para o arquivo de log
 
 
 
-        $logString = date('Y-m-d H:i:s') . ' - ' . json_encode($postData) . "\n"; // string formatada com a data atual e os dados do array em formato JSON
+        $logString = date('Y-m-d H:i:s') . ' - ' . json_encode($ofPaymentData) . "\n"; // string formatada com a data atual e os dados do array em formato JSON
 
         // abre o arquivo em modo de escrita, acrescentando os dados ao final do arquivo, se ele já existir
         $fileHandle = fopen($logFile, 'a');
@@ -42,16 +42,10 @@ function handleWebhook($gatewayParams)
         fwrite($fileHandle, $logString);
         fclose($fileHandle);
 
-    if (isset($postData->evento) && isset($postData->data_criacao)) {
+    if (!isset($ofPaymentData->identificadorPagamento) ) {
         header('HTTP/1.0 200 OK');
-        exit();
-    }
-
-    $ofPaymentData = $postData;
-
-    if (empty($ofPaymentData)) {
-        showException('Exception', array('Pagamento Open Finance não recebido pelo Webhook.'));
-    } else {
+        echo "webhook processado com sucesso";
+    }else {
         header('HTTP/1.0 200 OK');
 
         $tableName = 'tblefiopenfinance';
