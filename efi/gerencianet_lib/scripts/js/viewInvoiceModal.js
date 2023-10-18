@@ -133,7 +133,7 @@ window.onload = function() {
 
         $("#documentPJClientOF").keydown(function() {
             try { $("#documentPJClientOF").unmask(); } catch (e) {}
-            
+
             $("#documentPJClientOF").mask("99.999.999/9999-99");
 
             // ajustando foco
@@ -155,14 +155,6 @@ window.onload = function() {
         $("#numCartaoMobile").mask("0000 0000 0000 0000");
     }
 
-    function shadowButton() {
-        $('.button').hover(() => {
-            $('.button').addClass('shadow-lg')
-        }, () => {
-            $('.button').removeClass('shadow-lg')
-        })
-
-    }
 
     function loadParticipantsOpenFinance() {
 
@@ -171,8 +163,6 @@ window.onload = function() {
             url: "modules/gateways/efi/gerencianet_lib/functions/frontend/ajax/OpenFinanceAjaxHandler.php?participants=1",
             success: function(response) {
                 var jsonData = JSON.parse(response);
-                console.log("OF response:");
-                console.log(jsonData);
                 $('#bankOF').empty();
                 $('#bankOF').append('<option value="">Escolha o banco...</option>');
                 jsonData.participantes.forEach(function(value, i) {
@@ -305,7 +295,10 @@ window.onload = function() {
 
                         $(".formularios :submit").removeAttr('disabled');
                         $("#numCartao").removeClass("is-invalid");
-                        $('.formularios :submit').css('opacity', '1');
+                        $('.formularios :submit').css('opacity', '1')
+                        $(".optionPaymentGerencianet,.meuPopUp").scrollTop($('.formularios :submit').first().offset().top + $('.formularios :submit').first().height());
+                        $('.formularios :submit').focus()
+
                     } else {
                         $("#payment_token").val('');
                         var input = '';
@@ -407,7 +400,7 @@ window.onload = function() {
                 //$('.pix').remove();
                 $('#container_openfinance').remove();
                 $('.openfinanceSelected').remove();
-            } 
+            }
 
         }
     };
@@ -427,8 +420,8 @@ window.onload = function() {
 
             div = $("<div />", {
                 id: 'total',
-                class: 'container-fluid d-flex justify-content-between border mt-5 p-1'
-            });
+                class: ' d-flex justify-content-between border  p-1'
+            }).css('margin-top', 'auto');
             $('.billetSelected').append(div);
             span = $("<span />", {
                 id: 'spanTotal',
@@ -444,7 +437,7 @@ window.onload = function() {
             $('#spanValorTotal').html(`${formatValue($('.invoice_value').val())}`)
             div = $("<div />", {
                 id: 'descontoBoleto',
-                class: 'container-fluid d-flex justify-content-between border p-1'
+                class: ' d-flex justify-content-between border p-1'
             });
             $('.billetSelected').append(div);
             span = $("<span />", {
@@ -461,7 +454,7 @@ window.onload = function() {
             $('#spanDescontoTotal').html(`-${formatValue($('.totalDescontoBoleto').val())}`)
             div = $("<div />", {
                 id: 'descontoBoletoSubtraido',
-                class: 'container-fluid d-flex justify-content-between border p-1'
+                class: ' d-flex justify-content-between border p-1'
             });
             $('.billetSelected').append(div);
             span = $("<span />", {
@@ -481,8 +474,8 @@ window.onload = function() {
             span = '';
             div = $("<div />", {
                 id: 'total',
-                class: 'container-fluid d-flex justify-content-between border mt-5 p-1'
-            });
+                class: ' d-flex justify-content-between border  p-1'
+            }).css('margin-top', 'auto');
             $('.billetSelected').append(div);
             span = $("<span />", {
                 id: 'spanTotal',
@@ -505,8 +498,8 @@ window.onload = function() {
             var span = '';
             div = $("<div />", {
                 id: 'totalPix',
-                class: 'container-fluid d-flex justify-content-between border mt-5 p-1'
-            });
+                class: ' d-flex justify-content-between border  p-1'
+            }).css('margin-top', 'auto');
             $('.pixSelected').append(div);
             span = $("<span />", {
                 id: 'spanTotalPix',
@@ -522,7 +515,7 @@ window.onload = function() {
             $('#spanValorTotalPix').html(`${formatValue($('.invoice_value').val())}`)
             div = $("<div />", {
                 id: 'descontoPix',
-                class: 'container-fluid d-flex justify-content-between border p-1'
+                class: ' d-flex justify-content-between border p-1'
             });
             $('.pixSelected').append(div);
             span = $("<span />", {
@@ -539,7 +532,7 @@ window.onload = function() {
             $('#spanDescontoTotalPix').html(`-${formatValue($('.totalDescontoPix').val())}`)
             div = $("<div />", {
                 id: 'descontoPixSubtraido',
-                class: 'container-fluid d-flex justify-content-between border p-1'
+                class: ' d-flex justify-content-between border p-1'
             });
             $('.pixSelected').append(div);
             span = $("<span />", {
@@ -560,8 +553,8 @@ window.onload = function() {
             var span = '';
             div = $("<div />", {
                 id: 'totalPix',
-                class: 'container-fluid d-flex justify-content-between border mt-5 p-1'
-            });
+                class: ' d-flex justify-content-between border  p-1'
+            }).css('margin-top', 'auto');
             $('.pixSelected').append(div);
             span = $("<span />", {
                 id: 'spanTotalPix',
@@ -584,8 +577,8 @@ window.onload = function() {
         var span = '';
         div = $("<div />", {
             id: 'totalCredito',
-            class: 'container-fluid d-flex justify-content-between border mt-5 p-1'
-        });
+            class: ' d-flex justify-content-between border  p-1'
+        }).css('margin-top', 'auto');
         $('.creditSelected').append(div);
         span = $("<span />", {
             id: 'spanTotaCredit',
@@ -609,8 +602,8 @@ window.onload = function() {
         var span = '';
         div = $("<div />", {
             id: 'totalOpenFinance',
-            class: 'container-fluid d-flex justify-content-between border mt-5 p-1'
-        });
+            class: ' d-flex justify-content-between border  p-1'
+        }).css('margin-top', 'auto');
         $('.openfinanceSelected').append(div);
         span = $("<span />", {
             id: 'spanTotalOpenFinance',
@@ -638,8 +631,8 @@ window.onload = function() {
 
                 div = $("<div />", {
                     id: 'total',
-                    class: 'container-fluid d-flex justify-content-between border mt-5 p-1'
-                });
+                    class: ' d-flex justify-content-between border  p-1'
+                }).css('margin-top', 'auto');
                 $('.billetSelected').append(div);
                 span = $("<span />", {
                     id: 'spanTotal',
@@ -655,7 +648,7 @@ window.onload = function() {
                 $('#spanValorTotal').html(`${formatValue($('.invoice_value').val())}`)
                 div = $("<div />", {
                     id: 'descontoBoleto',
-                    class: 'container-fluid d-flex justify-content-between border p-1'
+                    class: ' d-flex justify-content-between border p-1'
                 });
                 $('.billetSelected').append(div);
                 span = $("<span />", {
@@ -672,7 +665,7 @@ window.onload = function() {
                 $('#spanDescontoTotal').html(`-${formatValue($('.totalDescontoBoleto').val())}`)
                 div = $("<div />", {
                     id: 'descontoBoletoSubtraido',
-                    class: 'container-fluid d-flex justify-content-between border  p-1',
+                    class: ' d-flex justify-content-between border  p-1',
                     style: 'opacity: 0.6; border-top-width: 2px !important; border-top-color: black !important;'
                 });
                 $('.billetSelected').append(div);
@@ -978,163 +971,7 @@ window.onload = function() {
             $('#clientNamePix').removeAttr('required');
         }
 
-        /*
-        //document.getElementsByClassName('billet')[0].onclick = () => {
-        document.getElementById('container_billet').onclick = () => {
-            $(".formularios :submit").removeAttr('disabled');
-            $('.formularios :submit').css('opacity', '1');
-            veriFyMinValue();
 
-            document.getElementById('billet').checked = true;
-
-            //document.getElementsByClassName('billet')[0].classList.add('selectedOption');
-            document.getElementById('container_billet').classList.add('selectedOption');
-            (document.getElementById('container_pix') != undefined) ? document.getElementById('container_pix').classList.remove('selectedOption') : "";
-            (document.getElementById('container_credit') != undefined) ? document.getElementById('container_credit').classList.remove('selectedOption') : "";
-
-            $('.button').html('Gerar Boleto');
-            $('.creditSelected').hide(0);
-            $('.pixSelected').hide(0);
-            $('.billetSelected').show();
-
-            $('#nameBillet').attr('required', true);
-            $('#documentClientBillet').attr('required', true);
-            $('#clientEmailBillet').attr('required', true);
-
-            $('#nameCredit').removeAttr('required');
-            $('#clientEmailCredit').removeAttr('required');
-            $('#documentClientCredit').removeAttr('required');
-            $('#telephoneCredit').removeAttr('required');
-            $('#dataNasce').removeAttr('required');
-            $('#rua').removeAttr('required');
-            $('#numero').removeAttr('required');
-            $('#bairro').removeAttr('required');
-            $('#cidade').removeAttr('required');
-            $('#estado').removeAttr('required');
-            $('#cep').removeAttr('required');
-
-            if ($(document).width() > 767) {
-                $('#numCartao').removeAttr('required');
-                $('#codSeguranca').removeAttr('required');
-                $('#mesVencimento').removeAttr('required');
-                $('#anoVencimento').removeAttr('required');
-                $('#numParcelas').removeAttr('required');
-            } else {
-                $('#numCartaoMobile').removeAttr('required');
-                $('#codSegurancaMobile').removeAttr('required');
-                $('#mesVencimentoMobile').removeAttr('required');
-                $('#anoVencimentoMobile').removeAttr('required');
-                $('#numParcelasMobile').removeAttr('required');
-            }
-
-
-            $('#documentClientPix').removeAttr('required');
-            $('#clientNamePix').removeAttr('required');
-
-        }
-        
-        document.getElementById('container_credit').onclick = () => {
-            if ($(".invalid-feedback").length > 0) {
-                $(".formularios :submit").prop('disabled', true);
-                $('.formularios :submit').css('opacity', '0.3');
-            }
-            veriFyMinValue();
-            document.getElementById('credit').checked = true;
-            document.getElementById('container_credit').classList.add('selectedOption');
-            (document.getElementById('container_pix') != undefined) ? document.getElementById('container_pix').classList.remove('selectedOption') : "";
-            (document.getElementById('container_billet') != undefined) ? document.getElementById('container_billet').classList.remove('selectedOption') : "";
-            $('.button').html('Pagar');
-            $('.pixSelected').hide(0);
-            $('.billetSelected').hide(0);
-            $('.creditSelected').show();
-
-            $('#nameBillet').removeAttr('required');
-            $('#documentClientBillet').removeAttr('required');
-            $('#clientEmailBillet').removeAttr('required');
-
-            $('#nameCredit').attr('required', true);
-            $('#clientEmailCredit').attr('required', true);
-            $('#documentClientCredit').attr('required', true);
-            $('#telephoneCredit').attr('required', true);
-            $('#dataNasce').attr('required', true);
-            $('#rua').attr('required', true);
-            $('#numero').attr('required', true);
-            $('#bairro').attr('required', true);
-            $('#cidade').attr('required', true);
-            $('#estado').attr('required', true);
-            $('#cep').attr('required', true);
-
-            if ($(document).width() > 767) {
-                $('#numCartao').attr('required', true);
-                $('#codSeguranca').attr('required', true);
-                $('#mesVencimento').attr('required', true);
-                $('#anoVencimento').attr('required', true);
-                $('#numParcelas').attr('required', true);
-            } else {
-                $('#numCartaoMobile').attr('required', true);
-                $('#codSegurancaMobile').attr('required', true);
-                $('#mesVencimentoMobile').attr('required', true);
-                $('#anoVencimentoMobile').attr('required', true);
-                $('#numParcelasMobile').attr('required', true);
-            }
-
-
-            $('#documentClientPix').removeAttr('required');
-            $('#clientNamePix').removeAttr('required');
-
-        }
-        
-
-        document.getElementById('container_pix').onclick = () => {
-            $(".formularios :submit").removeAttr('disabled');
-            $('.formularios :submit').css('opacity', '1');
-            document.getElementById('pix').checked = true;
-            document.getElementById('container_pix').classList.add('selectedOption');
-            (document.getElementById('container_credit') != undefined) ? document.getElementById('container_credit').classList.remove('selectedOption') : "";
-            (document.getElementById('container_billet') != undefined) ? document.getElementById('container_billet').classList.remove('selectedOption') : "";
-            $('.button').html('Gerar QRCode');
-            $('.billetSelected').hide(0);
-            $('.creditSelected').hide(0);
-            $('.pixSelected').show();
-
-
-            $('#nameBillet').removeAttr('required');
-            $('#documentClientBillet').removeAttr('required');
-            $('#clientEmailBillet').removeAttr('required');
-
-
-            $('#nameCredit').removeAttr('required');
-            $('#clientEmailCredit').removeAttr('required');
-            $('#documentClientCredit').removeAttr('required');
-            $('#telephoneCredit').removeAttr('required');
-            $('#dataNasce').removeAttr('required');
-            $('#rua').removeAttr('required');
-            $('#numero').removeAttr('required');
-            $('#bairro').removeAttr('required');
-            $('#cidade').removeAttr('required');
-            $('#estado').removeAttr('required');
-            $('#cep').removeAttr('required');
-
-            if ($(document).width() > 767) {
-                $('#numCartao').removeAttr('required');
-                $('#codSeguranca').removeAttr('required');
-                $('#mesVencimento').removeAttr('required');
-                $('#anoVencimento').removeAttr('required');
-                $('#numParcelas').removeAttr('required');
-            } else {
-                $('#numCartaoMobile').removeAttr('required');
-                $('#codSegurancaMobile').removeAttr('required');
-                $('#mesVencimentoMobile').removeAttr('required');
-                $('#anoVencimentoMobile').removeAttr('required');
-                $('#numParcelasMobile').removeAttr('required');
-            }
-
-            $('#documentClientPix').attr('required', true);
-            $('#clientNamePix').attr('required', true);
-
-
-        }
-        */
 
         document.querySelectorAll('.button')[0].onclick = (e) => {
 
@@ -1250,7 +1087,7 @@ window.onload = function() {
             } catch (e) {}
 
             $("#documentPJClientOF").mask("99.999.999/9999-99");
-           
+
             // ajustando foco
             var elem = this;
             setTimeout(function() {
@@ -1267,7 +1104,6 @@ window.onload = function() {
         $('.pixSelected').hide(0);
         intervalTotal();
         format();
-        shadowButton();
         formatYear();
         autoComplete();
         veriFyMinValue();

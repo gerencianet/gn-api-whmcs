@@ -1,9 +1,9 @@
-<div class='optionPaymentGerencianet overflow-auto'>
+<div class='optionPaymentGerencianet '>
     <div class="spinner1"></div>
-    <div class='meuPopUp overflow-auto'>
+    <div class='meuPopUp '>
         <img class="fechar" style="width: 32px;" src="modules/gateways/efi/gerencianet_lib/images/back.png" alt="">
 
-        <form action='#' method='POST' enctype='multipart/form-data' autocomplete="off" class='formularios'>
+        <form action='#' method='POST' enctype='multipart/form-data' autocomplete="off" class='formularios flex-grow-1  '>
             <div class="titlePayment">
                 <img class="w-25" src="modules/gateways/efi/gerencianet_lib/images/efi.png" />
             </div>
@@ -62,56 +62,11 @@
 
             </div>
 
-            <!-- 
-                <div class="billet selectedOption">
-                    <div class="divBilletPayment">
-                        <input type="radio" name="optionPayment" id="boleto" value="boleto" >
-                        <i class="fas fa-barcode-alt"></i>
-                    </div>
-                    <div class="labelPayment">
-                        <label for="boleto">Boleto Bancário</label>
-                    </div>
-                </div>
-                
-                
-
-
-                <div class="credit_card ">
-                    <div class="divCardPayment">
-                        <input type="radio" name="optionPayment" id="credit" value="credit">
-                        <i class="far fa-credit-card"></i>
-                    </div>
-                    <div class="labelPayment">
-                        <label for="credit">Cartão de Crédito</label>
-
-                    </div>
-                </div>
-                <div class="pix ">
-                    <div class="divPixtPayment">
-                        <input type="radio" name="optionPayment" id="pix" value="pix">
-                        <img src="modules/gateways/efi/gerencianet_lib/images/icone-pix.png" alt="icon billet">
-                    </div>
-                    <div class="labelPayment">
-                        <label for="pix">Pix</label>
-
-                    </div>
-                </div>
-                <div class="open_finance ">
-                    <div class="divOpenFinancePayment">
-                        <input type="radio" name="optionPayment" id="openfinance" value="openfinance">
-                        <img src="modules/gateways/efi/gerencianet_lib/images/icone-pix.png" alt="icon billet">
-                    </div>
-                    <div class="labelPayment">
-                        <label for="openfinance">Open Finance</label>
-
-                    </div>
-                </div>
-            </div>
-            -->
 
 
 
-            <div class="billetSelected optionSelected">
+
+            <div class="billetSelected flex-grow-1  optionSelected">
                 <div class="messageValidationBillet">
                 </div>
 
@@ -121,30 +76,30 @@
                     <label class="form-check-label" for="autocompleteBillet">Utilizar dados do cadastro</label>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3">
                         <label for="nameBillet"><span class="obrigatorio">*</span>Nome/Razão Social</label>
                         <input type="text" class="form-control" name="clientName" id="nameBillet" required>
                     </div>
-                    <div class="col-md-4  mb-3">
+                    <div class=" form-group col-md-4  mb-3">
                         <label for="documentClientBillet"><span class="obrigatorio">*</span>CPF/CNPJ</label>
                         <input type="text" class="form-control dc" name="clientDocumentBillet" id="documentClientBillet" placeholder="" required>
 
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3">
                         <label for="clientEmailBillet"><span class="obrigatorio">*</span>Email</label>
                         <input type="text" id="clientEmailBillet" class="form-control" name="clientEmail" required>
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="telephoneBillet">Telefone</label>
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="telephoneBillet"><span class="obrigatorio"></span>Telefone</label>
                         <input type="text" class="form-control dc" name="clientTelephoneBillet" id="telephoneBillet" placeholder="">
                     </div>
                 </div>
             </div>
 
 
-            <div class="creditSelected  optionSelected">
+            <div class="creditSelected flex-grow-1  optionSelected">
                 <div class="messageValidationCredit">
                 </div>
                 <span>Dados do titular do cartão:</span>
@@ -153,29 +108,29 @@
                     <label class="form-check-label" for="autocompleteCredit">Utilizar dados do cadastro</label>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3">
                         <label for="nameCredit"><span class="obrigatorio">*</span>Nome/Razão Social</label>
                         <input type="text" class="form-control" name="clientNameCredit" id="nameCredit" placeholder="">
 
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3">
                         <label for="clientEmailCredit"><span class="obrigatorio">*</span>Email</label>
                         <input type="text" id="clientEmailCredit" class="form-control" name="clientEmailCredit" placeholder="">
 
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 mb-3">
+                    <div class="form-group col-md-4 mb-3">
                         <label for="documentClientCredit"><span class="obrigatorio">*</span>CPF/CNPJ</label>
                         <input type="text" class="form-control dc" name="clientDocumentCredit" id="documentClientCredit" placeholder="">
 
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="form-group col-md-4 mb-3">
                         <label for="telephoneCredit"><span class="obrigatorio">*</span>Telefone</label>
                         <input type="text" class="form-control" id="telephoneCredit" name="clientTelephoneCredit" placeholder="">
 
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="form-group col-md-4 mb-3">
                         <label for="dataNasce"><span class="obrigatorio" >*</span>Data de Nascimento</label>
                         <input type="date" class="form-control" id="dataNasce" name="dataNasce" placeholder="">
 
@@ -183,34 +138,34 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3">
                         <label for="rua"><span class="obrigatorio">*</span>Rua</label>
                         <input type="text" class="form-control dc" name="rua" id="rua" placeholder="">
 
                     </div>
-                    <div class="col-md-2 mb-3">
+                    <div class="form-group col-md-2 mb-3">
                         <label for="numero"><span class="obrigatorio">*</span>N°</label>
                         <input type="text" class="form-control dc" name="numero" id="numero" placeholder="">
 
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="form-group col-md-4 mb-3">
                         <label for="bairro"><span class="obrigatorio">*</span>Bairro</label>
                         <input type="text" class="form-control dc" name="bairro" id="bairro" placeholder="">
 
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-5 mb-3">
+                    <div class="form-group col-md-5 mb-3">
                         <label for="cidade"><span class="obrigatorio">*</span>Cidade</label>
                         <input type="text" class="form-control dc" name="cidade" id="cidade" placeholder="">
 
                     </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="form-group col-md-4 mb-3">
                         <label for="cep"><span class="obrigatorio">*</span>Cep</label>
                         <input type="text" class="form-control dc" name="cep" id="cep" placeholder="">
 
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="form-group col-md-3 mb-3">
                         <label for="estado"><span class="obrigatorio">*</span>Estado</label>
                         <select class="custom-select d-block estado w-100" name="estado" id="estado">
                                 <option value="" >Escolha...</option>
@@ -246,15 +201,15 @@
                 </div>
 
 
-                <div class="container d-md-none shadow-sm   bg-light rounded p-2">
+                <div class="container form-group d-md-none shadow-sm   bg-light rounded p-2 mb-2">
                     <div class="row">
-                        <div class="col-12 mb-3">
+                        <div class="form-group col-12 mb-3">
                             <label for="numCartaoMobile"><span class="obrigatorio">*</span>Numero do cartão</label>
                             <input type="text" class="form-control dc" name="numCartaoMobile" id="numCartaoMobile" placeholder="">
 
                         </div>
                         <label for="codSegurancaMobile" class="col-12 col-form-label"><span class="obrigatorio">*</span>Código de Segurança</label>
-                        <div class="col-5 mb-3">
+                        <div class="form-group col-5 mb-3">
                             <input type="text" class="form-control dc" name="codSegurancaMobile" id="codSegurancaMobile" placeholder="">
 
                         </div>
@@ -296,7 +251,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="container-fluid d-none d-md-block  p-3 shadow-sm   bg-light rounded">
+                <div class="container-fluid form-group d-none d-md-block  p-3 shadow-sm   bg-light rounded mb-2">
                     <div class="row align-items-md-center mb-3">
                         <div class="col-1" id="card">
                             <img src="modules/gateways/efi/gerencianet_lib/images/cartao.png" style="width:50px;" class="" alt="icon billet">
@@ -318,7 +273,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4 col-md-2">
+                        <div class="form-group col-4 col-md-2">
                             <input type="text" class="form-control dc" name="codSeguranca" id="codSeguranca" placeholder="">
                         </div>
                         <div class="col-3 d-flex  align-items-start border border-info" style="max-height: 38px; font-size: 11px; padding:2px; width: 162px; line-height: 13px;">
@@ -367,7 +322,7 @@
             </div>
 
 
-            <div class="pixSelected optionSelected">
+            <div class="pixSelected flex-grow-1 optionSelected">
                 <div class="messageValidationPix">
                 </div>
                 <span>Optando por pagar via Pix, o pagamento é processado e a confirmação ocorrerá em alguns segundos.</span>
@@ -376,11 +331,11 @@
                     <label class="form-check-label" for="autocompletePix">Utilizar dados do cadastro</label>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3">
                         <label for="clientNamePix"><span class="obrigatorio">*</span>Nome/Razão Social</label>
                         <input type="text" class="form-control dc" name="clientNamePix" id="clientNamePix" placeholder="">
                     </div>
-                    <div class="col-md-4">
+                    <div class="form-group col-md-4">
                         <label for="documentClientPix"><span class="obrigatorio">*</span>CPF/CNPJ</label>
                         <input type="text" class="form-control dc" name="clientDocumentPix" id="documentClientPix" placeholder="">
                     </div>
@@ -388,7 +343,7 @@
             </div>
 
 
-            <div class="openfinanceSelected optionSelected">
+            <div class="openfinanceSelected flex-grow-1 optionSelected">
                 <div class="messageValidationOpenFinance">
                 </div>
 
@@ -400,33 +355,31 @@
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-3 mb-3">
+                    <div class="form-group col-md-3 mb-3">
                         <label for="documentClientOF"><span class="obrigatorio">*</span>CPF</label>
                         <input type="text" class="form-control dc" name="favoredDocumentOF" id="documentClientOF" placeholder="" maxlength="11" required="required">
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="form-group col-md-3 mb-3">
                         <label for="documentPJClientOF"><span class="obrigatorio"></span>CNPJ (Opcional)</label>
                         <input type="text" class="form-control dc" name="favoredPJDocumentOF" id="documentPJClientOF" placeholder="" maxlength="14">
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3">
                         <label for="nameOF"><span class="obrigatorio">*</span>Banco para Pagamento</label>
                         <select class="custom-select d-block estado w-100" name="favoredbankOF" id="bankOF">
                             <option value="" >Escolha o banco...</option>
                         </select>
                     </div>
                 </div>
-                
-                <div class="row mt-2">
-                    
-                </div>
+
+
 
             </div>
 
 
 
-            <div class="row mt-5">
-                <div class="col-12 text-right mb-2 mb-md-0">
-                    <button class='button ' type='submit '>Gerar Boleto</button>
+            <div class="row m-lg-0 m-md-0  ">
+                <div class="col-12  text-lg-right text-md-right ">
+                    <button class='button btn  ' type='submit '>Gerar Boleto</button>
                 </div>
             </div>
         </form>

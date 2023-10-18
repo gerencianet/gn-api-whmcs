@@ -1,3 +1,17 @@
+.optionPaymentGerencianet::-webkit-scrollbar,
+.optionPaymentGerencianet *::-webkit-scrollbar {
+    width: 4px;
+    /* Largura da barra de rolagem vertical */
+}
+
+.optionPaymentGerencianet::-webkit-scrollbar-thumb,
+.optionPaymentGerencianet *::-webkit-scrollbar-thumb {
+    background-color: #FF8C52;
+    /* Cor de fundo da barra de rolagem */
+    border-radius: 5px;
+    /* Raio das bordas da barra de rolagem */
+}
+
 .botao {
     background-color: #f26522;
     background-image: url("../images/gn-cinza.png");
@@ -43,10 +57,6 @@
     left: 0;
 }
 
-.obrigatorio {
-    color: red !important;
-}
-
 .optionsPaymentsMethods {
     display: flex !important;
 }
@@ -72,6 +82,7 @@
 
 .pay_option_container img {
     width: 1.5em !important;
+    margin: 0;
 }
 
 .pay_option_container input {
@@ -95,7 +106,7 @@
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-around !important;
-    padding-left: 5px !important;
+    align-items: baseline;
 }
 
 .labelPayment label {
@@ -121,6 +132,7 @@
 
 .optionSelected input {
     height: 30px !important;
+    border: 1px solid #ccc !important;
     border-radius: 5px!important;
     padding: 5px !important;
 }
@@ -152,6 +164,7 @@
 
 .meuPopUp h3 {
     margin-top: 5% !important;
+    font-size: 23px !important;
 }
 
 .optionPaymentGerencianet {
@@ -173,6 +186,7 @@
 .meuPopUp {
     background-color: white !important;
     min-width: 55% !important;
+    height: 99%;
     padding: 30px !important;
     z-index: 200000 !important;
     display: flex;
@@ -185,7 +199,29 @@
 .meuPopUp form {
     display: flex !important;
     flex-direction: column !important;
-    height: 100%;
+    overflow-y: scroll !important;
+    overflow-x: hidden;
+    padding: 2px;
+}
+
+@keyframes modal {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -60px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.mostrar .meuPopUp {
+    animation: modal .6s;
+}
+
+.optionPaymentGerencianet,
+.optionPaymentGerencianet * {
+    color: black !important;
 }
 
 .button {
@@ -204,26 +240,24 @@
     border-radius: 5px !important;
 }
 
-@keyframes modal {
-    from {
-        opacity: 0;
-        transform: translate3d(0, -60px, 0);
-    }
-    to {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-    }
+.button:hover {
+    background-color: #ff9c4d !important;
 }
 
-.mostrar .meuPopUp {
-    animation: modal .6s;
+.obrigatorio {
+    color: red !important;
+}
+
+.form-group label,
+.form-group input,
+.form-group select {
+    font-size: 15px !important;
 }
 
 @media screen and (max-width: 1401px) {
     .meuPopUp {
         width: 80% !important;
     }
-
     .labelPayment label,
     .formularios span {
         font-weight: 600 !important;
@@ -236,10 +270,9 @@
         font-size: 1rem !important;
     }
     .meuPopUp {
-        width: 95% !important;
+        width: 100% !important;
         border: 4px solid #f3722c !important;
     }
-
     .labelPayment label,
     .formularios span {
         font-weight: 600 !important;
@@ -248,6 +281,9 @@
 }
 
 @media screen and (max-width: 450px) {
+    .button {
+        width: 100% !important;
+    }
     .optionPaymentGerencianet {
         padding: 0;
         width: 100vw !important;
@@ -289,11 +325,15 @@
         font-weight: 600 !important;
         font-size: 4.2vw !important;
     }
-    .labelPayment {
-        padding-left: 10px !important;
-    }
     .labelPayment label {
         gap: 12px;
+    }
+    .meuPopUp h3 {
+        font-size: 1.75rem !important;
+    }
+    .form-group label,
+    .form-group input {
+        font-size: 3.7vw !important;
     }
 }
 
@@ -321,6 +361,7 @@
 
 .optionSelected .checkNormal {
     height: auto !important;
+    position: initial;
 }
 
 .fechar:hover {

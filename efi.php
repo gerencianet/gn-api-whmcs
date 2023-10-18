@@ -619,27 +619,31 @@ function efi_link($gatewayParams)
 
     $apiEnvironment = ($gatewayParams['sandbox'] == 'on') ? "sandbox" : "api"; 
 
-    $scriptGetPaymentToken = "<script defer type='text/javascript'>  var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://$apiEnvironment.gerencianet.com.br/v1/cdn/$identificadorDaConta/'+v;s.async=false;s.id='$identificadorDaConta';if(!document.getElementById('$identificadorDaConta')){document.getElementsByTagName('head')[0].appendChild(s);};\$gn={validForm:true,processed:false,done:{},ready:function(fn){\$gn.done=fn;}};</script>";
-
-
-
-
-
     $paymentOptionsScript = "<div id='modal_content'></div>
+    <script type=\"text/javascript\">
+        var apiEnvironment = '$apiEnvironment';
+        var identificadorDaConta = '$identificadorDaConta';
 
-    $scriptGetPaymentToken
+        var inputEnviroment = $('<input />', {
+            value: apiEnvironment,
+            type: 'hidden',
+            name: 'apiEnvironment',
+            id: 'apiEnvironment'
+        });
+        $(document.body).append(inputEnviroment);
 
-    <script defer type=\"text/javascript\" src=\"$baseUrl/modules/gateways/efi/gerencianet_lib/scripts/js/viewInvoiceModal.js\"></script>
+        var inputIdentificador = $('<input />', {
+            value: identificadorDaConta,
+            type: 'hidden',
+            name: 'identificadorDaConta',
+            id: 'identificadorDaConta'
+        });
+        $(document.body).append(inputIdentificador);
+    </script>
 
-    <script defer type=\"text/javascript\" src=\"$baseUrl/modules/gateways/efi/gerencianet_lib/scripts/js/jquery-mask/jquery.mask.min.js\"></script>
-
-    <script defer type=\"text/javascript\" src=\"$baseUrl/modules/gateways/efi/gerencianet_lib/scripts/js/validation/validation.js\"></script>
-
-    $autoCompleteFields
-
-    <script defer type=\"text/javascript\" src=\"$baseUrl/modules/gateways/efi/gerencianet_lib/scripts/js/autoComplete/autoComplete.js\"></script>
 
     $autoCompletetotal
+    <script defer type=\"text/javascript\" src=\"$baseUrl/modules/gateways/efi/gerencianet_lib/scripts/js/efi.min.js\"></script>
 
     ";
 

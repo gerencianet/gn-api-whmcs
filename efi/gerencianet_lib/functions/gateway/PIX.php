@@ -426,7 +426,6 @@ function btnConfirm() {
         padding: 10px;
         border: none;
         border-radius: 5px;
-        font-size: 16px;
         margin-top: 3px;
         font-weight: bold;
         width:240px;
