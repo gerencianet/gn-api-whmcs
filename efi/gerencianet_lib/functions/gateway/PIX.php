@@ -102,105 +102,58 @@ function getPixCharge($invoiceId) {
 
  */
 
-function createPixCharge($api_instance, $gatewayParams)
-
-{
-
-    // Pix Parameters
-
-    $pixKey         = $gatewayParams['pixKey'];
-
-    $pixDays        = $gatewayParams['pixDays'];
-
-    $pixDescription = $gatewayParams['description'];
-
-    $pixDiscount = str_replace('%', '', $gatewayParams['pixDiscount']);
-
-
-
-    if (empty($pixKey)) {
-
-        showException('Exception', array('Chave Pix não informada. Verificar as configurações do Portal de Pagamento.'));
-
-
-
-    } else {
-
-        // Calculating pix amount with discount
-
-        $pixAmount = $gatewayParams['amount'];
-
-        $total = (double)$pixAmount - ((($pixAmount) * $pixDiscount) /100);
-
-        $total = number_format((double)$total, 2, '.', '');
-
-        if (strpos($gatewayParams['paramsPix']['clientDocumentPix'],'/')) {
-
-            $document = str_replace('/','',str_replace('-','',str_replace('.','',$gatewayParams['paramsPix']['clientDocumentPix']))); 
-
-           
-
-        }else{
-
-            $document = str_replace('-','',str_replace('.','',$gatewayParams['paramsPix']['clientDocumentPix']));
-
-        }
-
-    
-
-        $requestBody = [
-
-            'calendario' => [
-
-                'expiracao' => $pixDays * 86400 // Multiplying by 86400 (1 day seconds) because the API expects to receive a value in seconds
-
-            ],
-
-            'devedor'=>[
-
-                'cpf'=> $document,
-
-                'nome'=> $gatewayParams['paramsPix']['clientNamePix']
-
-            ],
-
-            'valor' => [
-
-                'original' => strval($total) // String value from amount
-
-            ],
-
-            'chave' => $pixKey,
-
-            "infoAdicionais" => [
-
-                [
-
-                    "nome" => "Pagamento em",
-
-                    "valor" => $gatewayParams['companyname']
-
-                ],
-
-                [
-
-                    "nome" => "Número do Pedido",
-
-                    "valor" => "#".$gatewayParams['invoiceid']
-
-                ]
-
-            ]
-
-        ];
-
-    
-
-        return createImmediateCharge($api_instance, $requestBody);
-
-    }
-
-}
+ function createPixCharge($api_instance, $gatewayParams)
+ {
+     // Pix Parameters
+     $pixKey = $gatewayParams['pixKey'];
+     $pixDays = $gatewayParams['pixDays'];
+     $pixDescription = $gatewayParams['description'];
+     $pixDiscount = str_replace('%', '', $gatewayParams['pixDiscount']);
+ 
+     if (empty($pixKey)) {
+         showException('Exception', array('Chave Pix não informada. Verificar as configurações do Portal de Pagamento.'));
+     } else {
+         // Calculating pix amount with discount
+         $pixAmount = $gatewayParams['amount'];
+         $total = (double)$pixAmount - ((($pixAmount) * $pixDiscount) / 100);
+         $total = number_format((double)$total, 2, '.', '');
+ 
+         $document = $gatewayParams['paramsPix']['clientDocumentPix'];
+         $document = preg_replace('/[^0-9]/', '', $document); // Remove non-numeric characters
+ 
+         $devedorAttribute = 'cpf';
+         if (strlen($document) === 14) {
+             $devedorAttribute = 'cnpj';
+         }
+ 
+         $requestBody = [
+             'calendario' => [
+                 'expiracao' => $pixDays * 86400 // Multiplying by 86400 (1 day seconds) because the API expects to receive a value in seconds
+             ],
+             'devedor' => [
+                 $devedorAttribute => $document,
+                 'nome' => $gatewayParams['paramsPix']['clientNamePix']
+             ],
+             'valor' => [
+                 'original' => strval($total) // String value from amount
+             ],
+             'chave' => $pixKey,
+             "infoAdicionais" => [
+                 [
+                     "nome" => "Pagamento em",
+                     "valor" => $gatewayParams['companyname']
+                 ],
+                 [
+                     "nome" => "Número do Pedido",
+                     "valor" => "#" . $gatewayParams['invoiceid']
+                 ]
+             ]
+         ];
+ 
+         return createImmediateCharge($api_instance, $requestBody);
+     }
+ }
+ 
 
 
 
