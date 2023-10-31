@@ -53,6 +53,8 @@ function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountT
 
     if($descontoBoleto == 0) return null;
 
+    $where    = array('invoiceid' => $invoiceId);
+    $order    = selectCob('tblorders', $where, '*');
     $where    = array('id' => $invoiceId);              
     $invoice  = selectCob('tblinvoices', $where, '*');     
     $userid   = $invoice['userid'];
@@ -84,6 +86,14 @@ function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountT
     );
 
     insertCob('tblinvoiceitems', $dataDiscount);
+
+    $newOrderAmount      = $order['amount'] + $amount; 
+    $newInvoiceSubTotal  = $invoice['subtotal'] + $amount;
+    $newInvoiceTotal     = $invoice['total'] + $amount;
+
+    $updateAmountOrder   = updateCob('tblorders', array('invoiceid' => $invoiceId), array('amount' => $newOrderAmount)); 
+    $updateData          = array('total'    => $newInvoiceTotal, 'subtotal' => $newInvoiceSubTotal);
+    $updateAmountInvoice = updateCob('tblinvoices', array('id' => $invoiceId), $updateData);
 
    
 }
