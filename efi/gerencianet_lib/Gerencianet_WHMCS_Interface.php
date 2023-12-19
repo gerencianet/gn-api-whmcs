@@ -100,8 +100,7 @@ function extra_amounts_Gerencianet_WHMCS($invoiceId, $descontoBoleto, $discountT
 
 function get_price($invoiceId, $discount=false)
 {
-    $invoiceDescription         = $params['description'];
-    $invoiceAmount              = $params['amount'];
+   
     $invoiceValues['invoiceid'] = $invoiceId;
     $invoiceData                = localAPI("getinvoice", $invoiceValues, $adminuser);
 

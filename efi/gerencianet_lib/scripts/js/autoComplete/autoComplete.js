@@ -243,20 +243,26 @@
 
     function applyAnimations(inputs) {
         inputs.forEach((inputObj) => {
-            // Seleciona o elemento input
-            let input = $(`${inputObj.inputName}`);
 
-            // Anima a opacidade do elemento para zero
-            input.animate({ opacity: 0 }, 500, function() {
-                // Quando a animação terminar, atualiza o valor do input
+            let input = $(`${inputObj.inputName}`);
+            let div = $(`${inputObj.inputName}`).closest('.form-group');
+
+            if (inputObj.inputValue != '') {
+                div.fadeOut(500, function() {
+
+                    input.val(inputObj.inputValue);
+                    input.trigger('keydown');
+                    input.trigger('input');
+
+                });
+            } else {
                 input.val(inputObj.inputValue);
                 input.trigger('keydown');
                 input.trigger('input');
+                div.fadeIn(500);
+            }
 
-                // Anima a opacidade do elemento de volta para 1
-                input.animate({ opacity: 1 }, 500);
 
-            });
         });
 
     }
