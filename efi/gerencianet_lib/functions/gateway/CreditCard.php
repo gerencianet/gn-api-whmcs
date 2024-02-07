@@ -34,16 +34,12 @@ function getClientVariablesCard($params)
 
     $isJuridica = true;
 
-    if (strpos($params['paramsCartao']['clientDocumentCredit'],'/') == true) {
+    if (strpos($params['paramsCartao']['clientDocumentCredit'], '/') == true) {
 
-        $document = str_replace('/','',str_replace('-','',str_replace('.','',$params['paramsCartao']['clientDocumentCredit']))); 
+        $document = str_replace('/', '', str_replace('-', '', str_replace('.', '', $params['paramsCartao']['clientDocumentCredit'])));
+    } else {
 
-       
-
-    }else{
-
-        $document = str_replace('-','',str_replace('.','',$params['paramsCartao']['clientDocumentCredit']));
-
+        $document = str_replace('-', '', str_replace('.', '', $params['paramsCartao']['clientDocumentCredit']));
     }
 
     $corporateName    = $params['paramsCartao']['clientNameCredit'];
@@ -52,7 +48,7 @@ function getClientVariablesCard($params)
 
     $name  = $params['paramsCartao']['clientNameCredit'];
 
-    $phone = str_replace(' ','',str_replace('-','',str_replace('(','',str_replace(')','',$params['paramsCartao']['clientTelephoneCredit']))));
+    $phone = str_replace(' ', '', str_replace('-', '', str_replace('(', '', str_replace(')', '', $params['paramsCartao']['clientTelephoneCredit']))));
 
     $email = $params['paramsCartao']['clientEmailCredit'];
 
@@ -68,24 +64,21 @@ function getClientVariablesCard($params)
 
     if ($isJuridica == false) {
 
-            
 
-            $customer = array(
 
-                'name'          => $name,
+        $customer = array(
 
-                'cpf'           => (string)$document,
+            'name'          => $name,
 
-                'email'         => $email,
+            'cpf'           => (string)$document,
 
-                'birth'         => $birthDate,
+            'email'         => $email,
 
-                'phone_number'  => (string) $phone
+            'birth'         => $birthDate,
 
-            );
+            'phone_number'  => (string) $phone
 
-       
-
+        );
     } else {
 
         $juridical_data = array(
@@ -96,20 +89,17 @@ function getClientVariablesCard($params)
 
         );
 
-            $customer = array(
+        $customer = array(
 
-                'email'             => $email,
+            'email'             => $email,
 
-                'phone_number'      =>(string) $phone,
+            'phone_number'      => (string) $phone,
 
-                'birth'             => $birthDate,
+            'birth'             => $birthDate,
 
-                'juridical_person'  => $juridical_data
+            'juridical_person'  => $juridical_data
 
-            );
-
-       
-
+        );
     }
 
 
@@ -117,14 +107,13 @@ function getClientVariablesCard($params)
 
 
     return $customer;
-
 }
 
 function validationParamsCard($params)
 
 {
 
-    
+
 
 
 
@@ -134,41 +123,34 @@ function validationParamsCard($params)
 
     $birthDate = $params['paramsCartao']['dataNasce'];
 
-    $cardNumber = str_replace(' ', '',(strlen($params['paramsCartao']['numCartao']) >=14)? $params['paramsCartao']['numCartao']:$params['paramsCartao']['numCartaoMobile']);
+    $cardNumber = str_replace(' ', '', (strlen($params['paramsCartao']['numCartao']) >= 14) ? $params['paramsCartao']['numCartao'] : $params['paramsCartao']['numCartaoMobile']);
 
-    
+
 
 
 
     /* ********************************************* Coleta os dados do cliente ************************************************* */
 
-    if (strpos($params['paramsCartao']['clientDocumentCredit'],'/')) {
+    if (strpos($params['paramsCartao']['clientDocumentCredit'], '/')) {
 
-        $document = str_replace('/','',str_replace('-','',str_replace('.','',$params['paramsCartao']['clientDocumentCredit']))); 
+        $document = str_replace('/', '', str_replace('-', '', str_replace('.', '', $params['paramsCartao']['clientDocumentCredit'])));
+    } else {
 
-       
-
-    }else{
-
-        $document = str_replace('-','',str_replace('.','',$params['paramsCartao']['clientDocumentCredit']));
-
+        $document = str_replace('-', '', str_replace('.', '', $params['paramsCartao']['clientDocumentCredit']));
     }
 
     $corporateName    = $params['paramsCartao']['clientNameCredit'];
 
     $name  = $params['paramsCartao']['clientNameCredit'];
 
-    $phone = str_replace(' ','',str_replace('-','',str_replace('(','',str_replace(')','',$params['paramsCartao']['clientTelephoneCredit']))));
+    $phone = str_replace(' ', '', str_replace('-', '', str_replace('(', '', str_replace(')', '', $params['paramsCartao']['clientTelephoneCredit']))));
 
     $email = $params['paramsCartao']['clientEmailCredit'];
 
-    if ($document == null || $document == '')
-
-    {
+    if ($document == null || $document == '') {
 
         array_push($mensagensErros, DOCUMENT_NULL_ERROR_MESSAGE);
-
-    }else {
+    } else {
 
         if (strlen($document) <= 11) {
 
@@ -181,7 +163,6 @@ function validationParamsCard($params)
             if (!$validations->_name($name))
 
                 array_push($mensagensErros, NAME_ERROR_MESSAGE);
-
         } else {
 
             $isJuridica = true;
@@ -197,9 +178,7 @@ function validationParamsCard($params)
             elseif (!$validations->_corporate($corporateName))
 
                 array_push($mensagensErros, CORPORATE_ERROR_MESSAGE);
-
         }
-
     }
 
 
@@ -214,24 +193,21 @@ function validationParamsCard($params)
 
         array_push($mensagensErros, EMAIL_ERROR_MESSAGE);
 
-       
 
-    if(!$validations->_birthdate($birthDate)){
 
-            array_push($mensagensErros,BIRTHDATE_ERROR_MESSAGE);
+    if (!$validations->_birthdate($birthDate)) {
 
+        array_push($mensagensErros, BIRTHDATE_ERROR_MESSAGE);
     }
 
-    if(!$validations->_cardNumber($cardNumber)){
+    if (!$validations->_cardNumber($cardNumber)) {
 
-            array_push($mensagensErros,CARD_ERROR_MESSAGE);
-
+        array_push($mensagensErros, CARD_ERROR_MESSAGE);
     }
 
-    
+
 
     return $mensagensErros;
-
 }
 
 function existingChargeCredit($params, $gnIntegration)
@@ -274,35 +250,30 @@ function existingChargeCredit($params, $gnIntegration)
 
                 $resultado['existCharge'] = $existCharge;
 
-           
+
 
                 $code = generateResult();
 
                 $resultado['code'] = $code;
 
                 return $resultado;
-
             }
-
         } else {
 
             return $resultado;
-
         }
-
     }
-
 }
 
 
 
 
 
-function createCard($params, $gnIntegration, $errorMessages,$existCharge)
+function createCard($params, $gnIntegration, $errorMessages, $existCharge)
 
 {
 
-    $invoiceValues['invoiceid'] = $params['invoiceid']; 
+    $invoiceValues['invoiceid'] = $params['invoiceid'];
 
     $adminWHMCS = $params['whmcsAdmin'];
 
@@ -320,7 +291,7 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
 
     /* ***************************************** Calcula data de vencimento do boleto **************************************** */
 
-  
+
 
 
 
@@ -354,7 +325,7 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
 
         if ((float)$invoiceItem['amount'] > 0) {
 
-            $itemValue = number_format((double)$invoiceItem['amount'], 2, '.', '');
+            $itemValue = number_format((float)$invoiceItem['amount'], 2, '.', '');
 
             $itemValue = preg_replace("/[.,-]/", "", $itemValue);
 
@@ -371,13 +342,10 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
             array_push($items, $item);
 
             $totalItem += (float)$invoiceItem['amount'];
-
         } else {
 
             $valueDiscountWHMCS += (float)$invoiceItem['amount'];
-
         }
-
     }
 
 
@@ -397,7 +365,6 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
         );
 
         array_push($items, $item);
-
     }
 
 
@@ -417,20 +384,22 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
         );
 
         array_push($items, $item);
-
     }
 
 
 
-    $valueDiscountWHMCSFormated = number_format((double)$valueDiscountWHMCS, 2, '.', '');
+    $valueDiscountWHMCSFormated = number_format((float)$valueDiscountWHMCS, 2, '.', '');
 
     $valueDiscountWHMCSinCents  = preg_replace("/[.,-]/", "", $valueDiscountWHMCSFormated);
+    $valueDiscountWHMCSinCents = ($valueDiscountWHMCSinCents != 0) ? $valueDiscountWHMCSinCents: null;
 
     $percentageDiscountWHMCS    = ((100 * $valueDiscountWHMCS) / $totalItem);
 
-    $percentageDiscountWHMCS    = number_format((double)$percentageDiscountWHMCS, 2, '.', '');
+    $percentageDiscountWHMCS    = number_format((float)$percentageDiscountWHMCS, 2, '.', '');
 
     $percentageDiscountWHMCS    = preg_replace("/[.,-]/", "", $percentageDiscountWHMCS);
+
+    
 
 
 
@@ -450,7 +419,7 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
 
         if ($existCharge == false) {
 
-          
+
 
             $gnApiResult = $gnIntegration->create_charge($items, $invoiceId, $params['systemurl'] . "modules/gateways/callback/efi/card.php");
 
@@ -483,20 +452,18 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
                 $addtransresults = localAPI($addTransactionCommand, $addTransactionValues, $adminWHMCS);
 
                 $permitionToPay = true;
-
             } else
 
                 $permitionToPay = false;
-
         }
 
 
 
         if ($permitionToPay == true) {
 
-            $resultPayment = $gnIntegration->pay_credit($chargeId,$customer, $params['message'],$params);
+            $resultPayment = $gnIntegration->pay_credit($chargeId, $customer, $params['message'], $params, $valueDiscountWHMCSinCents);
 
-           
+
 
             $resultPaymentDecoded = json_decode($resultPayment, true);
             $data      = $resultPaymentDecoded['data'];
@@ -506,7 +473,7 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
                 if ($data['status'] == "approved") {
                     addInvoicePayment($invoiceId, $chargeId, $params['amount'], '0.00', $params['paymentmethod']);
                     return generateResult($data['status']);
-                }else{
+                } else {
                     $getTransactionValues['invoiceid']  = $invoiceId;
 
                     $transactionData                    = localAPI("gettransactions", $getTransactionValues, $adminWHMCS);
@@ -517,11 +484,11 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
 
 
 
-                    
+
 
                     $chargeId  = $data["charge_id"];
 
-            
+
 
                     $updateTransactionCommand                  = "updatetransaction";
 
@@ -533,7 +500,6 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
 
                     return generateResult();
                 }
-
             } else {
 
                 array_push($errorMessages, $resultPaymentDecoded['message']);
@@ -543,9 +509,7 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
                     logTransaction('efi', array('invoiceid' => $invoiceId, 'charge_id' => $chargeId, 'error' => $resultPaymentDecoded['messageAdmin']), 'Erro Efí: Geração do boleto');
 
                 return send_errors($errorMessages);
-
             }
-
         } else {
 
             array_push($errorMessages, $resultCheck['message']);
@@ -555,9 +519,7 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
                 logTransaction('efi', array('invoiceid' => $invoiceId, 'error' => $resultCheck['messageAdmin']), 'Erro Efí: Geração da cobrança');
 
             return send_errors($errorMessages);
-
         }
-
     } else {
 
         $validationErrors = array('invoiceid' => $invoiceId);
@@ -567,7 +529,6 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
         foreach ($errorMessages as $error) {
 
             array_push($validationErrors, $error);
-
         }
 
 
@@ -577,9 +538,7 @@ function createCard($params, $gnIntegration, $errorMessages,$existCharge)
             logTransaction('efi', $validationErrors, 'Erro Efí: Validação');
 
         return send_errors($errorMessages);
-
     }
-
 }
 
 function generateResult($status = null)
@@ -619,6 +578,4 @@ function generateResult($status = null)
             </div>
 
         ';
-
 }
-

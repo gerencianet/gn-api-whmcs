@@ -16,6 +16,7 @@
         $.get('modules/gateways/efi/gerencianet_lib/functions/frontend/ajax/ClientDataAjaxHandler.php', function(data) {
             let cliente = {};
             const attributes = JSON.parse(data);
+            console.log(attributes);
             cliente.telefone = attributes.phoneNumber.split('.')[1];
             cliente.fullName = `${attributes.firstName} ${attributes.lastName}`;
             cliente.email = attributes.email;
@@ -172,7 +173,7 @@
             inputValue: cliente.cidade
         }, {
             inputName: "#bairro",
-            inputValue: cliente.bairro
+            inputValue: ''
         }, {
             inputName: "#cep",
             inputValue: cliente.cep

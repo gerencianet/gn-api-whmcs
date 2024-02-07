@@ -52,7 +52,7 @@ class GerencianetIntegration
 		$options = GerencianetIntegration::get_gn_api_credentials();
 
 		$autorizacao =  base64_encode($options["client_id"] . ":" . $options["client_secret"]);
-		$environment =  $options["sandbox"] ? "sandbox":"api";
+		$environment =  $options["sandbox"] ? "sandbox" : "api";
 		$curl = curl_init();
 
 		curl_setopt_array($curl, array(
@@ -78,7 +78,6 @@ class GerencianetIntegration
 
 		if ($response == "Unauthorized") {
 			throw new Exception("Erro", 1);
-			
 		}
 	}
 
@@ -269,11 +268,10 @@ class GerencianetIntegration
 			return GerencianetIntegration::result_api($errorResponse, false);
 		}
 	}
-	public function pay_credit($charge_id, $customer, $message, $params)
+	public function pay_credit($charge_id, $customer, $message, $params, $discountValue )
 	{
 		$invoiceValues['invoiceid'] = $params['invoiceid'];
 		$invoiceData     = localAPI("getinvoice", $invoiceValues, $params['whmcsAdmin']);
-
 
 		$numeroParcelas = (strlen($params['paramsCartao']['numParcelas']) >= 1) ? $params['paramsCartao']['numParcelas'] : $params['paramsCartao']['numParcelasMobile'];
 		$options = GerencianetIntegration::get_gn_api_credentials();
@@ -287,7 +285,16 @@ class GerencianetIntegration
 			'city' =>  $params['paramsCartao']['cidade'],
 			'state' => $params['paramsCartao']['estado']
 		];
+
 		$paymentToken = $params['paramsCartao']['payment_token'];
+
+		$credit_card = array(
+			'customer' => $customer,
+			'installments' => (int)$numeroParcelas,
+			'billing_address' => $billingAddress,
+			'payment_token' => $paymentToken
+
+		);
 
 		if ($invoiceData['credit'] > 0) {
 			$invoiceCredit = (int)(number_format((float)$invoiceData['credit'], 2, '.', '') * 100);
@@ -295,22 +302,18 @@ class GerencianetIntegration
 				'type' => 'currency',
 				'value' => $invoiceCredit
 			];
-			$credit_card = array(
-				'customer' => $customer,
-				'discount' => $discount,
-				'installments' => (int)$numeroParcelas,
-				'billing_address' => $billingAddress,
-				'payment_token' => $paymentToken
-
-			);
-		} else {
-			$credit_card = array(
-				'customer' => $customer,
-				'installments' => (int)$numeroParcelas,
-				'billing_address' => $billingAddress,
-				'payment_token' => $paymentToken
-
-			);
+			$credit_card['discount'] = $discount;
+		}
+		if ($discountValue !== null) {
+			if (isset($credit_card['discount'])) {
+				$credit_card['discount']['value'] +=  $discountValue;
+			} else {
+				$discount = [
+					'type' => 'currency',
+					'value' => (int)$discountValue
+				];
+				$credit_card['discount'] = $discount;
+			}
 		}
 
 		if (strlen($message) > 0)
@@ -321,7 +324,6 @@ class GerencianetIntegration
 				'credit_card' => $credit_card
 			)
 		);
-
 		try {
 			$api = new Gerencianet($options);
 			$charge = $api->definePayMethod($chargeId, $body);
